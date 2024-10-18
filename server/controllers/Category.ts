@@ -1,4 +1,6 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
 import Category from "../models/Category"
 import Course from "../models/Course"
 
@@ -49,23 +51,33 @@ export const categoryPageDetails = async (req: any, res: Response) => {
   try {
     const { categoryId } = req.body
 
+    // Check if categoryId is provided
+    if (!categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Category ID is required",
+      })
+    }
+
     // Get courses for the specified category
-    const selectedCategory = await Category.findById(categoryId) //populate instuctor and rating and reviews from courses
+    const selectedCategory = await Category.findById(categoryId)
       .populate({
         path: "courses",
         match: { status: "Published" },
         populate: [{ path: "instructor" }, { path: "ratingAndReviews" }],
       })
       .exec()
-    // console.log(selectedCategory);
+
     // Handle the case when the category is not found
     if (!selectedCategory) {
       console.log("Category not found.")
-      return res
-        .status(404)
-        .json({ success: false, message: "Category not found" })
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      })
     }
-    // Handle the case when there are no courses
+
+    // Handle the case when there are no courses in the category
     if (selectedCategory.courses.length === 0) {
       console.log("No courses found for the selected category.")
       return res.status(404).json({
@@ -76,7 +88,7 @@ export const categoryPageDetails = async (req: any, res: Response) => {
 
     const selectedCourses = selectedCategory.courses
 
-    // Get courses for other categories
+    // Get courses for other categories (excluding the selected category)
     const categoriesExceptSelected = await Category.find({
       _id: { $ne: categoryId },
     }).populate({
@@ -84,10 +96,12 @@ export const categoryPageDetails = async (req: any, res: Response) => {
       match: { status: "Published" },
       populate: [{ path: "instructor" }, { path: "ratingAndReviews" }],
     })
-    const differentCourses = []
-    for (const category of categoriesExceptSelected) {
+
+    // Explicitly typing differentCourses as Course[] (or ObjectId[] if needed)
+    const differentCourses: any[] = []
+    categoriesExceptSelected.forEach((category) => {
       differentCourses.push(...category.courses)
-    }
+    })
 
     // Get top-selling courses across all categories
     const allCategories = await Category.find().populate({
@@ -95,22 +109,27 @@ export const categoryPageDetails = async (req: any, res: Response) => {
       match: { status: "Published" },
       populate: [{ path: "instructor" }, { path: "ratingAndReviews" }],
     })
+
     const allCourses = allCategories.flatMap((category) => category.courses)
+
+    // Sort and get the top 10 selling courses (uncomment sorting if you have the 'sold' field)
     const mostSellingCourses = allCourses
-      // .sort((a, b) => (b as any).sold - (a as any).sold)
+      // .sort((a, b) => (b as any).sold - (a as any).sold) // Assuming 'sold' is a field in the course model
       .slice(0, 10)
 
-    res.status(200).json({
-      selectedCourses: selectedCourses,
-      differentCourses: differentCourses,
-      mostSellingCourses: mostSellingCourses,
+    // Return the response with the courses data
+    return res.status(200).json({
+      selectedCourses,
+      differentCourses,
+      mostSellingCourses,
       success: true,
     })
   } catch (error) {
+    console.log("Error in categoryPageDetails:", error)
     return res.status(500).json({
       success: false,
       message: "Internal server error",
-      error: (error as Error).message,
+      error: error instanceof Error ? error.message : "Unknown error",
     })
   }
 }
