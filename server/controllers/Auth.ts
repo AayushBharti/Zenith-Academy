@@ -1,15 +1,13 @@
-import { Request, Response } from "express"
 import bcrypt from "bcrypt"
-import User from "../models/User"
-import OTP from "../models/OTP"
+import { Response } from "express"
 import jwt from "jsonwebtoken"
 import otpGenerator from "otp-generator"
-import mailSender from "../utils/mailSender"
-import { passwordUpdated } from "../mail/templates/passwordUpdate"
-import Profile from "../models/Profile"
-import dotenv from "dotenv"
 
-dotenv.config()
+import { passwordUpdated } from "../mail/templates/passwordUpdate"
+import OTP from "../models/OTP"
+import Profile from "../models/Profile"
+import User from "../models/User"
+import mailSender from "../utils/mailSender"
 
 // Send OTP For Email Verification
 export const sendotp = async (req: any, res: Response) => {
