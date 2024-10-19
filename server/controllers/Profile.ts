@@ -227,3 +227,93 @@ export const getEnrolledCourses = async (req: any, res: Response) => {
   }
 }
 
+// updateDisplayPicture
+export const updateDisplayPicture = async (req: any, res: Response) => {
+  try {
+    const id = req.user?.id
+    const user = await User.findById(id)
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+    const image = req.files.pfp
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        message: "Image not found",
+      })
+    }
+    const uploadDetails = await uploadImageToCloudinary(
+      image,
+      process.env.FOLDER_NAME as string
+    )
+    console.log(uploadDetails)
+
+    const updatedImage = await User.findByIdAndUpdate(
+      { _id: id },
+      { image: uploadDetails.secure_url },
+      { new: true }
+    )
+
+    res.status(200).json({
+      success: true,
+      message: "Image updated successfully",
+      data: updatedImage,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: (error as Error).message,
+    })
+  }
+}
+
+interface CourseStats {
+  _id: string
+  courseName: string
+  courseDescription: string
+  totalStudents: number
+  totalRevenue: number
+}
+
+//instructor dashboard
+export const instructorDashboard = async (
+  req: any,
+  res: Response
+): Promise<Response> => {
+  try {
+    const id = req.user.id
+    const courseData = await Course.find({ instructor: id })
+
+    // Map over the courses to gather relevant statistics
+    const courseDetails: CourseStats[] = courseData.map((course) => {
+      const totalStudents = course?.studentsEnrolled?.length || 0
+      const totalRevenue = (course?.price || 0) * totalStudents
+
+      const courseStats: CourseStats = {
+        _id: course._id.toString(),
+        courseName: course.courseName as string,
+        courseDescription: course.courseDescription as string,
+        totalStudents,
+        totalRevenue,
+      }
+
+      return courseStats
+    })
+
+    // Sending the response with the data
+    return res.status(200).json({
+      success: true,
+      message: "User Data fetched successfully",
+      data: courseDetails,
+    })
+  } catch (error: any) {
+    // Catching errors and sending a response
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while fetching course data.",
+    })
+  }
+}
