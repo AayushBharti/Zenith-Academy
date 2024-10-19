@@ -1,9 +1,16 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
+import Course from "../models/Course"
 import Profile from "../models/Profile"
 import User from "../models/User"
+import { uploadImageToCloudinary } from "../utils/imageUploader"
+
+// import Course from "../models/Course"
+// import { uploadImageToCloudinary } from "../utils/imageUploader"
 
 // Method for updating a profile
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: any, res: Response) => {
   try {
     // Extract profile update data from the request body
     const {
@@ -16,7 +23,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     } = req.body
 
     // Extract user ID from the authenticated user object
-    const userId = req.user.id
+    const userId = req.user?.id
 
     // Find the user and their associated profile
     const userDetails = await User.findById(userId)
@@ -61,12 +68,12 @@ export const updateProfile = async (req: Request, res: Response) => {
   }
 }
 
-export const deleteAccount = async (req: Request, res: Response) => {
+export const deleteAccount = async (req: any, res: Response) => {
   try {
     // TODO: Job Schedule this request for 5 days
 
     // Extract user ID from the authenticated user object
-    const userId = req.user.id
+    const userId = req.user?.id
 
     // Find the user by ID
     const user = await User.findById(userId)
@@ -109,7 +116,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
 // ) => {
 //   try {
 //     // Extract user ID from the authenticated user object
-//     const userId = req.user.id
+//     const userId = req.user?.id
 
 //     // Find the user by ID
 //     const user = await User.findById(userId)
@@ -159,9 +166,9 @@ export const deleteAccount = async (req: Request, res: Response) => {
 //   }
 // }
 
-export const getAllUserDetails = async (req: Request, res: Response) => {
+export const getAllUserDetails = async (req: any, res: Response) => {
   try {
-    const id = req.user.id
+    const id = req.user?.id
     const userDetails = await User.findById(id)
       .populate("additionalDetails") //to get details like gender
       .exec()
@@ -178,3 +185,45 @@ export const getAllUserDetails = async (req: Request, res: Response) => {
     })
   }
 }
+
+export const getEnrolledCourses = async (req: any, res: Response) => {
+  try {
+    // console.log("first")
+    const id = req.user?.id
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID not provided",
+      })
+    }
+
+    const user = await User.findById(id)
+      .populate({
+        path: "courses",
+        populate: {
+          path: "courseContent",
+        },
+      })
+      .populate("courseProgress")
+      .exec()
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User Data fetched successfully",
+      data: user,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: (error as Error).message,
+    })
+  }
+}
+
