@@ -1,13 +1,15 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import crypto from "crypto"
+import { Response } from "express"
+import { default as mongoose } from "mongoose"
+
 import { instance } from "../config/razorpay"
-import Course from "../models/Course"
-import User from "../models/User"
-import mailSender from "../utils/mailSender"
 import { courseEnrollmentEmail } from "../mail/templates/courseEnrollmentEmail"
 import { paymentSuccess } from "../mail/templates/paymentSuccess"
-import { default as mongoose } from "mongoose"
-import crypto from "crypto"
+import Course from "../models/Course"
 import CourseProgress from "../models/CourseProgress"
+import User from "../models/User"
+import mailSender from "../utils/mailSender"
 
 export const capturePayment = async (req: any, res: Response) => {
   //get courseId and UserID

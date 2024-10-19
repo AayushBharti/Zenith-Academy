@@ -1,4 +1,6 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
 import mailSender from "../utils/mailSender"
 
 // Define a type for the request body
@@ -59,4 +61,5 @@ const contactUs = async (req: any, res: Response) => {
     })
   }
 }
+
 export default contactUs
