@@ -1,8 +1,14 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
 import Category from "../models/Category"
 import Course from "../models/Course"
+import CourseProgress from "../models/CourseProgress"
+import Section from "../models/Section"
+import SubSection from "../models/SubSection"
 import User from "../models/User"
 import { uploadImageToCloudinary } from "../utils/imageUploader"
+import { convertSecondsToDuration } from "../utils/secToDuration"
 
 // Function to create a new course
 export const createCourse = async (req: any, res: Response) => {
@@ -20,8 +26,9 @@ export const createCourse = async (req: any, res: Response) => {
       category,
       instructions,
     } = req.body
-
-    let {status} = req.body
+    // console.log(req.body);
+    // console.log(req.files);
+    let { status } = req.body
 
     // Get thumbnail image from request files
     const thumbnail = req.files?.thumbnailImage
@@ -33,7 +40,7 @@ export const createCourse = async (req: any, res: Response) => {
       !whatYouWillLearn ||
       !price ||
       !tag ||
-      !thumbnail ||
+      // !thumbnail ||
       !category
     ) {
       return res.status(400).json({
@@ -57,7 +64,7 @@ export const createCourse = async (req: any, res: Response) => {
       })
     }
 
-    // Check if the tag given is valid
+    // Check if the category given is valid
     const categoryDetails = await Category.findById(category)
     if (!categoryDetails) {
       return res.status(404).json({
@@ -74,9 +81,11 @@ export const createCourse = async (req: any, res: Response) => {
         message: "Invalid FOLDER_NAME in env",
       })
     }
-
-    const thumbnailImage = await uploadImageToCloudinary(Array.isArray(thumbnail) ? thumbnail[0] : thumbnail, folderName)
-    console.log(thumbnailImage)
+    const thumbnailImage = await uploadImageToCloudinary(
+      Array.isArray(thumbnail) ? thumbnail[0] : thumbnail,
+      folderName
+    )
+    // console.log(thumbnailImage);
     // Create a new course with the given details
     const newCourse = await Course.create({
       courseName,
@@ -103,7 +112,7 @@ export const createCourse = async (req: any, res: Response) => {
     )
     // Add the new course to the Categories
     await Category.findByIdAndUpdate(
-      { _id: category },
+      { _id: categoryDetails._id },
       {
         $push: {
           course: newCourse._id,
@@ -202,6 +211,34 @@ export const getCourseDetails = async (
       success: false,
       message: `Can't Fetch Course Data`,
       error: (error as Error).message,
+    })
+  }
+}
+
+// Function to get all courses of a particular instructor
+export const getInstructorCourses = async (
+  req: any,
+  res: Response
+): Promise<Response> => {
+  try {
+    // Get user ID from request object (assuming it's added to req.user by some auth middleware)
+    const userId: string = req.user.id
+
+    // Find all courses of the instructor
+    const allCourses = await Course.find({ instructor: userId })
+
+    // Return all courses of the instructor
+    return res.status(200).json({
+      success: true,
+      data: allCourses,
+    })
+  } catch (error: any) {
+    // Handle any errors that occur during the fetching of the courses
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch courses",
+      error: error.message,
     })
   }
 }
