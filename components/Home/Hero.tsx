@@ -1,7 +1,8 @@
-import { ChevronRight } from "lucide-react"
-import HighlightText from "./HighlightedText"
 import Link from "next/link"
+import { ChevronRight } from "lucide-react"
+
 import { ButtonOutline, MainButton } from "../ui/ThemeButton"
+import HighlightText from "./HighlightedText"
 
 export default function Hero() {
   return (

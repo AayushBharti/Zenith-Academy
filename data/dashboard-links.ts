@@ -1,12 +1,12 @@
 import { ACCOUNT_TYPE } from "@/data/constants"
 import {
+  Archive,
   BookOpen,
   GraduationCap,
   LayoutDashboard,
-  User,
   PlusCircle,
   ShoppingCart,
-  Archive,
+  User,
 } from "lucide-react"
 
 export const sidebarLinks = [

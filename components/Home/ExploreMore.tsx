@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import { HomePageExplore } from "@/data/homepage-explore"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { BookOpen } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -10,8 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { BookOpen } from "lucide-react"
+
 import HighlightText from "./HighlightedText"
 
 const tabsName = [
