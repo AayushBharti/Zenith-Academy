@@ -1,16 +1,16 @@
 "use client"
 
-import Hero from "@/components/Home/Hero"
+import ReviewsCarousel from "@/components/Common/ReviewCarousel"
 import CodeBlocks from "@/components/Home/CodeBlocks"
+import ExploreMore from "@/components/Home/ExploreMore"
+import { Features } from "@/components/Home/Features"
+import Hero from "@/components/Home/Hero"
 import HighlightText from "@/components/Home/HighlightedText"
 import InstructorSection from "@/components/Home/InstructorSection"
-import { Features } from "@/components/Home/Features"
-import ExploreMore from "@/components/Home/ExploreMore"
-import ReviewsCarousel from "@/components/Common/ReviewCarousel"
 
 export default function Home() {
   return (
-    <main className="relative max-w-[1400px] dark:bg-black-100 flex justify-center items-center flex-col overflow-hidden mx-auto sm:px-10 px-5">
+    <main className="relative max-w-[1400px] dark:bg-black-100 flex justify-center items-center flex-col mx-auto sm:px-10 px-5">
       {/* font-[family-name:var(--font-geist-mono)] */}
       <Hero />
       <CodeBlocks

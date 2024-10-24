@@ -1,7 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import {
+  BarChart,
+  Book,
+  Briefcase,
+  ChevronRight,
+  Users,
+  Zap,
+} from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,16 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import {
-  ChevronRight,
-  Book,
-  Users,
-  BarChart,
-  Briefcase,
-  Zap,
-} from "lucide-react"
 
 const learningFeatures = [
   {

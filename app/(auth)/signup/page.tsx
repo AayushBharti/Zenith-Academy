@@ -1,6 +1,9 @@
 "use client"
-import Template from "@/components/Auth/AuthTemplate"
+
 import { useAuthStore } from "@/store/useAuthStore"
+
+import Template from "@/components/Auth/AuthTemplate"
+
 import OpenRoute from "../../../components/Auth/OpenRoute"
 
 function Signup() {

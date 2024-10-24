@@ -1,9 +1,21 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/useAuthStore"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ArrowLeft } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -19,18 +31,8 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { useAuthStore } from "@/store/useAuthStore"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+
 import { signUp } from "../../../services/authService"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { ArrowLeft } from "lucide-react"
 
 const otpSchema = z.object({
   otp: z.string().min(6, {

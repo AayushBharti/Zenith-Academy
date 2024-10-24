@@ -1,5 +1,5 @@
-import { Badge } from "../ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Award, GraduationCap, Users, Zap } from "lucide-react"
+
 import {
   Card,
   CardContent,
@@ -7,7 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Users, GraduationCap, Award, Zap } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import { Badge } from "../ui/badge"
 
 export default function Mission() {
   return (

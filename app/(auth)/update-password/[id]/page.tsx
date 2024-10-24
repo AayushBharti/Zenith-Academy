@@ -2,10 +2,24 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { updatePassword } from "@/services/authService"
+import { useAuthStore } from "@/store/useAuthStore"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -16,19 +30,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ArrowLeft, AlertCircle, CheckCircle2 } from "lucide-react"
-import { useAuthStore } from "@/store/useAuthStore"
-import { updatePassword } from "@/services/authService"
-import { useRouter } from "next/navigation"
 
 const updatePasswordSchema = z
   .object({

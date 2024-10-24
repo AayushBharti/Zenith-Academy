@@ -1,4 +1,6 @@
 import { Metadata } from "next"
+import { Mail, MapPin, Phone } from "lucide-react"
+
 import {
   Card,
   CardContent,
@@ -6,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Mail, MapPin, Phone } from "lucide-react"
 import ContactForm from "@/components/ContactUs/ContactForm"
 
 export const metadata: Metadata = {

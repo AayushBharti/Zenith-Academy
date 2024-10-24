@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+
 import { Badge } from "../ui/badge"
 
 const FAQData = [

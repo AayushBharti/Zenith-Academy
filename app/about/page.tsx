@@ -1,11 +1,11 @@
-import ReviewsCarousel from "@/components/Common/ReviewCarousel"
-import LearningGrid from "@/components/About/LearningGrid"
+import CTASection from "@/components/About/CTA"
+import FAQ from "@/components/About/FAQ"
 import HeroAbout from "@/components/About/HeroAbout"
+import LearningGrid from "@/components/About/LearningGrid"
 import Mission from "@/components/About/Mission"
 import Statistics from "@/components/About/Statistics"
 import VideoSection from "@/components/About/VIdeoSection"
-import FAQ from "@/components/About/FAQ"
-import CTASection from "@/components/About/CTA"
+import ReviewsCarousel from "@/components/Common/ReviewCarousel"
 
 export default function PremiumDarkModeEdTechAboutPage() {
   return (

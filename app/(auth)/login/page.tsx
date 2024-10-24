@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { CornerDownRight, Lightbulb } from "lucide-react"
+
 import Template from "@/components/Auth/AuthTemplate"
 import OpenRoute from "@/components/Auth/OpenRoute"
 

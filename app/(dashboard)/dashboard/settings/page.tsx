@@ -1,12 +1,32 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import {
+  deleteAccount,
+  updateAdditionalDetails,
+  updatePassword,
+  updatePfp,
+} from "@/services/profileService"
+import { useAuthStore } from "@/store/useAuthStore"
+import { useProfileStore } from "@/store/useProfileStore"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { AlertCircle } from "lucide-react"
+import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
+import * as z from "zod"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -16,6 +36,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -23,28 +45,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Label } from "@/components/ui/label"
-import { AlertCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useAuthStore } from "@/store/useAuthStore"
-import { useRouter } from "next/navigation"
-import { useProfileStore } from "@/store/useProfileStore"
-import toast from "react-hot-toast"
-import {
-  deleteAccount,
-  updateAdditionalDetails,
-  updatePassword,
-  updatePfp,
-} from "@/services/profileService"
+import { Textarea } from "@/components/ui/textarea"
 import PrivateRoute from "@/components/Auth/PrivateRoute"
 
 const profileSchema = z.object({
