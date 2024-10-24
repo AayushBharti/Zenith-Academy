@@ -1,9 +1,21 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { useProfileStore } from "@/store/useProfileStore"
+import { useRouter } from "next/navigation"
 import { logout } from "@/services/authService"
+import { useProfileStore } from "@/store/useProfileStore"
+import {
+  BookOpen,
+  Calendar,
+  Github,
+  GraduationCap,
+  HelpCircle,
+  LayoutDashboard,
+  LogOut,
+  MessageSquare,
+  Settings,
+} from "lucide-react"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -15,17 +27,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  GraduationCap,
-  BookOpen,
-  Calendar,
-  MessageSquare,
-  HelpCircle,
-  Github,
-} from "lucide-react"
 
 export default function ProfileDropdown() {
   const { user } = useProfileStore()

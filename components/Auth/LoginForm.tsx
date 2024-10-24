@@ -1,10 +1,11 @@
 "use client"
 
-import { useForm } from "react-hook-form"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { login } from "@/services/authService"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { login } from "@/services/authService"
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),

@@ -1,6 +1,8 @@
+import { GraduationCap, Star, Users, Zap } from "lucide-react"
+
 import { Card, CardContent } from "@/components/ui/card"
+
 import { Badge } from "../ui/badge"
-import { Users, GraduationCap, Zap, Star } from "lucide-react"
 
 export default function Statistics() {
   return (

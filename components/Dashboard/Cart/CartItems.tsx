@@ -1,12 +1,13 @@
 "use client"
 
-import { useCartStore } from "@/store/useCartStore"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useCartStore } from "@/store/useCartStore"
+import { Trash2 } from "lucide-react"
+
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function CartItems() {
   const { cart, removeFromCart } = useCartStore()

@@ -1,11 +1,12 @@
 "use client"
 
-import { useCartStore } from "@/store/useCartStore"
-import { useAuthStore } from "@/store/useAuthStore"
-import { useProfileStore } from "@/store/useProfileStore"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/useAuthStore"
+import { useCartStore } from "@/store/useCartStore"
+import { useProfileStore } from "@/store/useProfileStore"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 
 export default function CartSummary() {
   const { total, cart } = useCartStore()

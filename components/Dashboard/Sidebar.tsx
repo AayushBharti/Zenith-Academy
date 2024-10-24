@@ -3,9 +3,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Settings, LogOut } from "lucide-react"
+import { sidebarLinks } from "@/data/dashboard-links"
+import { logout } from "@/services/authService"
+import { useProfileStore } from "@/store/useProfileStore"
+import { LogOut, Settings } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,9 +18,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { logout } from "@/services/authService"
-import { sidebarLinks } from "@/data/dashboard-links"
-import { useProfileStore } from "@/store/useProfileStore"
+import { Button } from "@/components/ui/button"
 
 export default function Sidebar() {
   const { user } = useProfileStore()

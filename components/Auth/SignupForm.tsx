@@ -1,10 +1,11 @@
 "use client"
 
-import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import { sendOtp } from "@/services/authService"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
+import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
+import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,9 +18,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { sendOtp } from "@/services/authService"
-import { useAuthStore } from "../../store/useAuthStore"
+
 import { ACCOUNT_TYPE } from "../../data/constants"
+import { useAuthStore } from "../../store/useAuthStore"
 
 const formSchema = z
   .object({

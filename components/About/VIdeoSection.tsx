@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useRef, useState } from "react"
+import { Pause, Play, Volume2, VolumeX } from "lucide-react"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Pause, Play, Volume2, VolumeX } from "lucide-react"
 
 export default function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false)

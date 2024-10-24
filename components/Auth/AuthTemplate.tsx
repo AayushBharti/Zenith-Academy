@@ -2,8 +2,10 @@
 
 import React from "react"
 import Image from "next/image"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+
 import LoginForm from "./LoginForm"
 import SignupForm from "./SignupForm"
 

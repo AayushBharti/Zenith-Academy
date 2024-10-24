@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
+import Image from "next/image"
 import { Upload as UploadIcon, X } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Image from "next/image"
 
 interface UploadProps {
   onChange: (file: File | null) => void

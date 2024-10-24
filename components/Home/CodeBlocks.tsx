@@ -1,5 +1,6 @@
-import { TypeAnimation } from "react-type-animation"
 import Link from "next/link"
+import { TypeAnimation } from "react-type-animation"
+
 import { ButtonOutline, MainButton } from "../ui/ThemeButton"
 
 type CTAButton = {

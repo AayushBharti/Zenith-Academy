@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { X } from "lucide-react"
-import { Input } from "@/components/ui/input"
+
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 interface ChipInputProps {
   value: string[]

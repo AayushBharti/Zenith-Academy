@@ -1,19 +1,13 @@
 "use client"
 
-import React, { useState } from "react"
-import { Swiper, SwiperSlide } from "swiper/react"
-import type { Swiper as SwiperType } from "swiper"
-import { Autoplay, Navigation, Pagination } from "swiper/modules"
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react"
+import React from "react"
+import { Quote, Star } from "lucide-react"
+
+import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 
-// Import Swiper styles
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import { cn } from "@/lib/utils"
+import { GeneralSwiper } from "./GeneralSwiper"
 
 interface Review {
   id: number
@@ -23,7 +17,6 @@ interface Review {
   review: string
 }
 
-// Sample review data with real Unsplash images
 const reviews: Review[] = [
   {
     id: 1,
@@ -107,64 +100,20 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => (
 )
 
 export default function ReviewsCarousel() {
-  const [swiper, setSwiper] = useState<SwiperType | null>(null)
-
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 relative">
-      <Swiper
-        modules={[Autoplay, Navigation, Pagination]}
-        spaceBetween={20}
-        slidesPerView={1}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
+    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+      <GeneralSwiper
+        slidesPerView={{ 640: 2, 1024: 4 }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
         loop={true}
-        navigation={{
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        }}
-        pagination={{
-          clickable: true,
-          el: ".swiper-pagination",
-          bulletActiveClass: "bg-primary",
-        }}
-        breakpoints={{
-          640: {
-            slidesPerView: 2,
-          },
-          1024: {
-            slidesPerView: 4,
-          },
-        }}
-        onSwiper={setSwiper}
+        navigation={true}
+        pagination={true}
         className="py-12"
       >
         {reviews.map((review) => (
-          <SwiperSlide key={review.id}>
-            <ReviewCard review={review} />
-          </SwiperSlide>
+          <ReviewCard key={review.id} review={review} />
         ))}
-      </Swiper>
-      <div className="swiper-pagination mt-4"></div>
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-background/60 text-foreground hover:bg-accent hover:text-accent-foreground rounded-full"
-        onClick={() => swiper?.slidePrev()}
-      >
-        <ChevronLeft className="h-6 w-6" />
-        <span className="sr-only">Previous review</span>
-      </Button>
-      <Button
-        variant="outline"
-        size="icon"
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-background/60 text-foreground hover:bg-accent hover:text-accent-foreground rounded-full"
-        onClick={() => swiper?.slideNext()}
-      >
-        <ChevronRight className="h-6 w-6" />
-        <span className="sr-only">Next review</span>
-      </Button>
+      </GeneralSwiper>
     </div>
   )
 }

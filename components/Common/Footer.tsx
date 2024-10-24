@@ -1,6 +1,7 @@
 import Link from "next/link"
+import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react"
+
 import { FooterLink2 } from "../../data/footer-links"
-import { Facebook, Twitter, Youtube, Instagram, Linkedin } from "lucide-react"
 
 const Resources = [
   "Articles",
@@ -30,7 +31,7 @@ const socialLinks = [
 export default function Footer() {
   return (
     <section id="footer" className="bg-zinc-900">
-      <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-zinc-400 leading-6 mx-auto relative py-14 max-w-[1400px]">
+      <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-zinc-400 leading-6 mx-auto relative py-14 max-w-[1500px]">
         <div className="border-b w-[100%] flex flex-col lg:flex-row pb-5 border-zinc-700">
           {/* Section 1 */}
 
@@ -103,9 +104,7 @@ export default function Footer() {
             </div>
 
             <div className="w-[48%] lg:w-[30%] mb-7 lg:pl-0 hidden md:block">
-              <h1 className="text-zinc-50 font-semibold text-[16px]">
-                Plans
-              </h1>
+              <h1 className="text-zinc-50 font-semibold text-[16px]">Plans</h1>
 
               <div className="flex flex-col gap-2 mt-2">
                 {Plans.map((ele, index) => {

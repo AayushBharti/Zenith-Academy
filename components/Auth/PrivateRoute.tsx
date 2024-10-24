@@ -1,7 +1,7 @@
 // This will prevent Unauthenticated users from accessing this route
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store/useAuthStore"
-import { useEffect } from "react"
 
 interface PrivateRouteProps {
   children: React.ReactNode
