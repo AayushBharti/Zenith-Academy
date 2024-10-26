@@ -1,7 +1,9 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
+import Course from "../models/Course"
 import Section from "../models/Section"
 import SubSection from "../models/SubSection"
-import Course from "../models/Course"
 import { uploadImageToCloudinary } from "../utils/imageUploader"
 
 // Create a new sub-section for a given section

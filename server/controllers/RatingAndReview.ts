@@ -1,7 +1,9 @@
-import { Request, Response } from "express"
-import RatingAndReview from "../models/RatingAndReview"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+import mongoose from "mongoose"
+
 import Course from "../models/Course"
-import { default as mongoose } from "mongoose"
+import RatingAndReview from "../models/RatingAndReview"
 
 // Function to create a rating and review for a course
 export const createRating = async (

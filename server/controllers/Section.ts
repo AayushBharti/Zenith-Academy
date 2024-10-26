@@ -1,6 +1,8 @@
-import Section from "../models/Section"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Response } from "express"
+
 import Course from "../models/Course"
-import { Request, Response } from "express"
+import Section from "../models/Section"
 
 export const createSection = async (req: any, res: Response) => {
   try {

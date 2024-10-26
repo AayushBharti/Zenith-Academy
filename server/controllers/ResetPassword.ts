@@ -1,13 +1,12 @@
-import { Request, Response } from "express"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import crypto from "crypto"
+import bcrypt from "bcrypt"
+import { Response } from "express"
+
 import User from "../models/User"
 import mailSender from "../utils/mailSender"
-import bcrypt from "bcrypt"
-import crypto from "crypto"
 
-export const resetPasswordToken = async (
-  req: any,
-  res: Response
-) => {
+export const resetPasswordToken = async (req: any, res: Response) => {
   try {
     //get email from req body
     const email = req.body.email
@@ -62,10 +61,7 @@ export const resetPasswordToken = async (
   }
 }
 
-export const resetPassword = async (
-  req: any,
-  res: Response
-) => {
+export const resetPassword = async (req: any, res: Response) => {
   try {
     //data fetch
     const { password, confirmPassword, token } = req.body
