@@ -1,11 +1,14 @@
 "use client"
 
 import React from "react"
+import useCourseStore from "@/store/useCourseStore"
 import { motion } from "framer-motion"
 import { Check } from "lucide-react"
-import useCourseStore from "../../../store/useCourseStore"
-import CourseInformationForm from "./CourseInformation/CourseInformationForm"
+
 import CourseBuilderForm from "./CourseBuilder/CourseBuilder"
+import CourseInformationForm from "./CourseInformation/CourseInformationForm"
+import PublishCourseForm from "./PublishCourse"
+
 const steps = [
   { id: 1, title: "Course Information" },
   { id: 2, title: "Course Builder" },
@@ -19,35 +22,26 @@ export function RenderSteps() {
     <div className="container mx-auto py-10">
       <div className="mb-8">
         <div className="relative flex justify-between">
-          {steps.map((item, index) => (
-            <React.Fragment key={item.id}>
+          {steps.map((item) => (
+            <div key={item.id} className=" flex w-full justify-between">
               <div className="flex flex-col items-center">
-                <motion.div
-                  className={`grid h-10 w-10 place-items-center rounded-full border-2 ${
-                    step >= item.id
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-muted bg-background text-muted-foreground"
-                  }`}
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {step > item.id ? <Check className="h-6 w-6" /> : item.id}
-                </motion.div>
-                <p className="mt-2 text-sm font-medium">{item.title}</p>
-              </div>
-              {index < steps.length - 1 && (
                 <div
-                  className={`absolute top-5 left-0 h-[2px] ${
-                    step > item.id ? "bg-primary" : "bg-muted"
+                  className={`grid cursor-default aspect-square w-[34px] place-items-center rounded-full border-[1px] ${
+                    step === item.id
+                      ? "bg-yellow-900 border-yellow-50 text-yellow-50"
+                      : "border-richblack-700 bg-richblack-800 text-richblack-300"
                   }`}
-                  style={{
-                    width: `${100 / (steps.length - 1)}%`,
-                    left: `${(100 / (steps.length - 1)) * index}%`,
-                  }}
-                />
+                >
+                  {step > item.id ? <Check /> : item.id}
+                </div>
+              </div>
+              {item.id < 3 && (
+                <div
+                  className={`h-[calc(34px/2)] w-[100%]  border-dashed border-b-2 ${step > item.id ? "border-yellow-50" : "border-richblack-700"}
+            }`}
+                ></div>
               )}
-            </React.Fragment>
+            </div>
           ))}
         </div>
       </div>
@@ -61,7 +55,7 @@ export function RenderSteps() {
       >
         {step === 1 && <CourseInformationForm />}
         {step === 2 && <CourseBuilderForm />}
-        {/* {step === 3 && <PublishCourseForm form={form} />} */}
+        {step === 3 && <PublishCourseForm />}
       </motion.div>
     </div>
   )
