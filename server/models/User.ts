@@ -1,4 +1,3 @@
-// Import the Mongoose library
 import mongoose from "mongoose"
 
 // Define the user schema using the Mongoose Schema constructor
@@ -73,5 +72,4 @@ const userSchema = new mongoose.Schema(
 )
 
 // Export the Mongoose model for the user schema, using the name "User"
-const User = mongoose.model("User", userSchema)
-export default User
+export default mongoose.model("User", userSchema)

@@ -1,4 +1,6 @@
-import mongoose from "mongoose"
+import mongoose, { CallbackError } from "mongoose"
+
+import { otpTemplate } from "../mail/templates/emailVerificationTemplate"
 import mailSender from "../utils/mailSender"
 
 // Define the OTP schema
@@ -24,7 +26,7 @@ async function sendVerificationEmail(email: string, otp: string) {
     const mailResponse = await mailSender(
       email,
       "Verification Email",
-      `Your OTP is: ${otp}`
+      otpTemplate(otp)
     )
     console.log("Email sent successfully:", mailResponse)
   } catch (error) {
@@ -40,7 +42,7 @@ OTPSchema.pre("save", async function (next) {
       await sendVerificationEmail(this.email, this.otp)
       console.log("Verification email sent for OTP document.")
     } catch (error) {
-      return next(error) // Pass error to the next middleware
+      return next(error as CallbackError) // Pass error to the next middleware
     }
   }
   next()
