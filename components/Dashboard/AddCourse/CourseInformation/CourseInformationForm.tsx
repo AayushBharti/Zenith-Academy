@@ -1,22 +1,28 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useForm, Controller } from "react-hook-form"
+import { useEffect, useState } from "react"
+import { COURSE_STATUS } from "@/data/constants"
+import {
+  addCourseDetails,
+  editCourseDetails,
+  fetchCourseCategories,
+} from "@/services/courseDetailsService"
+import { useAuthStore } from "@/store/useAuthStore"
+import useCourseStore from "@/store/useCourseStore"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
+import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -26,36 +32,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 
-import {
-  addCourseDetails,
-  editCourseDetails,
-  fetchCourseCategories,
-} from "@/services/courseDetailsService"
-import { COURSE_STATUS } from "@/data/constants"
-import { useAuthStore } from "@/store/useAuthStore"
-import useCourseStore from "@/store/useCourseStore"
 import ChipInput from "./ChipInput"
 import Upload from "./Upload"
 
 const formSchema = z.object({
-  courseTitle: z.string().min(1, "Course Title is required"),
-  courseShortDesc: z.string().min(1, "Course Description is required"),
-  coursePrice: z.number().min(0, "Price must be a positive number"),
-  courseCategory: z.string().min(1, "Course Category is required"),
-  courseTags: z.array(z.string()).min(1, "At least one tag is required"),
-  courseBenefits: z.string().min(1, "Course benefits are required"),
-  courseRequirements: z
+  courseName: z.string().min(1, "Course Title is required"),
+  courseDescription: z.string().min(1, "Course Description is required"),
+  price: z.number().min(0, "Price must be a positive number"),
+  category: z.string().min(1, "Course Category is required"),
+  tag: z.array(z.string()).min(1, "At least one tag is required"),
+  whatYouWillLearn: z.string().min(1, "Course benefits are required"),
+  instructions: z
     .array(z.string())
     .min(1, "At least one requirement is required"),
-  courseImage: z.instanceof(File).optional(),
+  thumbnailImage: z.instanceof(File).optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -70,13 +70,13 @@ export default function CourseInformationForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseTitle: "",
-      courseShortDesc: "",
-      coursePrice: 0,
-      courseCategory: "",
-      courseTags: [],
-      courseBenefits: "",
-      courseRequirements: [],
+      courseName: "",
+      courseDescription: "",
+      price: 0,
+      category: "",
+      tag: [],
+      whatYouWillLearn: "",
+      instructions: [],
     },
   })
 
@@ -92,26 +92,27 @@ export default function CourseInformationForm() {
 
     if (editCourse) {
       form.reset({
-        courseTitle: course.courseName,
-        courseShortDesc: course.courseDescription,
-        coursePrice: course.price,
-        courseCategory: course.category._id,
-        courseTags: course.tag,
-        courseBenefits: course.whatYouWillLearn,
-        courseRequirements: course.instructions,
+        courseName: course.courseName,
+        courseDescription: course.courseDescription,
+        price: course.price,
+        category: course.category._id,
+        tag: course.tag,
+        whatYouWillLearn: course.whatYouWillLearn,
+        instructions: course.instructions,
       })
     }
     getCategories()
   }, [editCourse, course, form])
 
+  //handles next button click
   const onSubmit = async (data: FormValues) => {
     setLoading(true)
     try {
       const formData = new FormData()
       Object.entries(data).forEach(([key, value]) => {
-        if (key === "courseTags" || key === "courseRequirements") {
+        if (key === "tag" || key === "instructions") {
           formData.append(key, JSON.stringify(value))
-        } else if (key === "courseImage" && value instanceof File) {
+        } else if (key === "thumbnailImage" && value instanceof File) {
           formData.append("thumbnailImage", value)
         } else {
           formData.append(key, value.toString())
@@ -153,7 +154,7 @@ export default function CourseInformationForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="courseTitle"
+              name="courseName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Course Title</FormLabel>
@@ -167,7 +168,7 @@ export default function CourseInformationForm() {
 
             <FormField
               control={form.control}
-              name="courseShortDesc"
+              name="courseDescription"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Course Description</FormLabel>
@@ -184,7 +185,7 @@ export default function CourseInformationForm() {
 
             <FormField
               control={form.control}
-              name="coursePrice"
+              name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Course Price</FormLabel>
@@ -205,7 +206,7 @@ export default function CourseInformationForm() {
 
             <FormField
               control={form.control}
-              name="courseCategory"
+              name="category"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Course Category</FormLabel>
@@ -231,8 +232,8 @@ export default function CourseInformationForm() {
               )}
             />
 
-            <Controller
-              name="courseTags"
+            <FormField
+              name="tag"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -254,7 +255,7 @@ export default function CourseInformationForm() {
 
             <FormField
               control={form.control}
-              name="courseBenefits"
+              name="whatYouWillLearn"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Course Benefits</FormLabel>
@@ -266,8 +267,8 @@ export default function CourseInformationForm() {
               )}
             />
 
-            <Controller
-              name="courseRequirements"
+            <FormField
+              name="instructions"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -287,8 +288,8 @@ export default function CourseInformationForm() {
               )}
             />
 
-            <Controller
-              name="courseImage"
+            <FormField
+              name="thumbnailImage"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
