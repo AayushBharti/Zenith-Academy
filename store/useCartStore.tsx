@@ -1,5 +1,5 @@
-import { create } from "zustand"
 import { toast } from "react-hot-toast"
+import { create } from "zustand"
 
 // Define types for cart items and the store state
 interface Course {
@@ -14,7 +14,7 @@ interface CartState {
   totalItems: number
   addToCart: (course: Course) => void
   removeFromCart: (courseId: string) => void
-  resetCart: () => void 
+  resetCart: () => void
 }
 
 // Create the Zustand store

@@ -13,7 +13,7 @@ interface User {
     contactNumber: string
   }
   createdAt: string
-  updatedAt:string
+  updatedAt: string
   active: string
   approved: string
 }

@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer"
 import dotenv from "dotenv"
+import nodemailer from "nodemailer"
 
 dotenv.config()
 
@@ -22,7 +22,7 @@ const mailSender = async (email: string, title: string, body: string) => {
       subject: title,
       html: body,
     })
-    
+
     console.log("Email sent:", info.messageId)
     return info
   } catch (error) {

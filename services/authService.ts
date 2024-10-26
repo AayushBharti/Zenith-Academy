@@ -1,9 +1,10 @@
-import { toast } from "react-hot-toast"
 import { useAuthStore } from "@/store/useAuthStore"
 import { useCartStore } from "@/store/useCartStore"
 import { useProfileStore } from "@/store/useProfileStore"
-import { endpoints } from "../utils/apis"
+import { toast } from "react-hot-toast"
+
 import { apiConnector } from "../utils/apiConnector"
+import { endpoints } from "../utils/apis"
 
 const {
   SENDOTP_API,

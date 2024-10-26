@@ -1,4 +1,5 @@
 import toast from "react-hot-toast"
+
 import { apiConnector } from "../utils/apiConnector"
 import { profileEndpoints, settingsEndpoints } from "../utils/apis"
 import { logout } from "./authService"
