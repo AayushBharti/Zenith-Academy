@@ -1,17 +1,34 @@
-import { NextFunction } from "express"
-import jwt from "jsonwebtoken"
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import dotenv from "dotenv"
+import { NextFunction, Response } from "express"
+import jwt, { JwtPayload } from "jsonwebtoken"
+
 dotenv.config()
 
+interface DecodedToken {
+  id: string
+  email: string
+  accountType: string
+}
+
+// Type guard to check if the decoded token is of type DecodedToken
+function isDecodedToken(payload: JwtPayload | string): payload is DecodedToken {
+  return (
+    typeof payload !== "string" &&
+    "id" in payload &&
+    "email" in payload &&
+    "accountType" in payload
+  )
+}
+
 //auth
-export const auth = async (req, res, next: NextFunction) => {
+export const auth = async (req: any, res: Response, next: NextFunction) => {
   try {
-    //extract token
+    // Extract token from cookies, body, or headers
     const token =
       req.cookies.token ||
       req.body.token ||
-      req.header("Authorisation").replace("Bearer ", "")
+      req.header("Authorisation")?.replace("Bearer ", "")
 
     // If token is missing, return response
     if (!token) {
@@ -21,16 +38,26 @@ export const auth = async (req, res, next: NextFunction) => {
       })
     }
 
-    //verify the token
+    // Verify the token
     try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET)
-      console.log("decode = ", decode)
-      req.user = decode
+      const decode = jwt.verify(token, process.env.JWT_SECRET as string)
+
+      // Use the type guard to check the payload type
+      if (isDecodedToken(decode)) {
+        req.user = decode // Now TypeScript understands this is a DecodedToken
+        console.log("decode = ", decode)
+      } else {
+        // If the token is not of expected type
+        return res.status(401).json({
+          success: false,
+          message: "Token is invalid",
+        })
+      }
     } catch (err) {
       // Verification issue
       return res.status(401).json({
         success: false,
-        message: "token is invalid",
+        message: "Token is invalid",
       })
     }
     next()
@@ -43,9 +70,13 @@ export const auth = async (req, res, next: NextFunction) => {
 }
 
 //isStudent
-export const isStudent = async (req, res, next: NextFunction) => {
+export const isStudent = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    if (req.user.accountType !== "Student") {
+    if (req.user?.accountType !== "Student") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Students only",
@@ -61,9 +92,13 @@ export const isStudent = async (req, res, next: NextFunction) => {
 }
 
 //isInstructor
-export const isInstructor = async (req, res, next: NextFunction) => {
+export const isInstructor = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    if (req.user.accountType !== "Instructor") {
+    if (req.user?.accountType !== "Instructor") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Instructor only",
@@ -79,9 +114,9 @@ export const isInstructor = async (req, res, next: NextFunction) => {
 }
 
 //isAdmin
-export const isAdmin = async (req, res, next: NextFunction) => {
+export const isAdmin = async (req: any, res: Response, next: NextFunction) => {
   try {
-    if (req.user.accountType !== "Admin") {
+    if (req.user?.accountType !== "Admin") {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Admin only",
