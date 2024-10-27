@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "**",
+        port: "",
+        pathname: "/**",
       },
     ],
     deviceSizes: [320, 420, 768, 1024, 1200],
@@ -16,4 +15,5 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
 }
+
 export default nextConfig
