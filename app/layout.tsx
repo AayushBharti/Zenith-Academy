@@ -1,10 +1,13 @@
 import "./globals.css"
-import type { Metadata } from "next"
+
+import type { Metadata, Viewport } from "next"
 import localFont from "next/font/local"
-import { cn } from "@/lib/utils"
-import { ThemeProvider } from "../components/ThemeProviders"
-import Footer from "../components/Common/Footer"
 import { Toaster } from "react-hot-toast"
+
+import { cn } from "@/lib/utils"
+
+// import { ThemeProvider } from "../components/ThemeProviders";
+import Footer from "../components/Common/Footer"
 import Navbar from "../components/Common/Navbar"
 
 const geistSans = localFont({
@@ -30,13 +33,18 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "black" }],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <head />
       <body
         className={cn(
@@ -45,17 +53,17 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
-        >
-          <Toaster />
-          <Navbar />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        > */}
+        <Toaster />
+        <Navbar />
+        {children}
+        <Footer />
+        {/* </ThemeProvider> */}
       </body>
     </html>
   )
