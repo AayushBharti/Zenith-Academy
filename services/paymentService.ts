@@ -111,3 +111,68 @@ export async function buyCourse(
     console.log("buyCourse -> error", error)
   }
 }
+
+async function sendPaymentSuccessEmail(
+  response: RazorpayResponse,
+  amount: number,
+  token: string
+): Promise<void> {
+  const res = await apiConnector(
+    "POST",
+    SEND_PAYMENT_SUCCESS_EMAIL_API,
+    {
+      amount,
+      paymentId: response.razorpay_payment_id,
+      orderId: response.razorpay_order_id,
+    },
+    {
+      Authorisation: `Bearer ${token}`,
+    }
+  )
+
+  if (!res.data.success) {
+    console.log(res.data.message)
+    toast.error(res.data.message || "An error occurred")
+  }
+}
+
+async function verifypament(
+  response: RazorpayResponse,
+  courses: Course[] | { courses: Course[] },
+  token: string,
+  navigate: (path: string) => void
+): Promise<void> {
+  const { resetCart } = useCartStore.getState()
+
+  const toastId = toast.loading("Please wait while we verify your payment")
+
+  try {
+    const res = await apiConnector(
+      "POST",
+      COURSE_VERIFY_API,
+      {
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_signature: response.razorpay_signature,
+        courses: Array.isArray(courses) ? courses : courses.courses,
+      },
+      {
+        Authorisation: `Bearer ${token}`,
+      }
+    )
+
+    if (!res.data.success) {
+      toast.error(res.data.message || "Verification failed")
+      return
+    }
+
+    toast.success("Payment Successful")
+    navigate("/dashboard/enrolled-courses")
+    resetCart()
+  } catch (err) {
+    toast.error("Payment Failed")
+    console.log(err)
+  }
+
+  toast.dismiss(toastId)
+}
