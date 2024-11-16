@@ -382,3 +382,101 @@ export const getFullCourseDetails = async (
     })
   }
 }
+
+// Delete Course
+export const deleteCourse = async (
+  req: any,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { courseId } = req.body
+
+    // Find the course to delete
+    const course = await Course.findById(courseId)
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" })
+    }
+
+    // Unenroll students from the course
+    const studentsEnrolled = course.studentsEnrolled
+    for (const studentId of studentsEnrolled) {
+      await User.findByIdAndUpdate(studentId, {
+        $pull: { courses: courseId },
+      })
+    }
+
+    // Delete sections and sub-sections
+    const courseSections = course.courseContent
+    for (const sectionId of courseSections) {
+      // Delete sub-sections of the section
+      const section = await Section.findById(sectionId)
+      if (section) {
+        const subSections = section.subSection
+        for (const subSectionId of subSections) {
+          await SubSection.findByIdAndDelete(subSectionId)
+        }
+      }
+
+      // Delete the section
+      await Section.findByIdAndDelete(sectionId)
+    }
+
+    // Delete the course
+    await Course.findByIdAndDelete(courseId)
+
+    // Delete course ID from Category
+    await Category.findByIdAndUpdate(course?.category?._id, {
+      $pull: { courses: courseId },
+    })
+
+    // Delete course ID from Instructor
+    await User.findByIdAndUpdate(course?.instructor?._id, {
+      $pull: { courses: courseId },
+    })
+
+    return res.status(200).json({
+      success: true,
+      message: "Course deleted successfully",
+    })
+  } catch (error: any) {
+    console.error(error)
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    })
+  }
+}
+
+// Search course by title, description, and tags array
+export const searchCourse = async (
+  req: any,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { searchQuery } = req.body
+
+    // Search for courses based on title, description, or tags
+    const courses = await Course.find({
+      $or: [
+        { courseName: { $regex: searchQuery, $options: "i" } },
+        { courseDescription: { $regex: searchQuery, $options: "i" } },
+        { tag: { $regex: searchQuery, $options: "i" } },
+      ],
+    })
+      .populate("instructor")
+      .populate("category")
+      .populate("ratingAndReviews")
+      .exec()
+
+    return res.status(200).json({
+      success: true,
+      data: courses,
+    })
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
