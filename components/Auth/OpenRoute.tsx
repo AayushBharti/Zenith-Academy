@@ -1,5 +1,7 @@
 // This will prevent authenticated users from accessing this route
-import { useEffect } from "react"
+"use client"
+
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store/useAuthStore"
 
@@ -8,17 +10,23 @@ interface OpenRouteProps {
 }
 
 export default function OpenRoute({ children }: OpenRouteProps) {
-  const { token } = useAuthStore()
+  const { token, loading } = useAuthStore()
   const router = useRouter()
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   useEffect(() => {
-    if (token) {
-      router.push("/dashboard/my-profile")
+    if (token && !loading) {
+      setIsRedirecting(true)
+      router.replace("/dashboard/my-profile")
     }
-  }, [token, router])
+  }, [token, loading, router])
 
-  if (token) {
-    return <div>Loading...</div>
+  if (loading || isRedirecting) {
+    return (
+      <div className="size-full flex justify-center items-center">
+        <p>Loading...</p>
+      </div>
+    )
   }
 
   return children
