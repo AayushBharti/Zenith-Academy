@@ -6,21 +6,12 @@ import { useRouter } from "next/navigation"
 import { getUserCourses as getUserEnrolledCourses } from "@/services/profileService"
 import { useAuthStore } from "@/store/useAuthStore"
 
+import { CourseDetails } from "@/types/course"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
-
-interface Course {
-  _id: string
-  courseName: string
-  courseDescription: string
-  thumbnail: string
-  courseContent: {
-    subSection: any[]
-  }[]
-}
 
 interface CourseProgress {
   courseID: string
@@ -30,14 +21,16 @@ interface CourseProgress {
 export default function EnrolledCourses() {
   const router = useRouter()
   const { token } = useAuthStore()
-
-  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([])
-  const [progressData, setProgressData] = useState<CourseProgress[]>([])
   const [loading, setLoading] = useState(true)
+
+  const [enrolledCourses, setEnrolledCourses] = useState<CourseDetails[]>([])
+  const [progressData, setProgressData] = useState<CourseProgress[]>([])
 
   const getEnrolledCourses = async () => {
     try {
       const response = await getUserEnrolledCourses(token as string)
+      // console.log("getEnrolledCourses -> response", response?.courseProgress)
+
       setEnrolledCourses(response?.courses || [])
       setProgressData(response?.courseProgress || [])
     } catch (error) {
@@ -47,7 +40,7 @@ export default function EnrolledCourses() {
     }
   }
 
-  const totalNoOfLectures = (course: Course) => {
+  const totalNoOfLectures = (course: CourseDetails) => {
     return course.courseContent.reduce(
       (total, section) => total + section.subSection.length,
       0
@@ -125,7 +118,11 @@ export default function EnrolledCourses() {
                     </div>
                     <Button
                       className="w-full mt-4"
-                      onClick={() => router.push(`/courses/${course._id}`)}
+                      onClick={() =>
+                        router.push(
+                          `/view-course/${course._id}/section/${course.courseContent[0]._id}/sub-section/${course.courseContent[0].subSection[0]}`
+                        )
+                      }
                     >
                       Continue Learning
                     </Button>
