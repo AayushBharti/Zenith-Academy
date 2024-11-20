@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/useAuthStore"
 
 import Template from "@/components/Auth/AuthTemplate"
 
-import OpenRoute from "../../../components/Auth/OpenRoute"
+import OpenRoute from "@/components/Auth/OpenRoute"
 
 function Signup() {
   const { loading } = useAuthStore()
