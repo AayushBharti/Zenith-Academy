@@ -16,7 +16,7 @@ export default function Loading() {
         >
           <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
         </svg>
-        <span className="text-xl">Loading...</span>
+        <span className="size-full gird place-items-center">Loading...</span>
       </div>
     </div>
   )
