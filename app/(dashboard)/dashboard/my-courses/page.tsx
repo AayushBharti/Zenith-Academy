@@ -6,19 +6,15 @@ import { fetchInstructorCourses } from "@/services/courseDetailsService"
 import { useAuthStore } from "@/store/useAuthStore"
 import { PlusIcon } from "lucide-react"
 
+import { CourseDetails } from "@/types/course"
 import { Button } from "@/components/ui/button"
 import CoursesTable from "@/components/Dashboard/MyCourses/CoursesTable"
-
-interface Course {
-  id: string
-  title: string
-}
 
 export default function MyCourses() {
   const { token } = useAuthStore()
 
   const router = useRouter()
-  const [courses, setCourses] = useState<any[] | null>(null)
+  const [courses, setCourses] = useState<CourseDetails[] | null>(null)
 
   const fetchCourses = async () => {
     try {
@@ -38,7 +34,7 @@ export default function MyCourses() {
   return (
     <div className="container mx-auto py-10">
       <div className="mb-14 flex items-center justify-between">
-        <h1 className="text-3xl font-medium text-primary">My Courses</h1>
+        <h1 className="text-4xl font-bold">My Courses</h1>
         <Button
           onClick={() => router.push("/dashboard/add-course")}
           className="flex items-center gap-x-2"
