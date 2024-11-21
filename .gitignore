@@ -7,7 +7,6 @@
 .pnp.js
 .yarn/install-state.gz
 
-
 /Server/dist
 /dist
 
@@ -41,3 +40,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.idea
