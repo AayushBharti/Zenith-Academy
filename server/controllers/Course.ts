@@ -226,6 +226,9 @@ export const getInstructorCourses = async (
 
     // Find all courses of the instructor
     const allCourses = await Course.find({ instructor: userId })
+      .populate("instructor")
+      .populate("ratingAndReviews")
+      .exec()
 
     // Return all courses of the instructor
     return res.status(200).json({
@@ -472,6 +475,53 @@ export const searchCourse = async (
     return res.status(200).json({
       success: true,
       data: courses,
+    })
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
+
+// Mark lecture as completed
+export const markLectureAsComplete = async (
+  req: any,
+  res: Response
+): Promise<Response> => {
+  const { courseId, subSectionId, userId } = req.body
+  if (!courseId || !subSectionId || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing required fields",
+    })
+  }
+
+  try {
+    // Check if the user has already marked this video as complete
+    const progressAlreadyExists = await CourseProgress.findOne({
+      userID: userId,
+      courseID: courseId,
+    })
+
+    const completedVideos = progressAlreadyExists?.completedVideos || []
+
+    if (!completedVideos.includes(subSectionId)) {
+      // Add the completed subSectionId to the user's progress
+      await CourseProgress.findOneAndUpdate(
+        { userID: userId, courseID: courseId },
+        { $push: { completedVideos: subSectionId } }
+      )
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Lecture already marked as complete",
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Lecture marked as complete",
     })
   } catch (error: any) {
     return res.status(500).json({
