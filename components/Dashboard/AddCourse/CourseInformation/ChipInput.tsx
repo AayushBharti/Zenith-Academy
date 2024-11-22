@@ -71,11 +71,7 @@ const ChipInput: React.FC<ChipInputProps> = ({
           placeholder={placeholder}
           className="flex-grow"
         />
-        <Button
-          type="button"
-          onClick={addTag}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
+        <Button type="button" onClick={addTag}>
           Add
         </Button>
       </div>
