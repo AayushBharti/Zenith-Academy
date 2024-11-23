@@ -15,7 +15,6 @@ import * as z from "zod"
 
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
@@ -111,50 +110,46 @@ const PublishCourseForm = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Publish Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="public"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Make this course public</FormLabel>
-                    <FormDescription>
-                      This will make your course visible to all users.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-end space-x-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={goBack}
-                disabled={loading}
-              >
-                Back
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : "Save Changes"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <div>
+      <div className="text-xl mb-4 font-bold">Publish Settings</div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="public"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Make this course public</FormLabel>
+                  <FormDescription>
+                    This will make your course visible to all users.
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-end space-x-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={goBack}
+              disabled={loading}
+            >
+              Back
+            </Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   )
 }
 
