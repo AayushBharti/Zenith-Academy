@@ -253,7 +253,7 @@ export const sendPaymentSuccessEmail = async (req: any, res: Response) => {
     }
     await mailSender(
       enrolledStudent.email,
-      `Zenith Minds Payment successful`,
+      `Zenith Academy Payment successful`,
       paymentSuccess(
         amount / 100,
         paymentId,

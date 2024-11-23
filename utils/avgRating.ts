@@ -2,7 +2,7 @@ interface Rating {
   rating: number
 }
 
-export default function GetAvgRating(ratingArr: Rating[]): number {
+export default function getAvgRating(ratingArr: Rating[]): number {
   if (ratingArr.length === 0) return 0
 
   const totalReviewCount = ratingArr.reduce((acc, curr) => {
