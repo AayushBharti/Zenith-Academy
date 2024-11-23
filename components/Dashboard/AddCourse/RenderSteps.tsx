@@ -2,8 +2,9 @@
 
 import React from "react"
 import useCourseStore from "@/store/useCourseStore"
-import { motion } from "framer-motion"
-import { Check } from "lucide-react"
+import { Check, ChevronRight } from "lucide-react"
+
+import { Progress } from "@/components/ui/progress"
 
 import CourseBuilderForm from "./CourseBuilder/CourseBuilder"
 import CourseInformationForm from "./CourseInformation/CourseInformationForm"
@@ -18,45 +19,53 @@ const steps = [
 export function RenderSteps() {
   const { step } = useCourseStore()
 
+  const renderStepContent = () => {
+    switch (step) {
+      case 1:
+        return <CourseInformationForm />
+      case 2:
+        return <CourseBuilderForm />
+      case 3:
+        return <PublishCourseForm />
+      default:
+        return null
+    }
+  }
+
   return (
-    <div className="container mx-auto py-10">
-      <div className="mb-8">
-        <div className="relative flex justify-between">
-          {steps.map((item) => (
-            <div key={item.id} className=" flex w-full justify-between">
+    <div className="space-y-8">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          {steps.map((item, index) => (
+            <React.Fragment key={item.id}>
               <div className="flex flex-col items-center">
                 <div
-                  className={`grid cursor-default aspect-square w-[34px] place-items-center rounded-full border-[1px] ${
-                    step === item.id
-                      ? "bg-yellow-900 border-yellow-50 text-yellow-50"
-                      : "border-richblack-700 bg-richblack-800 text-richblack-300"
+                  className={`grid place-items-center w-10 h-10 rounded-full border-2 ${
+                    step >= item.id
+                      ? "bg-primary border-primary-foreground text-primary-foreground"
+                      : "border-muted-foreground text-muted-foreground"
                   }`}
                 >
-                  {step > item.id ? <Check /> : item.id}
+                  {step > item.id ? (
+                    <Check className="h-5 w-5" />
+                  ) : (
+                    <span className="text-sm font-medium">{item.id}</span>
+                  )}
                 </div>
+                <span className="mt-2 text-xs font-medium text-muted-foreground">
+                  {item.title}
+                </span>
               </div>
-              {item.id < 3 && (
-                <div
-                  className={`h-[calc(34px/2)] w-[100%]  border-dashed border-b-2 ${step > item.id ? "border-yellow-50" : "border-richblack-700"}
-            }`}
-                ></div>
+              {index < steps.length - 1 && (
+                <ChevronRight className="h-5 w-5 text-muted-foreground" />
               )}
-            </div>
+            </React.Fragment>
           ))}
         </div>
+        <Progress value={(step / steps.length) * 100} className="h-2" />
       </div>
 
-      <motion.div
-        className="space-y-8"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-      >
-        {step === 1 && <CourseInformationForm />}
-        {step === 2 && <CourseBuilderForm />}
-        {step === 3 && <PublishCourseForm />}
-      </motion.div>
+      {renderStepContent()}
     </div>
   )
 }
