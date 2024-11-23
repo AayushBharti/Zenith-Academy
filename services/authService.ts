@@ -67,7 +67,8 @@ export async function signUp(
       throw new Error(response.data.message)
     }
     toast.success("Signup Successful")
-    navigate("/login")
+    // navigate("/login")
+    login(email, password, navigate)
   } catch (error) {
     console.log("SIGNUP API ERROR............", error)
     toast.error("Signup Failed")
@@ -115,6 +116,7 @@ export async function login(
 }
 
 export function logout(navigate: (path: string) => void) {
+  navigate("/")
   const { setToken } = useAuthStore.getState()
   const { resetCart } = useCartStore.getState()
   const { setUser } = useProfileStore.getState()
@@ -123,7 +125,6 @@ export function logout(navigate: (path: string) => void) {
   resetCart()
   localStorage.removeItem("token")
   localStorage.removeItem("user")
-  navigate("/")
   toast.success("Logged Out")
 }
 
