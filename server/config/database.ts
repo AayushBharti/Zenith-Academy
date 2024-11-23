@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 // Define the connection function
 
-const DBconnect = async () => {
+export const DBconnect = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URL as string)
     console.log("DB Connected Successfully")
@@ -11,9 +11,6 @@ const DBconnect = async () => {
     process.exit(1)
   }
 }
-
-// Export the connection function
-export { DBconnect }
 
 // const DBconnect = () => {
 //   mongoose
