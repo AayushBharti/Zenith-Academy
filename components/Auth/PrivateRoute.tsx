@@ -1,33 +1,26 @@
 // This will prevent Unauthenticated users from accessing this route
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store/useAuthStore"
 
-interface PrivateRouteProps {
-  children: React.ReactNode
-}
+import Loading from "@/app/loading"
 
-export default function PrivateRoute({ children }: PrivateRouteProps) {
+export default function PrivateRoute({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const { token, loading } = useAuthStore()
   const router = useRouter()
-  const [isRedirecting, setIsRedirecting] = useState(false)
 
   useEffect(() => {
     if (!token && !loading) {
-      setIsRedirecting(true)
       router.replace("/login")
     }
   }, [token, loading, router])
 
-  if (loading || isRedirecting) {
-    return (
-      <div className="size-full flex justify-center items-center">
-        Loading...
-      </div>
-    )
-  }
-
-  return children
+  if (token) return children
+  else return <Loading />
 }
