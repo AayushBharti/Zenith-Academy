@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { ACCOUNT_TYPE } from "@/data/constants"
 import { logout } from "@/services/authService"
 import { useProfileStore } from "@/store/useProfileStore"
 import {
@@ -24,7 +25,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -40,7 +40,6 @@ export default function ProfileDropdown() {
 
   const handleLogout = () => {
     logout(router.push)
-    window.location.reload()
   }
 
   return (
@@ -70,42 +69,45 @@ export default function ProfileDropdown() {
               <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
+          {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/my-courses">
+                <BookOpen className="mr-2 h-4 w-4" />
+                <span>My Courses</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
+          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/enrolled-courses">
+                <GraduationCap className="mr-2 h-4 w-4" />
+                <span>Enrolled Courses</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
-            <Link href="/my-courses">
-              <BookOpen className="mr-2 h-4 w-4" />
-              <span>My Courses</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/progress">
-              <GraduationCap className="mr-2 h-4 w-4" />
-              <span>Learning Progress</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/schedule">
+            <Link href="/contact">
               <Calendar className="mr-2 h-4 w-4" />
               <span>Schedule</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/messages">
+            <Link href="/contact">
               <MessageSquare className="mr-2 h-4 w-4" />
-              <span>Messages</span>
+              <span>Contact</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link href="/dashboard/settings">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link
-            href="https://github.com/AayushBharti/ZenithMinds"
+            href="https://github.com/AayushBharti/Zenith-Academy"
             target="_blank"
           >
             <Github className="mr-2 h-4 w-4" />
@@ -113,16 +115,15 @@ export default function ProfileDropdown() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/support">
+          <Link href="/about">
             <HelpCircle className="mr-2 h-4 w-4" />
-            <span>Support</span>
+            <span>About</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
