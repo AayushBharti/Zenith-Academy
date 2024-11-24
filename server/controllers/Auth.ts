@@ -304,7 +304,7 @@ export const changePassword = async (req: any, res: Response) => {
     try {
       const emailResponse = await mailSender(
         updatedUserDetails?.email || "",
-        "Zenith Minds - Password Updated",
+        "Zenith Academy - Password Updated",
         passwordUpdated(
           updatedUserDetails?.email || "",
           `Password updated successfully for ${updatedUserDetails?.firstName} ${updatedUserDetails?.lastName}`
