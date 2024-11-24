@@ -15,14 +15,8 @@ import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import * as z from "zod"
 
+import { Category } from "@/types/category"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -143,192 +137,180 @@ export default function CourseInformationForm() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>
-          {editCourse ? "Edit Course Information" : "Create New Course"}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="courseName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Title</FormLabel>
+    <div className="w-full max-w-2xl mx-auto">
+      <div className="text-xl mb-4 font-bold">
+        {editCourse ? "Edit Course Information" : "Create New Course"}
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="courseName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter Course Title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="courseDescription"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter Course Description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Price</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Enter Course Price"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <Input placeholder="Enter Course Title" {...field} />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <SelectContent>
+                    {courseCategories.map((category: Category) => (
+                      <SelectItem key={category._id} value={category._id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="courseDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter Course Description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            name="tag"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Tags</FormLabel>
+                <FormControl>
+                  <ChipInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Enter tags and press Enter"
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter tags and press Enter to add
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter Course Price"
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value))
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="whatYouWillLearn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Benefits</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter Course Benefits" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {courseCategories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            name="instructions"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Requirements</FormLabel>
+                <FormControl>
+                  <ChipInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Enter requirements and press Enter"
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter requirements and press Enter to add
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              name="tag"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Tags</FormLabel>
-                  <FormControl>
-                    <ChipInput
-                      value={field.value}
-                      onChange={field.onChange}
-                      placeholder="Enter tags and press Enter"
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Enter tags and press Enter to add
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            name="thumbnailImage"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Course Image</FormLabel>
+                <FormControl>
+                  <Upload
+                    onChange={(file) => field.onChange(file)}
+                    value={field.value as File}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="whatYouWillLearn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Benefits</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Enter Course Benefits" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="instructions"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Requirements</FormLabel>
-                  <FormControl>
-                    <ChipInput
-                      value={field.value}
-                      onChange={field.onChange}
-                      placeholder="Enter requirements and press Enter"
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Enter requirements and press Enter to add
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="thumbnailImage"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Course Image</FormLabel>
-                  <FormControl>
-                    <Upload
-                      onChange={(file) => field.onChange(file)}
-                      value={field.value as File}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <CardFooter className="flex justify-between">
-              {editCourse && (
-                <Button variant="outline" onClick={() => setStep(2)}>
-                  Continue Without Saving
-                </Button>
-              )}
-              <Button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </>
-                ) : (
-                  <>{editCourse ? "Save Changes" : "Next"}</>
-                )}
+          <div className="flex justify-between">
+            {editCourse && (
+              <Button variant="outline" onClick={() => setStep(2)}>
+                Continue Without Saving
               </Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+            )}
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                <>{editCourse ? "Save Changes" : "Next"}</>
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   )
 }
