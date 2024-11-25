@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form"
 
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -101,11 +100,10 @@ const CourseBuilderForm = () => {
   }
 
   return (
-    <Card className="bg-card text-card-foreground">
-      <CardHeader>
-        <CardTitle>Course Builder</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="bg-card text-card-foreground">
+      <div className="text-xl mb-4 font-bold">Course Builder</div>
+
+      <div className="space-y-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="sectionName">
@@ -164,8 +162,8 @@ const CourseBuilderForm = () => {
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 
