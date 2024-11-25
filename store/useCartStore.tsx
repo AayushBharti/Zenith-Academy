@@ -1,18 +1,15 @@
 import { toast } from "react-hot-toast"
 import { create } from "zustand"
 
+import { CourseDetails } from "@/types/course"
+
 // Define types for cart items and the store state
-interface Course {
-  _id: string
-  title: string
-  price: number
-}
 
 interface CartState {
-  cart: Course[]
+  cart: CourseDetails[]
   total: number
   totalItems: number
-  addToCart: (course: Course) => void
+  addToCart: (course: CourseDetails) => void
   removeFromCart: (courseId: string) => void
   resetCart: () => void
 }
