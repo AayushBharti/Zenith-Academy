@@ -1,7 +1,9 @@
+"use client"
+
+import rzplogo from "@/public/Logo/rzp.png"
 import { useCartStore } from "@/store/useCartStore"
 import { toast } from "react-hot-toast"
 
-import rzplogo from "../../assets/Images/rzp.png"
 import { apiConnector } from "../utils/apiConnector"
 import { studentEndpoints } from "../utils/apis"
 
@@ -43,8 +45,8 @@ function loadScript(src: string): Promise<boolean> {
 
 export async function buyCourse(
   token: string,
-  courses: Course[] | { courses: Course[] },
-  userDetails: UserDetails,
+  courses: any[] | { courses: any[] },
+  userDetails: any,
   navigate: (path: string) => void
 ): Promise<void> {
   const toastId = toast.loading(
@@ -78,7 +80,7 @@ export async function buyCourse(
     }
 
     const options = {
-      key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       currency: orderResponse.data.currency,
       amount: orderResponse.data.amount.toString(),
       order_id: orderResponse.data.orderId,
@@ -138,7 +140,7 @@ async function sendPaymentSuccessEmail(
 
 async function verifypament(
   response: RazorpayResponse,
-  courses: Course[] | { courses: Course[] },
+  courses: Course[] | { courses: any[] },
   token: string,
   navigate: (path: string) => void
 ): Promise<void> {

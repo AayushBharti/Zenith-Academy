@@ -49,12 +49,14 @@ export const fetchCourseDetails = async (courseId: string) => {
     const response = await apiConnector("POST", COURSE_DETAILS_API, {
       courseId,
     })
+    // console.log("COURSE_DETAILS_API API RESPONSE............", response.data)
+
     if (!response?.data?.success) {
       throw new Error(response.data.message)
     }
-    result = response.data.data[0]
+    result = response.data.data
   } catch (error) {
-    console.log("COURSE_DETAILS_API ERROR:", error)
+    console.log("COURSE_DETAILS_API ERROR............", error)
     result = null
   }
   return result
@@ -264,7 +266,7 @@ export const fetchInstructorCourses = async (token: string) => {
   try {
     const response = await apiConnector(
       "GET",
-      GET_ALL_INSTRUCTOR_COURSES_API,
+      GET_ALL_INSTRUCTOR_COURSES_API, 
       null,
       {
         Authorisation: `Bearer ${token}`,

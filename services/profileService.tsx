@@ -9,7 +9,7 @@ export async function getUserCourses(token: string) {
   // const toastId = toast.loading("Loading...")
   let result = []
   try {
-    console.log("BEFORE Calling BACKEND API FOR ENROLLED COURSES")
+    // console.log("BEFORE Calling BACKEND API FOR ENROLLED COURSES")
     const response = await apiConnector(
       "GET",
       profileEndpoints.GET_USER_ENROLLED_COURSES_API,
@@ -18,11 +18,11 @@ export async function getUserCourses(token: string) {
         Authorisation: `Bearer ${token}`,
       }
     )
-    // console.log("AFTER Calling BACKEND API FOR ENROLLED COURSES");
-    //   console.log(
-    //     "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
-    //     response
-    //   )
+    // console.log("AFTER Calling BACKEND API FOR ENROLLED COURSES")
+    // console.log(
+    //   "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
+    //   response
+    // )
 
     if (!response.data.success) {
       throw new Error(response.data.message)

@@ -188,7 +188,6 @@ export const getAllUserDetails = async (req: any, res: Response) => {
 
 export const getEnrolledCourses = async (req: any, res: Response) => {
   try {
-    // console.log("first")
     const id = req.user?.id
     if (!id) {
       return res.status(400).json({
@@ -196,7 +195,6 @@ export const getEnrolledCourses = async (req: any, res: Response) => {
         message: "User ID not provided",
       })
     }
-
     const user = await User.findById(id)
       .populate({
         path: "courses",
@@ -299,7 +297,6 @@ export const instructorDashboard = async (
         totalStudents,
         totalRevenue,
       }
-
       return courseStats
     })
 
