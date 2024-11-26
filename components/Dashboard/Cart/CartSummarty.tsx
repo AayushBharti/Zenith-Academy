@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { buyCourse } from "@/services/paymentService"
 import { useAuthStore } from "@/store/useAuthStore"
 import { useCartStore } from "@/store/useCartStore"
 import { useProfileStore } from "@/store/useProfileStore"
@@ -19,7 +20,7 @@ export default function CartSummary() {
     if (token) {
       console.log(courses)
       console.log(user?.firstName)
-      // buyCourse(token, courses, user, navigate, dispatch)
+      buyCourse(token, courses, user, router.push)
     } else {
       router.push("/login")
     }
