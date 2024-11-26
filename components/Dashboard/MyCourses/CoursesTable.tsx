@@ -30,20 +30,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { CourseDetails } from "../../../types/course"
 
-interface Course {
-  _id: string
-  courseName: string
-  courseDescription: string
-  thumbnail: string
-  price: number
-  status: string
-  createdAt: string
-  updatedAt: string
-}
 
 interface CoursesTableProps {
-  courses: Course[]
+  courses: CourseDetails[]
   setCourses: any
 }
 
@@ -82,7 +73,7 @@ export default function CoursesTable({
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">Loading...</div>
+      <span className="size-full gird place-items-center">Loading...</span>
     )
   }
 
