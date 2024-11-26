@@ -1,23 +1,5 @@
 import { create } from "zustand"
 
-interface User {
-  firstName: string
-  lastName: string
-  email: string
-  image: string
-  accountType: string
-  additionalDetails: {
-    gender: string
-    dateOfBirth: string
-    about: string
-    contactNumber: string
-  }
-  createdAt: string
-  updatedAt: string
-  active: string
-  approved: string
-}
-
 // Profile state interface
 interface ProfileState {
   user: User | null

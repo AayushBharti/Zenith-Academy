@@ -39,6 +39,7 @@ const formSchema = z
 export default function SignupForm() {
   const router = useRouter()
   const { setSignupData } = useAuthStore()
+
   // 1. Define form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
