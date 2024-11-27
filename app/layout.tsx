@@ -48,7 +48,7 @@ export default function RootLayout({
       <head />
       <body
         className={cn(
-          "relative h-full antialiased max-w-[1500px] mx-auto",
+          "relative h-full antialiased max-w-[1500px] mx-auto selection:bg-emerald-600/20 selection:text-emerald-400",
           geistSans.variable,
           geistMono.variable
         )}
