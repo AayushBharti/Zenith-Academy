@@ -1,3 +1,5 @@
+import React from "react"
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -9,6 +11,8 @@ import {
 } from "@/components/ui/dialog"
 
 type ConfirmationModalProps = {
+  isOpen: boolean
+  onClose: () => void
   text1: string
   text2: string
   btn1Text: string
@@ -18,6 +22,8 @@ type ConfirmationModalProps = {
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
+  isOpen,
+  onClose,
   text1,
   text2,
   btn1Text,
@@ -25,7 +31,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   btn1Handler,
   btn2Handler,
 }) => (
-  <Dialog>
+  <Dialog open={isOpen} onOpenChange={onClose}>
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{text1}</DialogTitle>
