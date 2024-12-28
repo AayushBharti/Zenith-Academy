@@ -7,10 +7,9 @@ import {
 } from "@/services/courseDetailsService"
 import { useAuthStore } from "@/store/useAuthStore"
 import { useCourseStore } from "@/store/useCourseStore"
-import { X } from "lucide-react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 
-import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -42,7 +41,6 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
   const { token } = useAuthStore()
   const { course, setCourse } = useCourseStore()
   const [loading, setLoading] = useState(false)
-  const { toast } = useToast()
 
   const {
     register,
@@ -133,14 +131,6 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
           <DialogTitle>
             {view ? "Viewing" : add ? "Adding" : "Editing"} Lecture
           </DialogTitle>
-          <Button
-            variant="ghost"
-            className="absolute right-4 top-4"
-            onClick={() => !loading && setModalData(null)}
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </Button>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Upload
