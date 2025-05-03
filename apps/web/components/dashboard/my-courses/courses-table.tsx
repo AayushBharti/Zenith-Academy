@@ -24,7 +24,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import Loading from "@/app/loading"
 
 interface CoursesGridProps {
   courses: CourseDetails[]

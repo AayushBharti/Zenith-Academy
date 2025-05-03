@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Book } from "lucide-react"
 
 import { Category } from "@/types/category"
@@ -28,7 +29,7 @@ export default function DesktopMenu({
               <div className="grid gap-3 p-6 md:w-[500px] lg:w-[700px] xl:w-[1000px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] min-w-[300px]">
                 <div className="row-span-3 col-span-full xl:col-span-1">
                   <NavigationMenuLink asChild>
-                    <a
+                    <Link
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       href="/"
                     >
@@ -40,7 +41,7 @@ export default function DesktopMenu({
                         Discover our wide range of online courses to boost your
                         skills.
                       </p>
-                    </a>
+                    </Link>
                   </NavigationMenuLink>
                 </div>
                 {categories.map((category) => (
