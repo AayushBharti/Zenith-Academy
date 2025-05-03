@@ -37,7 +37,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 
 import ChipInput from "./chip-input"
-import Upload from "./j"
+import Upload from "./upload"
 
 const formSchema = z.object({
   courseName: z.string().min(1, "Course Title is required"),
