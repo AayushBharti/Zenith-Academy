@@ -21,9 +21,9 @@
 1. 🤖 [Introduction](#introduction)
 2. ⚙️ [Tech Stack](#tech-stack)
 3. 🔋 [Features](#features)
-4. 🏗️ [System Architecture](#system-architecture)
-5. ⚡ [API Design](#api-design)
-6. 🤝 [How to Contribute](#how-to-contribute)
+4. ⚡ [API Design](#api-design)
+5. 🤝 [How to Contribute](#how-to-contribute)
+<!-- 4. 🏗️ [System Architecture](#system-architecture) -->
 
 ---
 
@@ -135,52 +135,93 @@ graph TD
 
 ## ⚡ API Design
 
-Zenith Academy's backend follows a **RESTful API design**, built with **Node.js and Express.js**, using **JSON** for data exchange and standard HTTP methods (`GET`, `POST`, `PUT`, `DELETE`).
+Zenith Academy follows a **RESTful API architecture** using **Node.js and Express.js**, structured under `/api/v1/` with modular route grouping for scalability and clarity.
 
+### 🔷 **Base Routes**
 
-### 🔷 **Authentication APIs**
+- `/api/v1/auth` – Authentication-related routes  
+- `/api/v1/profile` – User profile management  
+- `/api/v1/payment` – Payment processing routes  
+- `/api/v1/course` – Course and category management routes  
+- `/api/v1/contact` – Contact form submissions
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/signup` | POST | Register a new user (student or instructor). |
-| `/api/auth/login` | POST | Login with existing credentials, returns JWT token. |
-| `/api/auth/verify-otp` | POST | Verify OTP sent to user's email. |
-| `/api/auth/forgot-password` | POST | Sends password reset link to registered email. |
+### 🔐 **Authentication Routes**
 
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/login` | Authenticate user and return JWT token. |
+| POST | `/signup` | Register a new user (student/instructor). |
+| POST | `/sendotp` | Send OTP to user’s email for verification or reset. |
+| POST | `/changepassword` | Change user password (requires auth). |
+| POST | `/reset-password-token` | Generate password reset token. |
+| POST | `/reset-password` | Reset password using valid token. |
 
-### 🔷 **Course Management APIs**
+### 👤 **Profile Routes**
 
-| Endpoint                | Method | Description                            |
-| ----------------------- | ------ | -------------------------------------- |
-| `/api/courses`          | GET    | Fetch all available courses.           |
-| `/api/courses/:id`      | GET    | Fetch specific course details by ID.   |
-| `/api/courses`          | POST   | Create a new course (Instructor only). |
-| `/api/courses/:id`      | PUT    | Update an existing course by ID.       |
-| `/api/courses/:id`      | DELETE | Delete a course by ID.                 |
-| `/api/courses/:id/rate` | POST   | Add a rating (out of 5) to a course.   |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| DELETE | `/deleteProfile` | Delete user account (requires auth). |
+| PUT | `/updateProfile` | Update user profile details (requires auth). |
+| GET | `/getUserDetails` | Fetch logged-in user’s details. |
+| GET | `/getEnrolledCourses` | Get all courses enrolled by user. |
+| PUT | `/updateDisplayPicture` | Update user’s display picture. |
+| GET | `/getInstructorDashboardDetails` | Instructor-only dashboard analytics. |
 
+### 💳 **Payment Routes**
 
-### 🔷 **User APIs**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/capturePayment` | Capture initiated payment (student only). |
+| POST | `/verifyPayment` | Verify payment signature. |
+| POST | `/sendPaymentSuccessEmail` | Send payment success email to user. |
 
-| Endpoint                  | Method | Description                     |
-| ------------------------- | ------ | ------------------------------- |
-| `/api/users/:id`          | GET    | Get user profile by ID.         |
-| `/api/users/:id`          | PUT    | Update user profile details.    |
-| `/api/users/:id/courses`  | GET    | Fetch courses enrolled by user. |
-| `/api/users/:id/wishlist` | GET    | Fetch user's wishlist items.    |
+### 📚 **Course & Category Routes**
 
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/createCourse` | Create new course (instructor only). |
+| POST | `/addSection` | Add section to course (instructor only). |
+| POST | `/updateSection` | Update section details (instructor only). |
+| POST | `/deleteSection` | Delete section (instructor only). |
+| POST | `/addSubSection` | Add subsection to section (instructor only). |
+| POST | `/updateSubSection` | Update subsection details (instructor only). |
+| POST | `/deleteSubSection` | Delete subsection (instructor only). |
+| GET | `/getAllCourses` | Retrieve all courses. |
+| POST | `/getCourseDetails` | Get specific course details. |
+| POST | `/getFullCourseDetails` | Get full course content (auth required). |
+| POST | `/editCourse` | Edit course details (instructor only). |
+| DELETE | `/deleteCourse` | Delete course (instructor only). |
+| GET | `/getInstructorCourses` | Get all courses created by instructor. |
+| POST | `/searchCourse` | Search courses by keyword. |
+| POST | `/updateCourseProgress` | Mark lecture as completed (student only). |
 
-### 🔷 **Payment APIs**
+### 🗂️ **Category Routes (Admin only)**
 
-| Endpoint               | Method | Description                           |
-| ---------------------- | ------ | ------------------------------------- |
-| `/api/payments/order`  | POST   | Create a new Razorpay order.          |
-| `/api/payments/verify` | POST   | Verify payment success post checkout. |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/createCategory` | Create a new course category. |
+| GET | `/showAllCategories` | Fetch all categories. |
+| POST | `/getCategoryPageDetails` | Get category-specific course details. |
+| POST | `/addCourseToCategory` | Assign course to category (instructor only). |
 
+### 🌟 **Ratings & Reviews Routes**
 
-This **robust API design** ensures a scalable, secure, and maintainable backend for Zenith Academy, enabling seamless interaction between frontend and backend services.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/createRating` | Submit course rating and review (student only). |
+| GET | `/getAverageRating` | Get average rating for a course. |
+| GET | `/getReviews` | Get all reviews for a course. |
+
+### ✉️ **Contact Routes**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/contactUs` | Submit contact form (name, email, message). |
 
 ---
+
+This robust API design ensures **scalable, secure, and maintainable backend services** powering Zenith Academy’s online education ecosystem.
+
 
 
 ## 🤝 How to Contribute
