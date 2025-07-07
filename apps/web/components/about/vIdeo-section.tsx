@@ -34,13 +34,13 @@ export default function VideoSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Experience ZenithMinds
+            Experience ZenithAcademy
           </h2>
           <Badge variant="outline" className="mb-6">
             The Future of Learning
           </Badge>
           <p className="text-muted-foreground mt-4 mb-8">
-            Discover how ZenithMinds is revolutionizing education through
+            Discover how ZenithAcademy is revolutionizing education through
             immersive and interactive learning experiences.
           </p>
         </div>

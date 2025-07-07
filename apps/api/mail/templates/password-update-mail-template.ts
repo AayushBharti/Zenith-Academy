@@ -55,7 +55,7 @@ export const passwordUpdated = (email: string, name: string) => {
     
     <body>
         <div class="container">
-            <a href="https://Zenith.vercel.app"><img class="logo"
+            <a href="https://academy.aayushbharti.in"><img class="logo"
                     src="" alt="Zenith Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">
@@ -66,7 +66,7 @@ export const passwordUpdated = (email: string, name: string) => {
             </div>
             <div class="support">If you have any questions or need further assistance, please feel free to reach out to us
                 at
-                <a href="mailto:info@Zenith.com">info@Zenith.com</a>. We are here to help!
+                <a href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!
             </div>
         </div>
     </body>

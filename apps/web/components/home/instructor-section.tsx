@@ -12,16 +12,17 @@ export default function InstructorSection() {
 
       <div className="md:w-[50%] flex flex-col gap-7">
         <div className="font-semibold text-4xl text-neutral-800 tracking-tighter dark:text-neutral-300">
-          Become an <HighlightText text={" ZenithMinds Instructor "} />
+          Become an <HighlightText text={" ZenithAcademy Instructor "} />
         </div>
 
         <p className="text-left text-neutral-400 tracking-wide text-sm py-4 md:text-lg">
           Join a global community of educators and teach millions of students
           from around the world. Whether you&apos;re a professional or industry
-          expert, ZenithMinds gives you the tools to create courses, share your
-          knowledge, and grow your teaching career. With our platform, you can
-          design interactive lessons, offer feedback, and connect with learners
-          everywhere. Start teaching what you love and make an impact today!
+          expert, ZenithAcademy gives you the tools to create courses, share
+          your knowledge, and grow your teaching career. With our platform, you
+          can design interactive lessons, offer feedback, and connect with
+          learners everywhere. Start teaching what you love and make an impact
+          today!
           <br />
           <br />
           Empower students from every corner of the world and take the next step

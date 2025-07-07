@@ -72,7 +72,7 @@ export const courseEnrollmentEmail = (
     
     <body>
         <div class="container">
-            <a href="Zenith.vercel.app"><img class="logo" src=""
+            <a href="academy.aayushbharti.in"><img class="logo" src=""
                     alt="Zenith Logo"></a>
             <div class="message">Course Registration Confirmation</div>
             <div class="body">
@@ -83,10 +83,10 @@ export const courseEnrollmentEmail = (
                     ${thumbnail}
                 <p>Please log in to your learning dashboard to access the course materials and start your learning journey.
                 </p>
-                <a class="cta" href="https://Zenith.vercel.app/dashboard">Go to Dashboard</a>
+                <a class="cta" href="https://academy.aayushbharti.in/dashboard">Go to Dashboard</a>
             </div>
             <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:info@Zenith.com">info@Zenith.com</a>. We are here to help!</div>
+                    href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!</div>
         </div>
     </body>
     </html>`

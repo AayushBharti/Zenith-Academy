@@ -2,13 +2,11 @@ import cookieParser from "cookie-parser" // Import cookie parser
 import cors from "cors" // Import CORS for cross-origin resource sharing
 import dotenv from "dotenv" // Import dotenv to handle environment variables
 import express, { Request, Response } from "express"
-
 import fileUpload from "express-fileupload" // Import express-fileupload for handling file uploads
 
 // Import database connection and cloudinary config
 import { cloudnairyconnect } from "./config/cloudinary"
 import { DBconnect } from "./config/database"
-
 import contactRoutes from "./routes/contact-us-route"
 import CourseRoutes from "./routes/course-route"
 import paymentRoutes from "./routes/payments-route"
@@ -52,11 +50,11 @@ app.use(
 cloudnairyconnect()
 
 // Define route handlers
-app.use("/api/v1/auth", userRoutes) // User-related routes
-app.use("/api/v1/payment", paymentRoutes) // Payment-related routes
-app.use("/api/v1/profile", profileRoutes) // Profile-related routes
-app.use("/api/v1/course", CourseRoutes) // Course-related routes
-app.use("/api/v1/contact", contactRoutes) // Contact Us routes
+app.use("/api/v2/auth", userRoutes) // User-related routes
+app.use("/api/v2/payment", paymentRoutes) // Payment-related routes
+app.use("/api/v2/profile", profileRoutes) // Profile-related routes
+app.use("/api/v2/course", CourseRoutes) // Course-related routes
+app.use("/api/v2/contact", contactRoutes) // Contact Us routes
 
 // Simple GET route for testing
 app.get("/", (req: Request, res: Response) => {
