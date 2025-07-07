@@ -72,7 +72,7 @@ export const paymentSuccess = (
     
     <body>
         <div class="container">
-            <a href="https://Zenith.vercel.app"><img class="logo" src=""
+            <a href="https://academy.aayushbharti.in"><img class="logo" src=""
                     alt="Zenith Logo"></a>
             <div class="message">
             Your payment of ₹${amount} has been successfully received.
@@ -88,7 +88,7 @@ export const paymentSuccess = (
                 </p>
             </div>
             <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:info@Zenith.com">info@Zenith.com</a>. We are here to help!</div>
+                    href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!</div>
         </div>
     </body>
     </html>`

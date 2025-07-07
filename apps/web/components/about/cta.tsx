@@ -12,7 +12,7 @@ export default function CTASection() {
           </h2>
           <p className="mt-4 text-lg text-muted-foreground mb-8">
             Join a global community of learners and unlock your full potential
-            with ZenithMinds.
+            with ZenithAcademy.
           </p>
           <div className="flex justify-center space-x-4">
             <Button variant="default" size="lg" className="group">

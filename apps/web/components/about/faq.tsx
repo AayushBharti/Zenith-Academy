@@ -9,9 +9,9 @@ import { Badge } from "../ui/badge"
 
 const FAQData = [
   {
-    question: "What makes ZenithMinds unique?",
+    question: "What makes ZenithAcademy unique?",
     answer:
-      "ZenithMinds combines cutting-edge AI technology with expert-led courses to provide a personalized, adaptive learning experience. Our platform adjusts to each learner&apos;s pace and style, ensuring optimal knowledge retention and skill development.",
+      "ZenithAcademy combines cutting-edge AI technology with expert-led courses to provide a personalized, adaptive learning experience. Our platform adjusts to each learner&apos;s pace and style, ensuring optimal knowledge retention and skill development.",
   },
   {
     question: "How does the subscription model work?",
@@ -26,7 +26,7 @@ const FAQData = [
   {
     question: "Can I interact with instructors and other learners?",
     answer:
-      "ZenithMinds fosters a vibrant learning community. Engage with instructors through live Q&A sessions, participate in discussion forums, and collaborate with peers on projects. Our social learning features enhance your educational experience and help build valuable connections.",
+      "ZenithAcademy fosters a vibrant learning community. Engage with instructors through live Q&A sessions, participate in discussion forums, and collaborate with peers on projects. Our social learning features enhance your educational experience and help build valuable connections.",
   },
   {
     question: "How often is course content updated?",
