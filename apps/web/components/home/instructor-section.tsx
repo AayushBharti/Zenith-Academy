@@ -5,7 +5,7 @@ export default function InstructorSection() {
   return (
     <div className="flex flex-col md:flex-row gap-20 items-center my-16">
       <img
-        src="/images/instructor.png"
+        src="/assets/instructor.png"
         alt="Instructor Image"
         className="h-[500px] transform-gpu rounded-3xl object-cover transition-all duration-300 md:w-[50%]"
       />
