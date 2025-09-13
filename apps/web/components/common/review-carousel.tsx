@@ -101,7 +101,7 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => (
 
 export default function ReviewsCarousel() {
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="w-full container mx-auto px-5 py-8">
       <GeneralSwiper
         slidesPerView={{ 640: 2, 1024: 4 }}
         autoplay={{ delay: 4000, disableOnInteraction: false }}

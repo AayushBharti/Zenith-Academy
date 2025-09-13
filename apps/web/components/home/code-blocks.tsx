@@ -35,7 +35,7 @@ export function CodeBlocks({
   return (
     <section
       className={cn(
-        "flex flex-col gap-10 my-20 md:mt-32 px-4 md:px-6 lg:px-8",
+        "flex flex-col container mx-auto gap-10 my-20 md:mt-32 px-5",
         position === "flex-row" ? "lg:flex-row" : "lg:flex-row-reverse"
       )}
     >
@@ -46,11 +46,19 @@ export function CodeBlocks({
         <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400">
           {subheading}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 mt-6">
-          <Button asChild variant={ctabtn1.active ? "default" : "outline"}>
+        <div className="flex gap-4 mt-6">
+          <Button
+            asChild
+            variant={ctabtn1.active ? "default" : "outline"}
+            className="flex-1"
+          >
             <Link href={ctabtn1.linkto}>{ctabtn1.btnText}</Link>
           </Button>
-          <Button asChild variant={ctabtn2.active ? "default" : "outline"}>
+          <Button
+            asChild
+            variant={ctabtn2.active ? "default" : "outline"}
+            className="flex-1"
+          >
             <Link href={ctabtn2.linkto}>{ctabtn2.btnText}</Link>
           </Button>
         </div>
@@ -70,7 +78,12 @@ export function CodeBlocks({
             <div
               className={cn("absolute inset-0 opacity-20", backgroundGradient)}
             ></div>
-            <pre className={cn("font-geistMono text-xs overflow-x-auto", codeColor)}>
+            <pre
+              className={cn(
+                "font-geistMono text-xs overflow-x-auto",
+                codeColor
+              )}
+            >
               <TypeAnimation
                 sequence={[codeblock, 5000, ""]}
                 repeat={Number.POSITIVE_INFINITY}
