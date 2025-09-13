@@ -40,6 +40,6 @@
     "@types/otp-generator": "^4.0.2",
     "cross-env": "^7.0.3",
     "nodemon": "^3.1.9",
-    "tsup": "^8.3.6"
+    "tsup": "^8.5.0"
   }
 }
