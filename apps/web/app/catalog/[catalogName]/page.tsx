@@ -64,9 +64,9 @@ export default function CatalogPageContent() {
     !catalogPageData.mostSellingCourses?.length
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-12">
       <CatalogHeader category={category} />
-      <div className="mx-auto max-w-maxContent px-4 py-12 space-y-12">
+      <div className="mx-auto container px-5 py-12 space-y-12">
         {hasNoCourses ? (
           <NoCourses categoryName={category.name} />
         ) : (
@@ -95,8 +95,8 @@ export default function CatalogPageContent() {
 
 function CatalogHeader({ category }: { category: Category }) {
   return (
-    <div className="bg-primary-foreground px-4 py-8">
-      <div className="mx-auto max-w-maxContent flex flex-col justify-center gap-4">
+    <div className="bg-primary-foreground py-8">
+      <div className="mx-auto max-w-maxContent flex flex-col justify-center gap-4 container px-5">
         <p className="text-sm text-muted-foreground">
           Home / Catalog / <span className="text-primary">{category.name}</span>
         </p>
@@ -167,14 +167,14 @@ function NoCourses({ categoryName }: { categoryName: string }) {
 function CatalogSkeleton() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-primary-foreground px-4 py-8">
-        <div className="mx-auto max-w-maxContent flex flex-col justify-center gap-4">
+      <div className="bg-primary-foreground py-8">
+        <div className="mx-auto max-w-maxContent flex flex-col justify-center gap-4 container px-5">
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-8 w-96" />
           <Skeleton className="h-20 w-full max-w-[870px]" />
         </div>
       </div>
-      <div className="mx-auto max-w-maxContent px-4 py-12 space-y-12">
+      <div className="mx-auto container px-5 py-12 space-y-12">
         {[...Array(3)].map((_, index) => (
           <div key={index} className="space-y-4">
             <Skeleton className="h-8 w-64" />
