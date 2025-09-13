@@ -81,7 +81,7 @@ function submitHandler() {
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-950 dark:to-neutral-800 text-neutral-800 dark:text-neutral-200 mt-8 w-full">
-      <div className="container mx-auto px-4 py-12 md:py-16 max-w-7xl">
+      <div className="mx-auto px-4 py-12 md:py-16 container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center mr-6 mb-4">
@@ -103,10 +103,10 @@ export default function Footer() {
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 h-10"
                 />
               </div>
-              <Button type="submit" variant="default" className="group">
+              <Button type="submit" variant="default" className="group h-10">
                 Subscribe
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
