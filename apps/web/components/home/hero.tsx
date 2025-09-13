@@ -6,7 +6,6 @@ import Floating, { FloatingElement } from "@/components/ui/parallax-floating"
 
 import { Button } from "../ui/button"
 import HeroBadge from "../ui/hero-badge"
-import { ButtonOutline, MainButton } from "../ui/theme-button"
 import HighlightText from "./highlighted-text"
 
 const exampleImages = [
@@ -61,7 +60,7 @@ const exampleImages = [
 
 export default function Hero() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center container mx-auto px-5">
       <Floating sensitivity={-0.5} className="h-screen hidden md:block">
         <FloatingElement
           depth={0.5}
@@ -142,28 +141,28 @@ export default function Hero() {
           endIcon={<ChevronRight className="h-4 w-4" />}
         />
 
-        <h1 className="text-center bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text text-5xl font-medium text-transparent text-balance md:text-7xl z-50">
+        <h1 className="text-center bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text text-5xl font-bold text-transparent text-balance md:text-7xl z-50">
           Unlock Your Potential with In-Demand{" "}
           <HighlightText text={"Coding Skills"} />
         </h1>
 
-        <p className="text-lg md:text-xl text-balance text-center text-neutral-400 tracking-wide z-50">
+        <p className="text-base md:text-xl max-w-3xl text-center text-neutral-500 z-50">
           Learn to code at your own pace, anywhere, with access to hands-on
           projects, quizzes, and personalized feedback from expert instructors.
         </p>
 
-        <div className="flex md:flex-row flex-col gap-7 z-50">
-          <Button asChild variant={"default"}>
+        <div className="flex w-full md:w-fit gap-4 z-50">
+          <Button asChild variant={"default"} className="max-md:flex-1">
             <Link href="/signup">Learn More</Link>
           </Button>
-          <Button asChild variant={"outline"}>
+          <Button asChild variant={"outline"} className="max-md:flex-1">
             <Link href="/signup">Book a Demo</Link>
           </Button>
         </div>
       </div>
 
       <video
-        className="mx-3 mt-28 rounded-3xl relative w-[80%] p-3 bg-white/15 backdrop-blur-md"
+        className="mx-3 mt-28 rounded-3xl relative p-3 bg-black/30 lg:w-[80%] backdrop-blur-md"
         muted
         loop
         autoPlay

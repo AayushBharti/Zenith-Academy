@@ -19,7 +19,7 @@ export default function CourseViewLayout({
 
   return (
     <PrivateRoute>
-      <div className="flex max-w-[1500px] bg-background relative h-full max-w-8xl mx-auto antialiased">
+      <div className="flex bg-background relative h-full container mx-auto antialiased">
         {children}
       </div>
     </PrivateRoute>

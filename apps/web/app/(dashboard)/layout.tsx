@@ -23,7 +23,7 @@ export default function DashboardLayout({
 
   return (
     <PrivateRoute>
-      <div className="flex max-w-[1500px] bg-background relative h-full max-w-8xl mx-auto antialiased">
+      <div className="flex bg-background relative h-full container mx-auto antialiased">
         <Sidebar />
         <main className="flex-1 overflow-auto p-8">{children}</main>
       </div>

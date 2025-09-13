@@ -4,12 +4,12 @@ import { ButtonOutline, MainButton } from "../ui/theme-button"
 export default function HeroAbout() {
   return (
     <section className="relative overflow-hidden py-20 sm:py-32">
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto container px-5">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-100 sm:text-5xl md:text-7xl max-w-6xl mx-auto">
+          <h1 className="text-4xl font-extrabold tracking-tight dark:text-gray-100 sm:text-5xl md:text-7xl max-w-6xl mx-auto">
             Elevate Your Mind with <HighlightText text="ZenithAcademy" />
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-300">
+          <p className="mx-auto mt-6 max-w-3xl text-xl dark:text-gray-300 text-gray-500">
             Embark on a transformative learning journey powered by cutting-edge
             AI and expert-crafted content. Unlock your potential in the digital
             age.

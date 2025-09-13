@@ -10,7 +10,7 @@ import InstructorSection from "@/components/home/instructor-section"
 
 export default function Home() {
   return (
-    <main className="relative max-w-[1400px] dark:bg-black-100 flex justify-center items-center flex-col mx-auto sm:px-10 px-5">
+    <main className="relative dark:bg-black-100 mx-auto overflow-x-hidden">
       <Hero />
       <CodeBlocks
         position={"flex-row"}

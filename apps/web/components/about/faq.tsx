@@ -38,7 +38,7 @@ const FAQData = [
 export default function FAQ() {
   return (
     <section className="py-20 sm:py-32 bg-gradient-to-b from-background/80 to-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto container px-5">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Frequently Asked Questions

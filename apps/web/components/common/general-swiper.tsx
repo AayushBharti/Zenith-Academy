@@ -93,7 +93,7 @@ export function GeneralSwiper({
         ))}
       </Swiper>
       {pagination && <div className="swiper-pagination mt-4"></div>}
-      {navigation && (
+      {/* {navigation && (
         <>
           <div
             className="swiper-button-prev absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-background/60 text-foreground hover:bg-accent hover:text-accent-foreground rounded-full p-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-accent"
@@ -112,7 +112,7 @@ export function GeneralSwiper({
             <ChevronRight className="w-6 h-6" />
           </div>
         </>
-      )}
+      )} */}
     </div>
   )
 }

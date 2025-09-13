@@ -1,12 +1,13 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+
+import { Category } from "@/types/category"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Category } from "@/types/category"
+import { Button } from "@/components/ui/button"
 
 interface MobileMenuProps {
   navItems: { href: string; label: string }[]
@@ -14,9 +15,13 @@ interface MobileMenuProps {
   categories: Category[]
 }
 
-export default function MobileMenu({ navItems, token, categories }: MobileMenuProps) {
+export default function MobileMenu({
+  navItems,
+  token,
+  categories,
+}: MobileMenuProps) {
   return (
-    <nav className="flex flex-col space-y-4">
+    <nav className="flex flex-col space-y-4 w-full">
       {navItems.map((item) =>
         item.label === "Courses" ? (
           <Accordion type="single" collapsible key={item.href}>
@@ -50,16 +55,15 @@ export default function MobileMenu({ navItems, token, categories }: MobileMenuPr
         )
       )}
       {!token && (
-        <>
-          <Button variant="ghost" asChild className="justify-start">
+        <div className="flex bottom-0 left-1/2 -translate-x-1/2 gap-2 absolute w-full p-5">
+          <Button variant="outline" asChild className="flex-1">
             <Link href="/login">Log in</Link>
           </Button>
-          <Button asChild className="justify-start">
+          <Button asChild className="flex-1">
             <Link href="/signup">Sign up</Link>
           </Button>
-        </>
+        </div>
       )}
     </nav>
   )
 }
-

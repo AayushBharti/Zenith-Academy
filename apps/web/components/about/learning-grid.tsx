@@ -134,8 +134,8 @@ function FeatureCard({
 
 export default function LearningGrid() {
   return (
-    <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
+    <section className="py-20">
+      <div className="container mx-auto px-5">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Discover the ZenithAcademy{" "}
@@ -146,7 +146,7 @@ export default function LearningGrid() {
             designed to propel your career to new heights.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto">
           {learningFeatures.map((feature, index) => (
             <FeatureCard key={index} feature={feature} index={index} />
           ))}
