@@ -14,7 +14,7 @@ import { Badge } from "../ui/badge"
 export default function Mission() {
   return (
     <section className="py-20 sm:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto container px-5">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Our Vision & Values
@@ -23,10 +23,10 @@ export default function Mission() {
             Shaping the Future of Education
           </Badge>
         </div>
-        <Tabs defaultValue="mission" className="mt-12">
+        <Tabs defaultValue="values" className="mt-12">
           <TabsList className="grid w-full grid-cols-2 max-w-[400px] mx-auto">
-            <TabsTrigger value="mission">Our Mission</TabsTrigger>
             <TabsTrigger value="values">Core Values</TabsTrigger>
+            <TabsTrigger value="mission">Our Mission</TabsTrigger>
           </TabsList>
           <TabsContent value="mission" className="mt-8">
             <Card className="max-w-3xl mx-auto">
@@ -51,7 +51,7 @@ export default function Mission() {
             </Card>
           </TabsContent>
           <TabsContent value="values" className="mt-8">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 {
                   icon: Users,
