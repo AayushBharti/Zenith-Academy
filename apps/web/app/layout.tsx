@@ -48,17 +48,12 @@ export default function RootLayout({
       <head />
       <body
         className={cn(
-          "relative h-full antialiased mx-auto selection:bg-emerald-600/20 selection:text-emerald-400 font-inter",
+          "relative h-full antialiased mx-auto selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black font-inter",
           inter.variable,
           geistMono.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           <Toaster />
           <Navbar />
           {children}
