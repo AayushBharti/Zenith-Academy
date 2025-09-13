@@ -8,7 +8,7 @@ const Login: React.FC = () => {
         title="Welcome Back"
         description1="Build skills for today, tomorrow, and beyond."
         description2="Education to future-proof your career."
-        image="/Images/login.webp"
+        image="/assets/login.webp"
         formType="login"
       />
     </OpenRoute>

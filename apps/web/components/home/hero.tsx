@@ -163,12 +163,12 @@ export default function Hero() {
       </div>
 
       <video
-        className="mx-3 mt-28 rounded-3xl relative w-[80%] p-3 bg-white/15 backdrop-blur-md" 
+        className="mx-3 mt-28 rounded-3xl relative w-[80%] p-3 bg-white/15 backdrop-blur-md"
         muted
         loop
         autoPlay
       >
-        <source src="/images/banner.mp4" type="video/mp4" />
+        <source src="/assets/banner.mp4" type="video/mp4" />
       </video>
     </div>
   )
