@@ -56,7 +56,7 @@ export function Features() {
   }, [timer])
 
   return (
-    <div className="container my-20">
+    <div className="container mx-auto px-5 my-20">
       <div className="mb-20 text-center">
         <p className="mb-2 font-medium tracking-wider text-neutral-500 text-sm uppercase">
           Features Overview

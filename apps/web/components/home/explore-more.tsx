@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { HomePageExplore } from "@/data/homepage-explore"
-import { AnimatePresence, motion } from "motion/react"
 import { BookOpen } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -16,13 +16,7 @@ import {
 
 import HighlightText from "./highlighted-text"
 
-const tabsName = [
-  "Free Courses",
-  "Beginner Friendly",
-  "Trending Now",
-  "Skill Development",
-  "Career Growth",
-]
+const tabsName = ["Free Courses", "Trending Now", "Career Growth"]
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,7 +42,7 @@ const cardVariants = {
 }
 
 export default function ExploreMore() {
-  const [currentTab, setCurrentTab] = useState(tabsName[0])
+  const [currentTab, setCurrentTab] = useState(tabsName[1])
   const [courses, setCourses] = useState(HomePageExplore[0].courses)
 
   const setMyCards = (value: string) => {

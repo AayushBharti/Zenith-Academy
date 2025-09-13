@@ -3,7 +3,7 @@ import HighlightText from "./highlighted-text"
 
 export default function InstructorSection() {
   return (
-    <div className="flex flex-col md:flex-row gap-20 items-center my-16">
+    <div className="flex flex-col md:flex-row gap-20 items-center my-16 container mx-auto px-5">
       <img
         src="/assets/instructor.png"
         alt="Instructor Image"
