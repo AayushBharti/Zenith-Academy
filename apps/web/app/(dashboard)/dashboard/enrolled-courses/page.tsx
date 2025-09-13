@@ -28,6 +28,7 @@ export default function EnrolledCourses() {
 
   const getEnrolledCourses = async () => {
     try {
+      // console.log("token" + token)
       const response = await getUserEnrolledCourses(token as string)
       // console.log("getEnrolledCourses -> response", response?.courseProgress)
 
