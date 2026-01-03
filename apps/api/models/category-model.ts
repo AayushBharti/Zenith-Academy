@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Define the Tags schema
 const categorySchema = new mongoose.Schema({
@@ -7,13 +7,14 @@ const categorySchema = new mongoose.Schema({
     required: true,
   },
   description: { type: String },
+  slug: { type: String },
   courses: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
   ],
-})
+});
 
 // Export the Tags model
-export default mongoose.model("Category", categorySchema)
+export default mongoose.model("Category", categorySchema);
