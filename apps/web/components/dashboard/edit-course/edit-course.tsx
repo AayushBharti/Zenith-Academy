@@ -1,54 +1,52 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import { getFullDetailsOfCourse } from "@/services/course-details-service"
-import { useAuthStore } from "@/store/use-auth-store"
-import useCourseStore from "@/store/use-course-store"
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
+import { Card, CardContent } from "@/components/ui/card";
+import { getFullDetailsOfCourse } from "@/services/course-details-service";
+import { useAuthStore } from "@/store/use-auth-store";
+import useCourseStore from "@/store/use-course-store";
 
-import { Card, CardContent } from "@/components/ui/card"
-import Loading from "@/app/loading"
-
-import { RenderSteps } from "../add-course/render-steps"
-import CourseTips from "../course-tips"
+import { RenderSteps } from "../add-course/render-steps";
 
 export default function EditCourse() {
-  const { courseId } = useParams()
-  const { token } = useAuthStore()
-  const { course, setStep, setCourse, setEditCourse } = useCourseStore()
-  const [loading, setLoading] = useState(false)
+  const { courseId } = useParams();
+  const { token } = useAuthStore();
+  const { course, setStep, setCourse, setEditCourse } = useCourseStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const popualteCourse = async () => {
-      setLoading(true)
+      setLoading(true);
       const result = await getFullDetailsOfCourse(
         courseId as string,
         token as string
-      )
+      );
       if (result?.courseDetails) {
-        setCourse(result.courseDetails)
-        console.log("result", course)
-        setEditCourse(true)
-        setStep(1)
+        setCourse(result.courseDetails);
+        console.log("result", course);
+        setEditCourse(true);
+        setStep(1);
       }
-      setLoading(false)
-    }
-    popualteCourse()
-  }, [])
+      setLoading(false);
+    };
+    popualteCourse();
+  }, []);
 
   return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col xl:flex-row gap-8">
+    <div className="">
+      <div className="flex flex-col gap-8 xl:flex-row">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-8">Edit Course</h1>
+          <h1 className="mb-8 font-bold text-3xl">Edit Course</h1>
           <Card>
             <CardContent className="p-6">
               {loading ? <Loading /> : <RenderSteps />}
             </CardContent>
           </Card>
         </div>
-        <CourseTips className="xl:sticky xl:top-10 xl:self-start h-full xl:mt-16" />
+        {/* <CourseTips className="xl:sticky xl:top-10 xl:self-start h-full xl:mt-16" /> */}
       </div>
     </div>
-  )
+  );
 }
