@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dotenv from "dotenv"
-import { NextFunction, Response } from "express"
-import jwt, { JwtPayload } from "jsonwebtoken"
+import dotenv from "dotenv";
+import type { NextFunction, Response } from "express";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
-dotenv.config()
+dotenv.config();
 
 interface DecodedToken {
-  id: string
-  email: string
-  accountType: string
+  id: string;
+  email: string;
+  accountType: string;
 }
 
 // Type guard to check if the decoded token is of type DecodedToken
@@ -18,7 +18,7 @@ function isDecodedToken(payload: JwtPayload | string): payload is DecodedToken {
     "id" in payload &&
     "email" in payload &&
     "accountType" in payload
-  )
+  );
 }
 
 //auth
@@ -28,46 +28,46 @@ export const auth = async (req: any, res: Response, next: NextFunction) => {
     const token =
       req.cookies.token ||
       req.body.token ||
-      req.header("Authorisation")?.replace("Bearer ", "")
+      req.header("Authorisation")?.replace("Bearer ", "");
 
     // If token is missing, return response
     if (!token) {
       return res.status(401).json({
         success: false,
         message: "Token is missing",
-      })
+      });
     }
 
     // Verify the token
     try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET as string)
+      const decode = jwt.verify(token, process.env.JWT_SECRET as string);
 
       // Use the type guard to check the payload type
       if (isDecodedToken(decode)) {
-        req.user = decode // Now TypeScript understands this is a DecodedToken
-        console.log("decode = ", decode)
+        req.user = decode; // Now TypeScript understands this is a DecodedToken
+        console.log("decode = ", decode);
       } else {
         // If the token is not of expected type
         return res.status(401).json({
           success: false,
           message: "Token is invalid",
-        })
+        });
       }
     } catch (err) {
       // Verification issue
       return res.status(401).json({
         success: false,
         message: "Token is invalid",
-      })
+      });
     }
-    next()
+    next();
   } catch (error) {
     return res.status(401).json({
       success: false,
       message: "Something went wrong while validating the token",
-    })
+    });
   }
-}
+};
 
 //isStudent
 export const isStudent = async (
@@ -80,16 +80,16 @@ export const isStudent = async (
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Students only",
-      })
+      });
     }
-    next()
+    next();
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
-    })
+    });
   }
-}
+};
 
 //isInstructor
 export const isInstructor = async (
@@ -102,16 +102,16 @@ export const isInstructor = async (
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Instructor only",
-      })
+      });
     }
-    next()
+    next();
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
-    })
+    });
   }
-}
+};
 
 //isAdmin
 export const isAdmin = async (req: any, res: Response, next: NextFunction) => {
@@ -120,13 +120,13 @@ export const isAdmin = async (req: any, res: Response, next: NextFunction) => {
       return res.status(401).json({
         success: false,
         message: "This is a protected route for Admin only",
-      })
+      });
     }
-    next()
+    next();
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
-    })
+    });
   }
-}
+};
