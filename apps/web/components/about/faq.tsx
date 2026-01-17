@@ -3,9 +3,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
-import { Badge } from "../ui/badge"
+import { Badge } from "../ui/badge";
 
 const FAQData = [
   {
@@ -33,22 +33,22 @@ const FAQData = [
     answer:
       "We&apos;re committed to keeping our content current and relevant. Our team of experts regularly reviews and updates courses to reflect the latest industry trends, technological advancements, and best practices. Most courses are refreshed at least annually, with some high-paced subjects updated even more frequently.",
   },
-]
+];
 
 export default function FAQ() {
   return (
-    <section className="py-20 sm:py-32 bg-gradient-to-b from-background/80 to-background">
-      <div className="mx-auto container px-5">
+    <section className="bg-linear-to-b from-background/80 to-background py-20 sm:py-32">
+      <div className="container mx-auto px-5">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="mb-4 font-bold text-3xl tracking-tight sm:text-4xl">
             Frequently Asked Questions
           </h2>
-          <Badge variant="outline" className="mb-6">
+          <Badge className="mb-6" variant="outline">
             Get to Know Us Better
           </Badge>
         </div>
-        <div className="mt-16 max-w-3xl mx-auto">
-          <Accordion type="single" collapsible className="w-full">
+        <div className="mx-auto mt-16 max-w-3xl">
+          <Accordion className="w-full" collapsible type="single">
             {FAQData.map((item, index) => (
               <AccordionItem key={index} value={`item-${index + 1}`}>
                 <AccordionTrigger>{item.question}</AccordionTrigger>
@@ -59,5 +59,5 @@ export default function FAQ() {
         </div>
       </div>
     </section>
-  )
+  );
 }
