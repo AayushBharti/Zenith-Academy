@@ -1,5 +1,4 @@
-export const otpTemplate = (otp: string) => {
-  return `<!DOCTYPE html>
+export const otpTemplate = (otp: string) => `<!DOCTYPE html>
 	<html>
 	
 	<head>
@@ -82,6 +81,5 @@ export const otpTemplate = (otp: string) => {
 		</div>
 	</body>
 	
-	</html>`
-}
+	</html>`;
 // module.exports = otpTemplate;

@@ -1,5 +1,4 @@
-export const passwordUpdated = (email: string, name: string) => {
-  return `<!DOCTYPE html>
+export const passwordUpdated = (email: string, name: string) => `<!DOCTYPE html>
     <html>
     
     <head>
@@ -71,5 +70,4 @@ export const passwordUpdated = (email: string, name: string) => {
         </div>
     </body>
     
-    </html>`
-}
+    </html>`;

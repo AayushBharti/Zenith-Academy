@@ -3,8 +3,7 @@ export const courseEnrollmentEmail = (
   name: string,
   courseDescription: string,
   thumbnail: string
-) => {
-  return `<!DOCTYPE html>
+) => `<!DOCTYPE html>
     <html>
     
     <head>
@@ -89,5 +88,4 @@ export const courseEnrollmentEmail = (
                     href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!</div>
         </div>
     </body>
-    </html>`
-}
+    </html>`;

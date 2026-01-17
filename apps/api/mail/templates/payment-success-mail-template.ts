@@ -4,8 +4,7 @@ export const paymentSuccess = (
   orderId: string,
   name: string,
   lastname: string
-): string => {
-  return `<!DOCTYPE html>
+): string => `<!DOCTYPE html>
     <html>
     <head>
         <meta charset="UTF-8">
@@ -91,5 +90,4 @@ export const paymentSuccess = (
                     href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!</div>
         </div>
     </body>
-    </html>`
-}
+    </html>`;
