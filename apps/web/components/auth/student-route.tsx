@@ -1,28 +1,30 @@
-// This will prevent non Student users from accessing this route
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { notFound, useRouter } from "next/navigation"
-import { ACCOUNT_TYPE } from "@/data/constants"
-import { useProfileStore } from "@/store/use-profile-store"
-
-import Loading from "@/app/loading"
+import { notFound, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Loading from "@/app/loading";
+import { ACCOUNT_TYPE } from "@/data/constants";
+import { useProfileStore } from "@/store/use-profile-store";
 
 export default function StudentRoute({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const { user, loading } = useProfileStore()
-  const isStudent = user?.accountType === ACCOUNT_TYPE.STUDENT
-  const router = useRouter()
+  const { user, loading } = useProfileStore();
+  const router = useRouter();
+
+  const isStudent = user?.accountType === ACCOUNT_TYPE.STUDENT;
 
   useEffect(() => {
-    if (!isStudent && !loading) {
-      return notFound()
+    if (!(loading || isStudent)) {
+      notFound();
     }
-  }, [user?.accountType, loading, router])
+  }, [user, loading, isStudent, router]);
 
-  if (isStudent) return children
-  else return <Loading />
+  if (loading || !isStudent) {
+    return <Loading />;
+  }
+
+  return <>{children}</>;
 }
