@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Response } from "express"
+import type { Response } from "express"
 
 import Course from "@/models/course-model"
 import Profile from "@/models/profile-model"

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextFunction, Response } from "express"
+import type { NextFunction, Response } from "express";
 
 // Check if the user is a demo user
 export const isDemo = async (req: any, res: Response, next: NextFunction) => {
@@ -13,15 +13,15 @@ export const isDemo = async (req: any, res: Response, next: NextFunction) => {
       return res.status(401).json({
         success: false,
         message: "This is a Demo User",
-      })
+      });
     }
     // If the user is not a demo user, proceed to the next middleware
-    next()
+    next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong while checking demo user",
-    })
+    });
   }
-}
+};
