@@ -1,4 +1,4 @@
-import { Award, GraduationCap, Users, Zap } from "lucide-react"
+import { Award, GraduationCap, Users, Zap } from "lucide-react";
 
 import {
   Card,
@@ -6,30 +6,30 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Badge } from "../ui/badge"
+import { Badge } from "../ui/badge";
 
 export default function Mission() {
   return (
     <section className="py-20 sm:py-32">
-      <div className="mx-auto container px-5">
+      <div className="container mx-auto px-5">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="mb-4 font-bold text-3xl tracking-tight sm:text-4xl">
             Our Vision & Values
           </h2>
-          <Badge variant="outline" className="mb-6">
+          <Badge className="mb-6" variant="outline">
             Shaping the Future of Education
           </Badge>
         </div>
-        <Tabs defaultValue="values" className="mt-12">
-          <TabsList className="grid w-full grid-cols-2 max-w-[400px] mx-auto">
+        <Tabs className="mt-12" defaultValue="values">
+          <TabsList className="mx-auto grid w-full max-w-[400px] grid-cols-2">
             <TabsTrigger value="values">Core Values</TabsTrigger>
             <TabsTrigger value="mission">Our Mission</TabsTrigger>
           </TabsList>
-          <TabsContent value="mission" className="mt-8">
-            <Card className="max-w-3xl mx-auto">
+          <TabsContent className="mt-8" value="mission">
+            <Card className="mx-auto max-w-3xl">
               <CardHeader>
                 <CardTitle>Empowering Global Learning</CardTitle>
                 <CardDescription>
@@ -50,7 +50,7 @@ export default function Mission() {
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="values" className="mt-8">
+          <TabsContent className="mt-8" value="values">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 {
@@ -75,7 +75,7 @@ export default function Mission() {
                 },
               ].map((item, index) => (
                 <div key={index}>
-                  <Card className="h-full bg-card/50 backdrop-blur-sm border-primary/10 hover:border-primary/30 transition-colors">
+                  <Card className="h-full border-primary/10 bg-card/50 backdrop-blur-xs transition-colors hover:border-primary/30">
                     <CardHeader>
                       <item.icon className="h-8 w-8 text-primary" />
                       <CardTitle className="mt-4">{item.title}</CardTitle>
@@ -93,5 +93,5 @@ export default function Mission() {
         </Tabs>
       </div>
     </section>
-  )
+  );
 }
