@@ -1,26 +1,29 @@
-// This will prevent Unauthenticated users from accessing this route
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuthStore } from "@/store/use-auth-store"
-
-import Loading from "@/app/loading"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Loading from "@/app/loading";
+import { useAuthStore } from "@/store/use-auth-store";
 
 export default function PrivateRoute({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const { token, loading } = useAuthStore()
-  const router = useRouter()
+  const { token, loading } = useAuthStore();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!token && !loading) {
-      router.replace("/login")
+    // If we are done loading and there is no token, redirect
+    if (!(loading || token)) {
+      router.replace("/login");
     }
-  }, [token, loading, router])
+  }, [token, loading, router]);
 
-  if (token) return children
-  else return <Loading />
+  // While loading, or if no token exists (while waiting for redirect), show loader
+  if (loading || !token) {
+    return <Loading />;
+  }
+
+  return <>{children}</>;
 }
