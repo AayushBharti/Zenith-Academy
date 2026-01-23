@@ -1,23 +1,22 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { RenderSteps } from "@/components/dashboard/add-course/render-steps"
-import CourseTips from "@/components/dashboard/course-tips"
+import { RenderSteps } from "@/components/dashboard/add-course/render-steps";
+import { Card, CardContent } from "@/components/ui/card";
 
 const AddCourse = () => {
   return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col xl:flex-row gap-8">
+    <div className="">
+      <div className="flex flex-col gap-8 xl:flex-row">
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-8">Add Course</h1>
+          <h1 className="mb-8 font-bold text-3xl">Add Course</h1>
           <Card>
             <CardContent className="p-6">
               <RenderSteps />
             </CardContent>
           </Card>
         </div>
-        <CourseTips className="xl:sticky xl:top-10 xl:self-start h-full xl:mt-16" />
+        {/* <CourseTips className="xl:sticky xl:top-10 xl:self-start h-full xl:mt-16" /> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddCourse
+export default AddCourse;
