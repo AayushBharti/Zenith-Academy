@@ -1,29 +1,28 @@
-"use client"
+"use client";
 
-import { useAuthStore } from "@/store/use-auth-store"
-
-import Template from "@/components/auth/auth-template"
-import OpenRoute from "@/components/auth/open-route"
+import Template from "@/components/auth/auth-template";
+import OpenRoute from "@/components/auth/open-route";
+import { useAuthStore } from "@/store/use-auth-store";
 
 function Signup() {
-  const { loading } = useAuthStore()
+  const { loading } = useAuthStore();
   return (
     <OpenRoute>
       {loading ? (
-        <div className=" h-[100vh] flex justify-center items-center">
-          <div className="custom-loader"></div>
+        <div className="flex h-screen items-center justify-center">
+          <div className="custom-loader" />
         </div>
       ) : (
         <Template
-          title="Join the millions learning to code with ZenithAcademy for free"
           description1="Build skills for today, tomorrow, and beyond."
           description2="Education to future-proof your career."
-          image="/assets/signup.webp"
           formType="signup"
+          image="/assets/signup.webp"
+          title="Join the millions learning to code with ZenithAcademy for free"
         />
       )}
     </OpenRoute>
-  )
+  );
 }
 
-export default Signup
+export default Signup;
