@@ -1,10 +1,10 @@
-import { useAuthStore } from "@/store/use-auth-store"
-import { useCartStore } from "@/store/use-cart-store"
-import { useProfileStore } from "@/store/use-profile-store"
-import { toast } from "react-hot-toast"
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/use-auth-store";
+import { useCartStore } from "@/store/use-cart-store";
+import { useProfileStore } from "@/store/use-profile-store";
 
-import { apiConnector } from "../utils/api-connector"
-import { endpoints } from "../utils/apis"
+import { apiConnector } from "../utils/api-connector";
+import { endpoints } from "../utils/apis";
 
 const {
   SENDOTP_API,
@@ -12,29 +12,29 @@ const {
   LOGIN_API,
   RESETPASSTOKEN_API,
   RESETPASSWORD_API,
-} = endpoints
+} = endpoints;
 
 export async function sendOtp(email: string, navigate: (path: string) => void) {
-  const { setLoading } = useAuthStore.getState()
-  setLoading(true)
+  const { setLoading } = useAuthStore.getState();
+  setLoading(true);
 
   try {
     const response = await apiConnector("POST", SENDOTP_API, {
       email,
       checkUserPresent: true,
-    })
-    console.log("SENDOTP API RESPONSE............", response)
+    });
+    console.log("SENDOTP API RESPONSE............", response);
     if (!response.data.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
 
-    toast.success("OTP Sent Successfully")
-    navigate("/verify-email")
+    toast.success("OTP Sent Successfully");
+    navigate("/verify-email");
   } catch (error) {
-    console.log("SENDOTP API ERROR............", error)
-    toast.error((error as any)?.response?.data?.message)
+    console.log("SENDOTP API ERROR............", error);
+    toast.error((error as any)?.response?.data?.message);
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
@@ -48,9 +48,9 @@ export async function signUp(
   otp: string,
   navigate: (path: string) => void
 ) {
-  const { setLoading } = useAuthStore.getState()
+  const { setLoading } = useAuthStore.getState();
 
-  setLoading(true)
+  setLoading(true);
   try {
     const response = await apiConnector("POST", SIGNUP_API, {
       accountType,
@@ -60,21 +60,21 @@ export async function signUp(
       password,
       confirmPassword,
       otp,
-    })
+    });
 
-    console.log("SIGNUP API RESPONSE............", response)
+    console.log("SIGNUP API RESPONSE............", response);
     if (!response.data.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
-    toast.success("Signup Successful")
+    toast.success("Signup Successful");
     // navigate("/login")
-    login(email, password, navigate)
+    login(email, password, navigate);
   } catch (error) {
-    console.log("SIGNUP API ERROR............", error)
-    toast.error("Signup Failed")
-    navigate("/signup")
+    console.log("SIGNUP API ERROR............", error);
+    toast.error("Signup Failed");
+    navigate("/signup");
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
@@ -83,72 +83,72 @@ export async function login(
   password: string,
   navigate: (path: string) => void
 ) {
-  const { setLoading, setToken } = useAuthStore.getState()
-  const { setUser } = useProfileStore.getState()
+  const { setLoading, setToken } = useAuthStore.getState();
+  const { setUser } = useProfileStore.getState();
   // const { resetCart } = useCartStore.getState()
 
-  setLoading(true)
+  setLoading(true);
   try {
-    const response = await apiConnector("POST", LOGIN_API, { email, password })
+    const response = await apiConnector("POST", LOGIN_API, { email, password });
 
-    console.log("LOGIN API RESPONSE............", response)
+    console.log("LOGIN API RESPONSE............", response);
     if (!response.data.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
 
-    toast.success("Login Successful")
-    setToken(response.data.token)
+    toast.success("Login Successful");
+    setToken(response.data.token);
 
-    const userImage = response.data?.user?.image
+    const userImage = response.data?.user?.image;
     // ||`https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`
 
-    setUser({ ...response.data.user, image: userImage })
-    localStorage.setItem("user", JSON.stringify(response.data.user))
-    localStorage.setItem("token", JSON.stringify(response.data.token))
+    setUser({ ...response.data.user, image: userImage });
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+    localStorage.setItem("token", JSON.stringify(response.data.token));
 
-    navigate("/dashboard/my-profile")
+    navigate("/dashboard/my-profile");
   } catch (error) {
-    console.log("LOGIN API ERROR............", error)
-    toast.error((error as any).response?.data?.message)
+    console.log("LOGIN API ERROR............", error);
+    toast.error((error as any).response?.data?.message);
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
 export function logout(navigate: (path: string) => void) {
-  navigate("/")
-  const { setToken } = useAuthStore.getState()
-  const { resetCart } = useCartStore.getState()
-  const { setUser } = useProfileStore.getState()
-  setToken(null)
-  setUser(null)
-  resetCart()
-  localStorage.removeItem("token")
-  localStorage.removeItem("user")
-  toast.success("Logged Out")
+  navigate("/");
+  const { setToken } = useAuthStore.getState();
+  const { resetCart } = useCartStore.getState();
+  const { setUser } = useProfileStore.getState();
+  setToken(null);
+  setUser(null);
+  resetCart();
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  toast.success("Logged Out");
 }
 
 export async function getPasswordResetToken(
   email: string,
   setEmailSent: (sent: boolean) => void
 ) {
-  const { setLoading } = useAuthStore.getState()
-  setLoading(true)
+  const { setLoading } = useAuthStore.getState();
+  setLoading(true);
 
   try {
-    const response = await apiConnector("POST", RESETPASSTOKEN_API, { email })
+    const response = await apiConnector("POST", RESETPASSTOKEN_API, { email });
 
-    console.log("RESETPASSTOKEN RESPONSE............", response)
+    console.log("RESETPASSTOKEN RESPONSE............", response);
     if (!response.data.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
-    toast.success("Reset Email Sent")
-    setEmailSent(true)
+    toast.success("Reset Email Sent");
+    setEmailSent(true);
   } catch (error) {
-    console.log("RESETPASSTOKEN ERROR............", error)
-    toast.error("Failed To Send Reset Email")
+    console.log("RESETPASSTOKEN ERROR............", error);
+    toast.error("Failed To Send Reset Email");
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
@@ -159,28 +159,28 @@ export async function updatePassword(
   setresetComplete: (complete: boolean) => void,
   navigate: (path: string) => void
 ) {
-  const { setLoading } = useAuthStore.getState()
-  setLoading(true)
+  const { setLoading } = useAuthStore.getState();
+  setLoading(true);
 
   try {
     const response = await apiConnector("POST", RESETPASSWORD_API, {
       password,
       confirmPassword,
       token,
-    })
+    });
 
-    console.log("RESETPASSWORD RESPONSE............", response)
+    console.log("RESETPASSWORD RESPONSE............", response);
     if (!response.data.success) {
-      throw new Error(response.data.message)
+      throw new Error(response.data.message);
     }
 
-    toast.success("Password Reset Successfully")
-    setresetComplete(true)
-    navigate("/login")
+    toast.success("Password Reset Successfully");
+    setresetComplete(true);
+    navigate("/login");
   } catch (error) {
-    console.log("RESETPASSWORD ERROR............", error)
-    toast.error("Failed To Reset Password")
+    console.log("RESETPASSWORD ERROR............", error);
+    toast.error("Failed To Reset Password");
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
