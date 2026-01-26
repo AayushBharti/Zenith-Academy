@@ -1,10 +1,8 @@
-import React from "react"
-
 export default function HighlightText({ text }: { text?: string }) {
   return (
-    <span className="bg-gradient-to-br from-[#06b7f9] to-[#194aec] max-w-fit text-transparent bg-clip-text font-bold">
+    <span className="inline-block animate-gradient bg-linear-to-r bg-size-[200%_auto] from-[#06b7f9] via-[#194aec] to-[#06b7f9] bg-clip-text pb-1 font-bold text-transparent tracking-tighter">
       {" "}
       {text}
     </span>
-  )
+  );
 }
