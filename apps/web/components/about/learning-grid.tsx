@@ -1,7 +1,5 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
 import {
   BarChart,
   Book,
@@ -9,17 +7,19 @@ import {
   ChevronRight,
   Users,
   Zap,
-} from "lucide-react"
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 const learningFeatures = [
   {
@@ -27,7 +27,7 @@ const learningFeatures = [
     title: "Industry-Driven Curriculum",
     description:
       "Our curriculum is meticulously crafted to align with current industry demands, ensuring you learn skills that are immediately applicable in the workplace.",
-    stats: { courses: 500, hours: 10000 },
+    stats: { courses: 500, hours: 10_000 },
     image:
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
   },
@@ -36,7 +36,7 @@ const learningFeatures = [
     title: "Collaborative Learning",
     description:
       "Engage in group projects, peer reviews, and discussion forums to enhance your learning experience through collaboration with peers worldwide.",
-    stats: { students: 100000, countries: 190 },
+    stats: { students: 100_000, countries: 190 },
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80",
   },
@@ -63,7 +63,7 @@ const learningFeatures = [
     title: "Career Services",
     description:
       "Access our comprehensive career services, including resume reviews, mock interviews, and job placement assistance to jumpstart your career.",
-    stats: { jobPlacements: 50000, avgSalaryIncrease: "35%" },
+    stats: { jobPlacements: 50_000, avgSalaryIncrease: "35%" },
     image:
       "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80",
   },
@@ -76,31 +76,31 @@ const learningFeatures = [
     image:
       "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1422&q=80",
   },
-]
+];
 
 function FeatureCard({
   feature,
   index,
 }: {
-  feature: (typeof learningFeatures)[0]
-  index: number
+  feature: (typeof learningFeatures)[0];
+  index: number;
 }) {
-  const [isHovered, setIsHovered] = useState(false)
-  const Icon = feature.icon
+  const [isHovered, setIsHovered] = useState(false);
+  const Icon = feature.icon;
 
   return (
     <motion.div
+      animate={{ opacity: 1, y: 0 }}
       className="relative"
       initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => setIsHovered(true)}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <Card className="h-full overflow-hidden">
         <CardHeader className="relative z-10">
-          <div className="flex items-center space-x-2 mb-2">
-            <Icon className="w-6 h-6 text-primary" />
+          <div className="mb-2 flex items-center space-x-2">
+            <Icon className="h-6 w-6 text-primary" />
             <Badge variant="outline">
               {Object.keys(feature.stats)[0]}: {Object.values(feature.stats)[0]}
             </Badge>
@@ -111,52 +111,52 @@ function FeatureCard({
           <CardDescription className="mb-4">
             {feature.description}
           </CardDescription>
-          <Button variant="outline" size="sm">
+          <Button size="sm" variant="outline">
             Learn More <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </CardContent>
         <AnimatePresence>
           {isHovered && (
             <motion.div
-              className="absolute inset-0 bg-cover bg-center z-0"
-              style={{ backgroundImage: `url(${feature.image})` }}
-              initial={{ opacity: 0 }}
               animate={{ opacity: 0.15 }}
+              className="absolute inset-0 z-0 bg-center bg-cover"
               exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              style={{ backgroundImage: `url(${feature.image})` }}
               transition={{ duration: 0.3 }}
             />
           )}
         </AnimatePresence>
       </Card>
     </motion.div>
-  )
+  );
 }
 
 export default function LearningGrid() {
   return (
     <section className="py-20">
       <div className="container mx-auto px-5">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 font-bold text-3xl tracking-tight sm:text-4xl">
             Discover the ZenithAcademy{" "}
             <span className="text-primary">Advantage</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-muted-foreground text-xl">
             Unlock your potential with our cutting-edge learning platform,
             designed to propel your career to new heights.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto">
+        <div className="container mx-auto grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {learningFeatures.map((feature, index) => (
-            <FeatureCard key={index} feature={feature} index={index} />
+            <FeatureCard feature={feature} index={index} key={index} />
           ))}
         </div>
-        <div className="text-center mt-12">
-          <Button size="lg" className="animate-pulse">
+        <div className="mt-12 text-center">
+          <Button className="animate-pulse" size="lg">
             Start Your Learning Journey
           </Button>
         </div>
       </div>
     </section>
-  )
+  );
 }
