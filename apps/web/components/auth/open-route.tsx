@@ -1,22 +1,25 @@
-// This will prevent authenticated users from accessing this route
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuthStore } from "@/store/use-auth-store"
-
-import Loading from "@/app/loading"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Loading from "@/app/loading";
+import { useAuthStore } from "@/store/use-auth-store";
 
 export default function OpenRoute({ children }: { children: React.ReactNode }) {
-  const { token, loading } = useAuthStore()
-  const router = useRouter()
+  const { token, loading } = useAuthStore();
+  const router = useRouter();
 
   useEffect(() => {
-    if (token && !loading) {
-      router.replace("/dashboard/my-profile")
+    // If we are done loading and token exists, redirect to dashboard
+    if (!loading && token) {
+      router.replace("/dashboard/my-profile");
     }
-  }, [token, loading, router])
+  }, [token, loading, router]);
 
-  if (!token) return children
-  else return <Loading />
+  // While loading, or if token exists (while waiting for redirect), show loader
+  if (loading || token) {
+    return <Loading />;
+  }
+
+  return <>{children}</>;
 }
