@@ -1,49 +1,70 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useParams } from "next/navigation"
-import { createRating } from "@/services/course-details-service"
-import { useAuthStore } from "@/store/use-auth-store"
-import { useProfileStore } from "@/store/use-profile-store"
-import { Star } from "lucide-react"
-import { useForm } from "react-hook-form"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Loader2, Star } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { createRating } from "@/services/course-details-service";
+import { useAuthStore } from "@/store/use-auth-store";
+import { useProfileStore } from "@/store/use-profile-store";
 
 interface FormData {
-  userRating: number
-  userExperience: string
+  userRating: number;
+  userExperience: string;
 }
 
 export function ReviewModal({
   setReviewModal,
 }: {
-  setReviewModal: (isOpen: boolean) => void
+  setReviewModal: (isOpen: boolean) => void;
 }) {
-  const { courseId } = useParams()
+  const { courseId } = useParams();
+  const { token } = useAuthStore();
+  const { user } = useProfileStore();
 
-  const { token } = useAuthStore()
-  const { user } = useProfileStore()
-  const [rating, setRating] = useState(0)
+  const [loading, setLoading] = useState(false);
+  const [hover, setHover] = useState(0); // For hover effect on stars
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
-    reset,
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    defaultValues: {
+      userRating: 0,
+      userExperience: "",
+    },
+  });
+
+  // Watch rating for conditional styling (optional, but good for debugging)
+  const rating = watch("userRating");
+
+  // Register the rating field manually since it doesn't use a native input
+  useEffect(() => {
+    register("userRating", {
+      required: "Please select a star rating",
+      min: { value: 1, message: "Rating must be at least 1 star" },
+    });
+  }, [register]);
 
   const onSubmit = async (data: FormData) => {
+    setLoading(true);
     try {
       await createRating(
         {
@@ -52,89 +73,146 @@ export function ReviewModal({
           rating: data.userRating,
         },
         token as string
-      )
-      setReviewModal(false)
-      reset()
-      setRating(0)
+      );
+      toast.success("Review added successfully");
+      setReviewModal(false);
     } catch (error) {
-      console.error("Error submitting review:", error)
+      console.error("Error submitting review:", error);
+      toast.error("Failed to add review");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
+  const handleStarClick = (starValue: number) => {
+    setValue("userRating", starValue, { shouldValidate: true });
+  };
 
   return (
-    <Dialog open={true} onOpenChange={setReviewModal}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add Review</DialogTitle>
+    <Dialog onOpenChange={setReviewModal} open={true}>
+      <DialogContent className="gap-6 sm:max-w-[500px]">
+        <DialogHeader className="items-center text-center">
+          <DialogTitle className="text-2xl">How was the course?</DialogTitle>
+          <DialogDescription>
+            Your feedback helps us improve and helps other students make better
+            choices.
+          </DialogDescription>
         </DialogHeader>
-        <div className="flex items-center space-x-4 mb-4">
-          <Avatar>
-            <AvatarImage src={user?.image} alt={user?.firstName} />
-            <AvatarFallback>{user?.firstName?.[0]}</AvatarFallback>
+
+        {/* User Profile Section */}
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <Avatar className="h-16 w-16 border-2 border-primary/10">
+            <AvatarImage alt={user?.firstName} src={user?.image} />
+            <AvatarFallback className="text-lg">
+              {user?.firstName?.[0]}
+            </AvatarFallback>
           </Avatar>
-          <div>
-            <p className="font-semibold">
+          <div className="text-center">
+            <p className="font-semibold text-lg leading-none">
               {user?.firstName} {user?.lastName}
             </p>
-            <p className="text-sm text-muted-foreground">Posting Publicly</p>
+            <p className="mt-1 text-muted-foreground text-xs">
+              Posting Publicly
+            </p>
           </div>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="rating">Rating</Label>
-            <div className="flex space-x-1 mt-1">
+
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          {/* Star Rating Section */}
+          <div className="flex flex-col items-center gap-2">
+            <Label
+              className={cn(
+                "text-base",
+                errors.userRating && "text-destructive"
+              )}
+            >
+              {rating > 0
+                ? rating === 5
+                  ? "Excellent!"
+                  : rating === 4
+                    ? "Good"
+                    : rating === 3
+                      ? "Average"
+                      : rating === 2
+                        ? "Below Average"
+                        : "Poor"
+                : "Select a Rating"}
+            </Label>
+
+            <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star
+                <button
+                  className="transition-transform hover:scale-110 focus:outline-hidden"
                   key={star}
-                  className={`h-6 w-6 cursor-pointer ${
-                    star <= rating
-                      ? "text-yellow-400 fill-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                  onClick={() => {
-                    setRating(star)
-                  }}
-                />
+                  onClick={() => handleStarClick(star)}
+                  onMouseEnter={() => setHover(star)}
+                  onMouseLeave={() => setHover(0)}
+                  type="button"
+                >
+                  <Star
+                    className={cn(
+                      "h-8 w-8 transition-colors duration-200",
+                      // Logic: If hovering, show gold up to hover index.
+                      // If not hovering, show gold up to selected rating.
+                      (hover || rating) >= star
+                        ? "fill-amber-400 text-amber-400"
+                        : "fill-muted text-muted-foreground/30"
+                    )}
+                  />
+                </button>
               ))}
             </div>
-            <Input
-              type="hidden"
-              id="rating"
-              value={rating}
-              {...register("userRating", {
-                required: "Please provide a rating",
-              })}
-            />
             {errors.userRating && (
-              <p className="text-sm text-red-500 mt-1">
+              <span className="animate-pulse font-medium text-destructive text-sm">
                 {errors.userRating.message}
-              </p>
+              </span>
             )}
           </div>
-          <div>
+
+          {/* Text Area Section */}
+          <div className="space-y-2">
             <Label htmlFor="experience">Your Experience</Label>
             <Textarea
               id="experience"
-              placeholder="Write your experience..."
+              placeholder="Tell us about your learning journey..."
               {...register("userExperience", {
-                required: "Please share your experience",
+                required: "Please write a few words about your experience",
+                minLength: {
+                  value: 10,
+                  message: "Review must be at least 10 characters long",
+                },
               })}
-              className="mt-1"
+              className="min-h-[120px] resize-none bg-secondary/20"
             />
             {errors.userExperience && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="font-medium text-destructive text-sm">
                 {errors.userExperience.message}
               </p>
             )}
           </div>
-          <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => setReviewModal(false)}>
+
+          <DialogFooter className="gap-2 sm:justify-between">
+            <Button
+              disabled={loading}
+              onClick={() => setReviewModal(false)}
+              type="button"
+              variant="ghost"
+            >
               Cancel
             </Button>
-            <Button type="submit">Submit Review</Button>
-          </div>
+            <Button className="min-w-[120px]" disabled={loading} type="submit">
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting
+                </>
+              ) : (
+                "Submit Review"
+              )}
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
