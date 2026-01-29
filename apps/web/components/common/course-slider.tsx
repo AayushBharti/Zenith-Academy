@@ -1,53 +1,72 @@
-"use client"
-
-import React from "react"
-
-import { CourseDetails } from "@/types/course"
-import { Skeleton } from "@/components/ui/skeleton"
-
-import { CourseCard } from "./course-card"
-import { GeneralSwiper } from "./general-swiper"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { CourseDetails } from "@/types/course";
+import { CourseCard } from "./course-card";
 
 interface CourseSliderProps {
-  courses: CourseDetails[]
+  courses: CourseDetails[];
 }
 
 export function CourseSlider({ courses }: CourseSliderProps) {
+  // Loading State / Empty State
   if (!courses?.length) {
     return (
-      <div className="flex gap-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3].map((_, index) => (
-          <div key={index} className="w-full">
-            <Skeleton className="h-[200px] w-full rounded-xl" />
-            <Skeleton className="mt-2 h-4 w-1/4" />
-            <Skeleton className="mt-2 h-4 w-full" />
-            <Skeleton className="mt-2 h-4 w-full" />
+          <div className="flex flex-col space-y-3" key={index}>
+            <Skeleton className="h-[220px] w-full rounded-xl" />
+            <div className="space-y-2 p-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+              <div className="flex justify-between pt-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+            </div>
           </div>
         ))}
       </div>
-    )
+    );
   }
 
   return (
-    <GeneralSwiper
-      slidesPerView={{ 300: 1.3, 640: 2.5, 1024: 3.4 }}
-      spaceBetween={20}
-      pagination={false}
-      navigation={false}
-      // mousewheel={{
-      //   enabled: true,
-      //   forceToAxis: true,
-      // }}
-      // keyboard={{
-      //   enabled: true,
-      //   onlyInViewport: true,
-      // }}
-      // freeMode={true}
-      className="mySwiper md:pt-5"
-    >
-      {courses.map((course) => (
-        <CourseCard key={course._id} course={course} />
-      ))}
-    </GeneralSwiper>
-  )
+    <div className="w-full">
+      <Carousel
+        className="w-full"
+        opts={{
+          align: "start",
+          loop: false,
+        }}
+      >
+        <CarouselContent className="-ml-4 pb-4">
+          {courses.map((course) => (
+            <CarouselItem
+              className="basis-[85%] pl-4 md:basis-[45%] lg:basis-[32%]"
+              // Responsive basis values to mimic "slidesPerView" with peeking
+              // basis-[85%] = shows 1 full card + 15% of next (Mobile)
+              // md:basis-[45%] = shows 2 full cards + 10% of next (Tablet)
+              // lg:basis-[32%] = shows 3 full cards + space (Desktop)
+              key={course._id}
+            >
+              <div className="h-full p-1">
+                <CourseCard course={course} />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Navigation Buttons (Hidden on mobile for cleaner look, visible on larger screens) */}
+        <div className="hidden md:block">
+          <CarouselPrevious className="-left-4 lg:-left-12 h-10 w-10 border-border" />
+          <CarouselNext className="-right-4 lg:-right-12 h-10 w-10 border-border" />
+        </div>
+      </Carousel>
+    </div>
+  );
 }
