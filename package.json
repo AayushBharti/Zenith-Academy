@@ -3,25 +3,27 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:api": "turbo run build --filter=api",
-    "dev:api": "turbo run dev --filter=api",
-    "dev:admin": "turbo run dev --filter=admin",
-    "build:admin": "turbo run build --filter=admin",
-    "start:api": "turbo run start --filter=api",
-    "start:admin": "turbo run start --filter=admin",
-    "clean": "turbo run clean",
     "dev": "turbo run dev ",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
+    "build:api": "turbo run build --filter=api",
+    "build:web": "turbo run build --filter=web",
+    "dev:api": "turbo run dev --filter=api",
+    "dev:web": "turbo run dev --filter=web",
+    "start:api": "turbo run start --filter=api",
+    "start:web": "turbo run start --filter=web",
+    "clean": "turbo run clean",
+    "format": "npx ultracite fix",
+    "lint": "npx ultracite lint",
     "test": "turbo run test",
-    "typecheck": "turbo run typecheck"
+    "biome-check": "biome check --log-level=error --max-diagnostics=300",
+    "type": "turbo type",
+    "fix": "biome check --write --unsafe"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
+    "@biomejs/biome": "2.2.5",
     "@workspace/typescript-config": "workspace:*",
-    "prettier": "^3.6.0",
     "turbo": "^2.5.4",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "ultracite": "5.6.2"
   },
   "engines": {
     "node": ">=20"
