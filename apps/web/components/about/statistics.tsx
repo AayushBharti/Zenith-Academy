@@ -1,26 +1,26 @@
-import { GraduationCap, Star, Users, Zap } from "lucide-react"
+import { GraduationCap, Star, Users, Zap } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 
-import { Badge } from "../ui/badge"
+import { Badge } from "../ui/badge";
 
 export default function Statistics() {
   return (
     <div>
-      <section className="py-20 sm:py-32 bg-primary text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary-dark opacity-50" />
-        <div className="mx-auto container px-5 relative z-10">
+      <section className="relative overflow-hidden bg-primary py-20 text-primary-foreground sm:py-32">
+        <div className="absolute inset-0 bg-linear-to-br from-primary to-primary-dark opacity-50" />
+        <div className="container relative z-10 mx-auto px-5">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+            <h2 className="mb-4 font-bold text-3xl tracking-tight sm:text-4xl">
               Our Global Impact
             </h2>
-            <Badge variant="secondary" className="mb-6">
+            <Badge className="mb-6" variant="secondary">
               Transforming Lives Through Education
             </Badge>
           </div>
           <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { number: 1000000, label: "Active Learners", icon: Users },
+              { number: 1_000_000, label: "Active Learners", icon: Users },
               {
                 number: 500,
                 label: "Cutting-edge Courses",
@@ -30,10 +30,10 @@ export default function Statistics() {
               { number: 190, label: "Countries Reached", icon: Zap },
             ].map((stat, index) => (
               <div key={index}>
-                <Card className="bg-primary-foreground/10 backdrop-blur-sm border-primary-foreground/20 text-primary-foreground">
+                <Card className="border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground backdrop-blur-xs">
                   <CardContent className="p-6 text-center">
-                    <stat.icon className="h-8 w-8 mx-auto mb-4" />
-                    <div className="text-4xl font-bold mb-2">{stat.number}</div>
+                    <stat.icon className="mx-auto mb-4 h-8 w-8" />
+                    <div className="mb-2 font-bold text-4xl">{stat.number}</div>
                     <p className="text-xl opacity-80">{stat.label}</p>
                   </CardContent>
                 </Card>
@@ -43,5 +43,5 @@ export default function Statistics() {
         </div>
       </section>
     </div>
-  )
+  );
 }
