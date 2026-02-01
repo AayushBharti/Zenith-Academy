@@ -1,46 +1,46 @@
-"use client"
+"use client";
 
+import { toast } from "sonner";
 // import rzplogo from "@/public/Logo/rzp.png"
-import { useCartStore } from "@/store/use-cart-store"
-import { toast } from "react-hot-toast"
+import { useCartStore } from "@/store/use-cart-store";
 
-import { apiConnector } from "../utils/api-connector"
-import { studentEndpoints } from "../utils/apis"
+import { apiConnector } from "../utils/api-connector";
+import { studentEndpoints } from "../utils/apis";
 
 const {
   COURSE_PAYMENT_API,
   COURSE_VERIFY_API,
   SEND_PAYMENT_SUCCESS_EMAIL_API,
-} = studentEndpoints
+} = studentEndpoints;
 
 interface UserDetails {
-  firstName: string
-  lastName: string
-  email: string
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 interface Course {
-  id: string
-  name: string
-  price: number
-  [key: string]: any
+  id: string;
+  name: string;
+  price: number;
+  [key: string]: any;
 }
 
 interface RazorpayResponse {
-  razorpay_payment_id: string
-  razorpay_order_id: string
-  razorpay_signature: string
-  amount: number
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+  amount: number;
 }
 
 function loadScript(src: string): Promise<boolean> {
   return new Promise((resolve) => {
-    const script = document.createElement("script")
-    script.src = src
-    script.onload = () => resolve(true)
-    script.onerror = () => resolve(false)
-    document.body.appendChild(script)
-  })
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 }
 
 export async function buyCourse(
@@ -55,13 +55,15 @@ export async function buyCourse(
       position: "bottom-center",
       // autoClose: false,
     }
-  )
+  );
 
   try {
-    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js")
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
     if (!res) {
-      toast.error("Razorpay SDK failed to load. Are you online?")
-      return
+      toast.error("Razorpay SDK failed to load. Are you online?");
+      return;
     }
 
     const orderResponse = await apiConnector(
@@ -71,12 +73,12 @@ export async function buyCourse(
       {
         Authorisation: `Bearer ${token}`,
       }
-    )
+    );
 
     if (!orderResponse.data?.success) {
-      toast.error(orderResponse.data?.message || "An error occurred.")
-      toast.dismiss(toastId)
-      return
+      toast.error(orderResponse.data?.message || "An error occurred.");
+      toast.dismiss(toastId);
+      return;
     }
 
     const options = {
@@ -91,25 +93,25 @@ export async function buyCourse(
         email: userDetails.email,
       },
       handler: async (response: RazorpayResponse) => {
-        sendPaymentSuccessEmail(response, orderResponse.data.amount, token)
-        verifypament(response, courses, token, navigate)
+        sendPaymentSuccessEmail(response, orderResponse.data.amount, token);
+        verifypament(response, courses, token, navigate);
       },
       theme: {
         color: "#686CFD",
       },
-    }
+    };
 
-    const paymentObject = new window.Razorpay(options)
-    paymentObject.open()
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
     paymentObject.on("payment.failed", () => {
-      toast.error("Payment Failed")
-    })
+      toast.error("Payment Failed");
+    });
 
-    toast.dismiss(toastId)
+    toast.dismiss(toastId);
   } catch (error) {
-    toast.dismiss(toastId)
-    toast.error("Something went wrong")
-    console.log("buyCourse -> error", error)
+    toast.dismiss(toastId);
+    toast.error("Something went wrong");
+    console.log("buyCourse -> error", error);
   }
 }
 
@@ -129,11 +131,11 @@ async function sendPaymentSuccessEmail(
     {
       Authorisation: `Bearer ${token}`,
     }
-  )
+  );
 
   if (!res.data.success) {
-    console.log(res.data.message)
-    toast.error(res.data.message || "An error occurred")
+    console.log(res.data.message);
+    toast.error(res.data.message || "An error occurred");
   }
 }
 
@@ -143,9 +145,9 @@ async function verifypament(
   token: string,
   navigate: (path: string) => void
 ): Promise<void> {
-  const { resetCart } = useCartStore.getState()
+  const { resetCart } = useCartStore.getState();
 
-  const toastId = toast.loading("Please wait while we verify your payment")
+  const toastId = toast.loading("Please wait while we verify your payment");
 
   try {
     const res = await apiConnector(
@@ -160,20 +162,20 @@ async function verifypament(
       {
         Authorisation: `Bearer ${token}`,
       }
-    )
+    );
 
     if (!res.data.success) {
-      toast.error(res.data.message || "Verification failed")
-      return
+      toast.error(res.data.message || "Verification failed");
+      return;
     }
 
-    toast.success("Payment Successful")
-    navigate("/dashboard/enrolled-courses")
-    resetCart()
+    toast.success("Payment Successful");
+    navigate("/dashboard/enrolled-courses");
+    resetCart();
   } catch (err) {
-    toast.error("Payment Failed")
-    console.log(err)
+    toast.error("Payment Failed");
+    console.log(err);
   }
 
-  toast.dismiss(toastId)
+  toast.dismiss(toastId);
 }
