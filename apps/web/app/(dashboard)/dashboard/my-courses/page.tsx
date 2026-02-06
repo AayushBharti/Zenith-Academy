@@ -1,43 +1,49 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { fetchInstructorCourses } from "@/services/course-details-service"
-import { useAuthStore } from "@/store/use-auth-store"
-import { PlusIcon } from "lucide-react"
-
-import { CourseDetails } from "@/types/course"
-import { Button } from "@/components/ui/button"
-import CoursesTable from "@/components/dashboard/my-courses/courses-table"
+import { PlusIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import CoursesTable from "@/components/dashboard/my-courses/courses-table";
+import { Button } from "@/components/ui/button";
+import { fetchInstructorCourses } from "@/services/course-details-service";
+import { useAuthStore } from "@/store/use-auth-store";
+import type { CourseDetails } from "@/types/course";
 
 export default function MyCourses() {
-  const { token } = useAuthStore()
+  const { token } = useAuthStore();
 
-  const router = useRouter()
-  const [courses, setCourses] = useState<CourseDetails[] | null>(null)
+  const router = useRouter();
+  const [courses, setCourses] = useState<CourseDetails[] | null>(null);
 
   const fetchCourses = async () => {
     try {
-      const result = await fetchInstructorCourses(token as string)
+      const result = await fetchInstructorCourses(token as string);
       if (result) {
-        setCourses(result)
+        setCourses(result);
       }
     } catch (error) {
-      console.error("Failed to fetch courses:", error)
+      console.error("Failed to fetch courses:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchCourses()
-  }, [])
+    fetchCourses();
+  }, []);
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="mb-14 flex items-center justify-between">
-        <h1 className="text-4xl font-bold">My Courses</h1>
+    <div className="">
+      <div className="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div className="space-y-1">
+          <h1 className="font-bold text-3xl text-primary tracking-tight">
+            My Courses
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your courses, track performance, and edit content.
+          </p>
+        </div>
         <Button
-          onClick={() => router.push("/dashboard/add-course")}
           className="flex items-center gap-x-2"
+          onClick={() => router.push("/dashboard/add-course")}
         >
           <span>Add Course</span>
           <PlusIcon className="h-5 w-5" />
@@ -47,5 +53,5 @@ export default function MyCourses() {
         {courses && <CoursesTable courses={courses} setCourses={setCourses} />}
       </div>
     </div>
-  )
+  );
 }
