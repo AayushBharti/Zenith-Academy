@@ -1,26 +1,23 @@
-"use client"
+"use client";
 
-import Link from "next/link"
 import {
-  ArrowRight,
   Book,
   Facebook,
   Instagram,
   Linkedin,
   Twitter,
   Youtube,
-} from "lucide-react"
-import toast from "react-hot-toast"
+} from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 
 const footerSections = [
   {
@@ -59,13 +56,13 @@ const footerSections = [
       { name: "Contact", href: "/contact" },
     ],
   },
-]
+];
 
 const legalLinks = [
   { name: "Privacy Policy", href: "/privacy-policy" },
   { name: "Terms of Service", href: "/terms-of-service" },
   { name: "Cookie Policy", href: "/cookie-policy" },
-]
+];
 
 const socialLinks = [
   { Icon: Facebook, href: "https://facebook.com", name: "Facebook" },
@@ -73,33 +70,33 @@ const socialLinks = [
   { Icon: Youtube, href: "https://youtube.com", name: "YouTube" },
   { Icon: Instagram, href: "https://instagram.com", name: "Instagram" },
   { Icon: Linkedin, href: "https://linkedin.com", name: "LinkedIn" },
-]
+];
 function submitHandler() {
-  console.log("Newsletter Handler")
-  toast.success("Newsletter Subscribed!")
+  console.log("Newsletter Handler");
+  toast.success("Newsletter Subscribed!");
 }
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-950 dark:to-neutral-800 text-neutral-800 dark:text-neutral-200 mt-8 w-full">
-      <div className="mx-auto px-4 py-12 md:py-16 container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
+    <footer className="mt-8 w-full bg-linear-to-br from-neutral-100 to-neutral-200 text-neutral-800 dark:from-neutral-950 dark:to-neutral-800 dark:text-neutral-200">
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center mr-6 mb-4">
-              <Book className="h-6 w-6 mr-2" aria-hidden="true" />
+            <Link className="mr-6 mb-4 flex items-center" href="/">
+              <Book aria-hidden="true" className="mr-2 h-6 w-6" />
               <span className="font-bold text-lg">Zenith Academy</span>
             </Link>
-            <p className="text-sm mb-6 max-w-sm">
+            <p className="mb-6 max-w-sm text-sm">
               Empowering learners worldwide through innovative online education
               and cutting-edge technology.
             </p>
-            <h3 className="text-xl font-semibold mb-4">Stay Updated</h3>
-            <form
+            {/* <h3 className="text-xl font-semibold mb-4">Stay Updated</h3> */}
+            {/* <form
               action={() => {
                 submitHandler()
               }}
               className="flex flex-col sm:flex-row gap-2"
             >
-              <div className="flex-grow">
+              <div className="grow">
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -110,18 +107,18 @@ export default function Footer() {
                 Subscribe
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-            </form>
+            </form> */}
           </div>
 
           {footerSections.map((section) => (
-            <div key={section.title} className="hidden lg:block">
-              <h3 className="text-xl font-semibold mb-4">{section.title}</h3>
+            <div className="hidden lg:block" key={section.title}>
+              <h3 className="mb-4 font-semibold text-xl">{section.title}</h3>
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.name}>
                     <Link
+                      className="text-sm transition-colors duration-300 hover:text-primary dark:hover:text-primary/75"
                       href={link.href}
-                      className="text-sm hover:text-primary dark:hover:text-primary/75 transition-colors duration-300"
                     >
                       {link.name}
                     </Link>
@@ -131,10 +128,10 @@ export default function Footer() {
             </div>
           ))}
 
-          <Accordion type="single" collapsible className="lg:hidden">
+          <Accordion className="lg:hidden" collapsible type="single">
             {footerSections.map((section) => (
-              <AccordionItem value={section.title} key={section.title}>
-                <AccordionTrigger className="text-lg font-semibold">
+              <AccordionItem key={section.title} value={section.title}>
+                <AccordionTrigger className="font-semibold text-lg">
                   {section.title}
                 </AccordionTrigger>
                 <AccordionContent>
@@ -142,8 +139,8 @@ export default function Footer() {
                     {section.links.map((link) => (
                       <li key={link.name}>
                         <Link
+                          className="text-sm transition-colors duration-300 hover:text-primary dark:hover:text-primary/75"
                           href={link.href}
-                          className="text-sm hover:text-primary dark:hover:text-primary/75 transition-colors duration-300"
                         >
                           {link.name}
                         </Link>
@@ -158,31 +155,31 @@ export default function Footer() {
 
         <Separator className="mb-8 bg-gray-300 dark:bg-gray-700" />
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm order-2 md:order-1">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="order-2 text-sm md:order-1">
             © {new Date().getFullYear()} Zenith Academy. All rights reserved.
           </div>
-          <div className="flex flex-wrap justify-center gap-4 order-3 md:order-2">
+          <div className="order-3 flex flex-wrap justify-center gap-4 md:order-2">
             {legalLinks.map((link) => (
               <Link
-                key={link.name}
+                className="text-sm transition-colors duration-300 hover:text-primary dark:hover:text-primary/75"
                 href={link.href}
-                className="text-sm hover:text-primary dark:hover:text-primary/75 transition-colors duration-300"
+                key={link.name}
               >
                 {link.name}
               </Link>
             ))}
           </div>
-          <div className="flex gap-4 order-1 md:order-3 mb-4 md:mb-0">
+          <div className="order-1 mb-4 flex gap-4 md:order-3 md:mb-0">
             {socialLinks.map(({ Icon, href, name }) => (
               <a
-                key={name}
+                className="text-gray-600 transition-colors duration-300 hover:text-primary dark:text-gray-400 dark:hover:text-primary/75"
                 href={href}
-                target="_blank"
+                key={name}
                 rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary/75 transition-colors duration-300"
+                target="_blank"
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="h-5 w-5" />
                 <span className="sr-only">{name}</span>
               </a>
             ))}
@@ -190,5 +187,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
