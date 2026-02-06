@@ -1,13 +1,11 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { sendOtp } from "@/services/auth-service"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "react-hot-toast"
-import * as z from "zod"
-
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,12 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { sendOtp } from "@/services/auth-service";
 
-import { ACCOUNT_TYPE } from "../../data/constants"
-import { useAuthStore } from "../../store/use-auth-store"
+import { ACCOUNT_TYPE } from "../../data/constants";
+import { useAuthStore } from "../../store/use-auth-store";
 
 const formSchema = z
   .object({
@@ -34,11 +33,11 @@ const formSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
 
 export default function SignupForm() {
-  const router = useRouter()
-  const { setSignupData } = useAuthStore()
+  const router = useRouter();
+  const { setSignupData } = useAuthStore();
 
   // 1. Define form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,26 +50,26 @@ export default function SignupForm() {
       confirmPassword: "",
       accountType: ACCOUNT_TYPE.STUDENT,
     },
-  })
+  });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    console.log(values);
 
     // Setting signup data to state
     // To be used after otp verification
-    setSignupData(values)
+    setSignupData(values);
     // Send OTP to user for verification
-    console.log("SEND OTP TO USER FOR VERIFICATION")
-    sendOtp(values.email, router.push)
+    console.log("SEND OTP TO USER FOR VERIFICATION");
+    sendOtp(values.email, router.push);
 
-    toast.success("Account created successfully!")
-    form.reset()
+    toast.success("Account created successfully!");
+    form.reset();
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <Tabs
           defaultValue={ACCOUNT_TYPE.STUDENT}
           onValueChange={(value) =>
@@ -139,8 +138,8 @@ export default function SignupForm() {
               <FormLabel>Create Password</FormLabel>
               <FormControl>
                 <Input
-                  type="password"
                   placeholder="Enter Password"
+                  type="password"
                   {...field}
                 />
               </FormControl>
@@ -156,8 +155,8 @@ export default function SignupForm() {
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input
-                  type="password"
                   placeholder="Confirm Password"
+                  type="password"
                   {...field}
                 />
               </FormControl>
@@ -165,10 +164,10 @@ export default function SignupForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button className="w-full" type="submit">
           Create Account
         </Button>
       </form>
     </Form>
-  )
+  );
 }
