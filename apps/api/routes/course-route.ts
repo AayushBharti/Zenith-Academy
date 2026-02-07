@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Router } from "express";
 
 import {
   addCourseToCategory,
@@ -42,7 +42,7 @@ import {
 // Import Middlewares
 import { isDemo } from "@/middlewares/demo-middlewares";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 /**
  * Create a new course.

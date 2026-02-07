@@ -54,7 +54,8 @@ export const createCourse = async (req: any, res: Response) => {
       status = "Draft";
     }
     // Check for instructor details
-    const instructorDetails = await User.findById(userId, {
+    const instructorDetails = await User.findOne({
+      _id: userId,
       accountType: "Instructor",
     });
 
@@ -367,7 +368,10 @@ export const getFullCourseDetails = async (
     let totalDurationInSeconds = 0;
     courseDetails.courseContent.forEach((content: any) => {
       content.subSection.forEach((subSection: any) => {
-        const timeDurationInSeconds = Number.parseInt(subSection.timeDuration);
+        const timeDurationInSeconds = Number.parseInt(
+          subSection.timeDuration,
+          10
+        );
         totalDurationInSeconds += timeDurationInSeconds;
       });
     });
