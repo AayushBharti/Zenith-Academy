@@ -1,18 +1,19 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
-import { ACCOUNT_TYPE } from "../data/constants"
+import { ACCOUNT_TYPE } from "../data/constants";
+import type { User } from "../types/profile";
 
 // Combined state interface
 interface ProfileState {
-  user: User | null
-  loading: boolean
-  isStudent: boolean
-  isInstructor: boolean
-  isAdmin: boolean
-  setUser: (user: User | null) => void
-  setLoading: (loading: boolean) => void
-  setRoles: (accountType: string | undefined) => void
-  resetRoles: () => void
+  user: User | null;
+  loading: boolean;
+  isStudent: boolean;
+  isInstructor: boolean;
+  isAdmin: boolean;
+  setUser: (user: User | null) => void;
+  setLoading: (loading: boolean) => void;
+  setRoles: (accountType: string | undefined) => void;
+  resetRoles: () => void;
 }
 
 // Create the store with Zustand
@@ -28,21 +29,21 @@ export const useProfileStore = create<ProfileState>((set) => ({
 
   // Set user and roles together
   setUser: (user) => {
-    set({ user })
+    set({ user });
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user))
+      localStorage.setItem("user", JSON.stringify(user));
       set({
-        isStudent: user.accountType === ACCOUNT_TYPE.STUDENT,
-        isInstructor: user.accountType === ACCOUNT_TYPE.INSTRUCTOR,
-        isAdmin: user.accountType === ACCOUNT_TYPE.ADMIN,
-      })
+        isStudent: user?.accountType === ACCOUNT_TYPE.STUDENT,
+        isInstructor: user?.accountType === ACCOUNT_TYPE.INSTRUCTOR,
+        isAdmin: user?.accountType === ACCOUNT_TYPE.ADMIN,
+      });
     } else {
-      localStorage.removeItem("user")
+      localStorage.removeItem("user");
       set({
         isStudent: false,
         isInstructor: false,
         isAdmin: false,
-      })
+      });
     }
   },
 
@@ -54,7 +55,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
       isStudent: accountType === ACCOUNT_TYPE.STUDENT,
       isInstructor: accountType === ACCOUNT_TYPE.INSTRUCTOR,
       isAdmin: accountType === ACCOUNT_TYPE.ADMIN,
-    })
+    });
   },
 
   resetRoles: () => {
@@ -62,6 +63,6 @@ export const useProfileStore = create<ProfileState>((set) => ({
       isStudent: false,
       isInstructor: false,
       isAdmin: false,
-    })
+    });
   },
-}))
+}));
