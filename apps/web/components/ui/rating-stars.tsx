@@ -1,43 +1,58 @@
-import { Star, StarHalf } from "lucide-react"
+import { Star, StarHalf } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface RatingStarsProps {
-  rating: number
-  maxRating?: number
+  rating: number;
+  maxRating?: number;
+  size?: number;
+  className?: string;
 }
 
-export function RatingStars({ rating, maxRating = 5 }: RatingStarsProps) {
-  // Ensure the rating is a valid number and clamp it between 0 and maxRating
-  const validRating = Math.max(0, Math.min(Number(rating), maxRating))
-
-  // Calculate the number of full stars
-  const fullStars = Math.floor(validRating)
-
-  // Check if there's a half star (if the rating has a decimal part)
-  const hasHalfStar = validRating % 1 !== 0
-
-  // Calculate the number of empty stars (maxRating - the number of full and half stars)
-  const emptyStars = Math.max(0, maxRating - Math.ceil(validRating))
-
-  // Avoid creating arrays with invalid lengths
-  if (fullStars < 0 || isNaN(fullStars)) return null
-
-  // Only render if the number of full stars is valid
+export function RatingStars({
+  rating,
+  maxRating = 5,
+  size = 16,
+  className,
+}: RatingStarsProps) {
   return (
-    <div className="flex">
-      {/* Render full stars */}
-      {[...Array(fullStars).keys()].map((_, i) => (
-        <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-      ))}
+    <div
+      aria-label={`Rating: ${rating} out of ${maxRating} stars`}
+      className={cn("flex items-center gap-0.5", className)}
+    >
+      {[...Array(maxRating)].map((_, index) => {
+        const starValue = index + 1;
 
-      {/* Render a half star if necessary */}
-      {hasHalfStar && (
-        <StarHalf className="w-4 h-4 text-yellow-400 fill-current" />
-      )}
-
-      {/* Render empty stars */}
-      {[...Array(emptyStars).keys()].map((_, i) => (
-        <Star key={i + fullStars + (hasHalfStar ? 1 : 0)} className="w-4 h-4 text-gray-300" />
-      ))}
+        if (rating >= starValue) {
+          // Full Star
+          return (
+            <Star
+              className="fill-amber-400 text-amber-400"
+              key={index}
+              size={size}
+            />
+          );
+        }
+        if (rating >= starValue - 0.5) {
+          // Half Star
+          return (
+            <div className="relative" key={index}>
+              {/* Background empty star for the half-star to sit on top of */}
+              <Star
+                className="absolute top-0 left-0 text-muted-foreground/20"
+                size={size}
+              />
+              <StarHalf
+                className="relative z-10 fill-amber-400 text-amber-400"
+                size={size}
+              />
+            </div>
+          );
+        }
+        // Empty Star
+        return (
+          <Star className="text-muted-foreground/20" key={index} size={size} />
+        );
+      })}
     </div>
-  )
+  );
 }
