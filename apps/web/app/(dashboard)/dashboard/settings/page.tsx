@@ -1,24 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import {
-  deleteAccount,
-  updateAdditionalDetails,
-  updatePassword,
-  updatePfp,
-} from "@/services/profile-service"
-import { useAuthStore } from "@/store/use-auth-store"
-import { useProfileStore } from "@/store/use-profile-store"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { AlertCircle, Camera, Loader2 } from "lucide-react"
-import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
-import * as z from "zod"
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, Camera, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -26,7 +17,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -35,16 +26,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  deleteAccount,
+  updateAdditionalDetails,
+  updatePassword,
+  updatePfp,
+} from "@/services/profile-service";
+import { useAuthStore } from "@/store/use-auth-store";
+import { useProfileStore } from "@/store/use-profile-store";
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -57,7 +56,7 @@ const profileSchema = z.object({
     .string()
     .max(500, "About must be less than 500 characters")
     .optional(),
-})
+});
 
 const passwordSchema = z
   .object({
@@ -72,15 +71,15 @@ const passwordSchema = z
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
-  })
+  });
 
 export default function Settings() {
-  const router = useRouter()
-  const { token } = useAuthStore()
-  const { user } = useProfileStore()
+  const router = useRouter();
+  const { token } = useAuthStore();
+  const { user } = useProfileStore();
 
-  const [isUpdating, setIsUpdating] = useState(false)
-  const [profilePicture, setProfilePicture] = useState(user?.image)
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(user?.image);
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -93,7 +92,7 @@ export default function Settings() {
       contactNumber: user?.additionalDetails?.contactNumber || "",
       about: user?.additionalDetails?.about || "",
     },
-  })
+  });
 
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
     resolver: zodResolver(passwordSchema),
@@ -102,55 +101,55 @@ export default function Settings() {
       newPassword: "",
       confirmPassword: "",
     },
-  })
+  });
 
   const handleProfilePictureChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setIsUpdating(true)
+      setIsUpdating(true);
       try {
-        console.log(file)
-        setProfilePicture(URL.createObjectURL(file))
-        await updatePfp(token as string, file)
+        console.log(file);
+        setProfilePicture(URL.createObjectURL(file));
+        await updatePfp(token as string, file);
       } catch (error) {
-        console.error("Error updating profile picture:", error)
+        console.error("Error updating profile picture:", error);
       } finally {
-        setIsUpdating(false)
+        setIsUpdating(false);
       }
     }
-  }
+  };
 
   async function onProfileSubmit(values: z.infer<typeof profileSchema>) {
-    setIsUpdating(true)
+    setIsUpdating(true);
     try {
       const updatedData = {
         ...values,
         gender: values.gender === "prefer-not-to-say" ? "" : values.gender,
-      }
-      await updateAdditionalDetails(token as string, updatedData)
+      };
+      await updateAdditionalDetails(token as string, updatedData);
     } catch (error) {
-      console.error("Error updating profile:", error)
+      console.error("Error updating profile:", error);
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
   }
 
   async function onPasswordSubmit(values: z.infer<typeof passwordSchema>) {
-    setIsUpdating(true)
+    setIsUpdating(true);
     try {
-      const { currentPassword, confirmPassword } = values
+      const { currentPassword, confirmPassword } = values;
       if (currentPassword === confirmPassword) {
-        await updatePassword(token as string, values)
+        await updatePassword(token as string, values);
       } else {
-        toast.error("Password does not match")
+        toast.error("Password does not match");
       }
-      passwordForm.reset()
+      passwordForm.reset();
     } catch (error) {
-      console.error("Error updating password:", error)
+      console.error("Error updating password:", error);
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
   }
 
@@ -160,22 +159,22 @@ export default function Settings() {
         "Are you sure you want to delete your account? This action cannot be undone."
       )
     ) {
-      setIsUpdating(true)
+      setIsUpdating(true);
       try {
-        await deleteAccount(token as string, router.push)
+        await deleteAccount(token as string, router.push);
       } catch (error) {
-        console.error("Error deleting account:", error)
+        console.error("Error deleting account:", error);
       } finally {
-        setIsUpdating(false)
+        setIsUpdating(false);
       }
     }
-  }
+  };
 
-  if (!user) return null
+  if (!user) return null;
 
   return (
-    <div className="container max-w-4xl mx-auto py-10 space-y-8">
-      <h1 className="text-3xl font-bold">Account Settings</h1>
+    <div className="space-y-8">
+      <h1 className="font-bold text-3xl">Account Settings</h1>
 
       <Card>
         <CardHeader>
@@ -183,10 +182,10 @@ export default function Settings() {
           <CardDescription>Update your profile picture here.</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center gap-4">
-          <Avatar className="w-24 h-24">
+          <Avatar className="h-24 w-24">
             <AvatarImage
-              src={profilePicture}
               alt={`${user.firstName}'s profile picture`}
+              src={profilePicture}
             />
             <AvatarFallback>
               {user.firstName[0]}
@@ -194,18 +193,18 @@ export default function Settings() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <label htmlFor="picture" className="cursor-pointer">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <label className="cursor-pointer" htmlFor="picture">
+              <div className="flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
                 <Camera className="h-4 w-4" />
                 Change Picture
               </div>
             </label>
             <Input
-              id="picture"
-              type="file"
               className="hidden"
-              onChange={handleProfilePictureChange}
               disabled={isUpdating}
+              id="picture"
+              onChange={handleProfilePictureChange}
+              type="file"
             />
           </div>
         </CardContent>
@@ -221,8 +220,8 @@ export default function Settings() {
         <CardContent>
           <Form {...profileForm}>
             <form
-              onSubmit={profileForm.handleSubmit(onProfileSubmit)}
               className="space-y-6"
+              onSubmit={profileForm.handleSubmit(onProfileSubmit)}
             >
               <div className="grid grid-cols-2 gap-4">
                 <FormField
@@ -286,8 +285,8 @@ export default function Settings() {
                     <FormItem>
                       <FormLabel>Gender</FormLabel>
                       <Select
-                        onValueChange={field.onChange}
                         defaultValue={field.value}
+                        onValueChange={field.onChange}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -329,8 +328,8 @@ export default function Settings() {
                     <FormLabel>About</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell us a little about yourself"
                         className="resize-none"
+                        placeholder="Tell us a little about yourself"
                         {...field}
                       />
                     </FormControl>
@@ -342,7 +341,7 @@ export default function Settings() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isUpdating}>
+              <Button disabled={isUpdating} type="submit">
                 {isUpdating && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
@@ -361,8 +360,8 @@ export default function Settings() {
         <CardContent>
           <Form {...passwordForm}>
             <form
-              onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
               className="space-y-6"
+              onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
             >
               <FormField
                 control={passwordForm.control}
@@ -372,8 +371,8 @@ export default function Settings() {
                     <FormLabel>Current Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
                         placeholder="********"
+                        type="password"
                         {...field}
                       />
                     </FormControl>
@@ -389,8 +388,8 @@ export default function Settings() {
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
                         placeholder="********"
+                        type="password"
                         {...field}
                       />
                     </FormControl>
@@ -406,8 +405,8 @@ export default function Settings() {
                     <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
                         placeholder="********"
+                        type="password"
                         {...field}
                       />
                     </FormControl>
@@ -415,7 +414,7 @@ export default function Settings() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isUpdating}>
+              <Button disabled={isUpdating} type="submit">
                 {isUpdating && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
@@ -446,9 +445,9 @@ export default function Settings() {
         </CardContent>
         <CardFooter>
           <Button
-            variant="destructive"
-            onClick={onDeleteAccount}
             disabled={isUpdating}
+            onClick={onDeleteAccount}
+            variant="destructive"
           >
             {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Delete Account
@@ -456,5 +455,5 @@ export default function Settings() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
