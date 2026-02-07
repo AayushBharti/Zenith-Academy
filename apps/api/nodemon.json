@@ -1,6 +1,0 @@
-{
-  "watch": [","],
-  "ext": ".ts,.js",
-  "exec": "tsup --onSuccess \"node dist/index.js\"",
-  "ignore": ["./**/*.spec.ts", "dist/*"]
-}
