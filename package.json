@@ -1,18 +1,21 @@
 {
-  "name": "zenith-minds",
+  "name": "nextdemy",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev ",
-    "build:api": "turbo run build --filter=api",
     "build:web": "turbo run build --filter=web",
     "dev:api": "turbo run dev --filter=api",
     "dev:web": "turbo run dev --filter=web",
     "start:api": "turbo run start --filter=api",
     "start:web": "turbo run start --filter=web",
     "clean": "turbo run clean",
-    "format": "npx ultracite fix",
-    "lint": "npx ultracite lint",
+    "format": "bunx ultracite fix",
+    "lint": "bunx ultracite lint",
     "test": "turbo run test",
     "biome-check": "biome check --log-level=error --max-diagnostics=300",
     "type": "turbo type",
@@ -25,8 +28,9 @@
     "typescript": "5.9.2",
     "ultracite": "5.6.2"
   },
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "pnpm@9.14.4"
+  "packageManager": "bun@1.2.5",
+  "overrides": {
+    "@types/react": "19.2.13",
+    "@types/react-dom": "19.2.3"
+  }
 }
