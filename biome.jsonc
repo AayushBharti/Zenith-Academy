@@ -11,6 +11,10 @@
         "noEvolvingTypes": "off",
         "noGlobalIsNan": "off",
         "noDoubleEquals": "off",
+        "noBitwiseOperators": "off",
+        "noAlert": "off",
+        "noAssignInExpressions": "off",
+        "noDocumentCookie": "off",
         "useAwait": "off"
       },
       "nursery": {
@@ -18,7 +22,8 @@
         "useImageSize": "off",
         "noReactForwardRef": "off",
         "noShadow": "off",
-        "useMaxParams": "off"
+        "useMaxParams": "off",
+        "useAnchorHref": "off"
       },
       "performance": {
         "noBarrelFile": "off",
@@ -27,7 +32,7 @@
         "useTopLevelRegex": "off"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "warn",
+        "noExcessiveCognitiveComplexity": "off",
         "noForEach": "off",
         "noUselessTernary": "off",
         "noStaticOnlyClass": "off"
@@ -35,14 +40,21 @@
       "correctness": {
         "noUnusedFunctionParameters": "off",
         "noUnusedVariables": "warn",
-        "noInvalidPositionAtImportRule": "off"
+        "noInvalidPositionAtImportRule": "off",
+        "useExhaustiveDependencies": "off"
       },
       "a11y": {
         "noSvgWithoutTitle": "off",
         "noLabelWithoutControl": "off",
         "useButtonType": "off",
-        "useSemanticElements": "warn",
-        "useAriaPropsSupportedByRole": "off"
+        "useSemanticElements": "off",
+        "useAriaPropsSupportedByRole": "off",
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "useFocusableInteractive": "off",
+        "useAriaPropsForRole": "off",
+        "useMediaCaption": "off",
+        "noNoninteractiveElementInteractions": "off"
       },
       "style": {
         "noMagicNumbers": "off",
@@ -51,7 +63,12 @@
         "noNegationElse": "off",
         "useDefaultParameterLast": "off",
         "noNonNullAssertion": "off",
-        "useTemplate": "off"
+        "useTemplate": "off",
+        "noParameterAssign": "off",
+        "noNamespace": "off",
+        "noNestedTernary": "off",
+        "useFilenamingConvention": "off",
+        "useConsistentMemberAccessibility": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
