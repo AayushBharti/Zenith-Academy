@@ -31,6 +31,6 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "emmet.showExpandedAbbreviation": "never",
+  "emmet.showExpandedAbbreviation": "never"
   // "tailwindCSS.experimental.configFile": "packages/ui/src/styles/globals.css"
 }
