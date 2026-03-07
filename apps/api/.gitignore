@@ -18,6 +18,8 @@
 # production
 /build
 
+seed.ts
+
 # misc
 .DS_Store
 *.pem

@@ -18,6 +18,11 @@ coverage
 # Turbo
 .turbo
 
+TODO.md
+
+CLAUDE.md
+.claude
+
 # Vercel
 .vercel
 
