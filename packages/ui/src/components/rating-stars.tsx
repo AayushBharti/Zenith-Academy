@@ -1,5 +1,5 @@
 import { Star, StarHalf } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 
 interface RatingStarsProps {
   rating: number;
@@ -19,7 +19,7 @@ export function RatingStars({
       aria-label={`Rating: ${rating} out of ${maxRating} stars`}
       className={cn("flex items-center gap-0.5", className)}
     >
-      {[...Array(maxRating)].map((_, index) => {
+      {[...new Array(maxRating)].map((_, index) => {
         const starValue = index + 1;
 
         if (rating >= starValue) {
