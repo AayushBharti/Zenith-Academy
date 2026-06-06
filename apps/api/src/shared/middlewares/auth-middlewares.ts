@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import dotenv from "dotenv";
-import type { NextFunction, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
+import { logger } from "../utils/logger";
 
 dotenv.config();
 
@@ -22,13 +22,10 @@ function isDecodedToken(payload: JwtPayload | string): payload is DecodedToken {
 }
 
 //auth
-export const auth = async (req: any, res: Response, next: NextFunction) => {
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Extract token from cookies, body, or headers
-    const token =
-      req.cookies.token ||
-      req.body.token ||
-      req.header("Authorisation")?.replace("Bearer ", "");
+    // Extract token from the Authorization header
+    const token = req.header("Authorization")?.replace("Bearer ", "");
 
     // If token is missing, return response
     if (!token) {
@@ -38,14 +35,14 @@ export const auth = async (req: any, res: Response, next: NextFunction) => {
       });
     }
 
-    // Verify the token
+    // Verify the token using the access secret
     try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET as string);
+      const decode = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
 
       // Use the type guard to check the payload type
       if (isDecodedToken(decode)) {
         req.user = decode; // Now TypeScript understands this is a DecodedToken
-        console.log("decode = ", decode);
+        logger.info(decode, "decode = ");
       } else {
         // If the token is not of expected type
         return res.status(401).json({
@@ -53,15 +50,15 @@ export const auth = async (req: any, res: Response, next: NextFunction) => {
           message: "Token is invalid",
         });
       }
-    } catch (err) {
-      // Verification issue
+    } catch (_err) {
+      // Verification issue (e.g., expired or invalid)
       return res.status(401).json({
         success: false,
-        message: "Token is invalid",
+        message: "Token is invalid or expired",
       });
     }
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(401).json({
       success: false,
       message: "Something went wrong while validating the token",
@@ -71,7 +68,7 @@ export const auth = async (req: any, res: Response, next: NextFunction) => {
 
 //isStudent
 export const isStudent = async (
-  req: any,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -83,7 +80,7 @@ export const isStudent = async (
       });
     }
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
@@ -93,7 +90,7 @@ export const isStudent = async (
 
 //isInstructor
 export const isInstructor = async (
-  req: any,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -105,7 +102,7 @@ export const isInstructor = async (
       });
     }
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
@@ -114,7 +111,11 @@ export const isInstructor = async (
 };
 
 //isAdmin
-export const isAdmin = async (req: any, res: Response, next: NextFunction) => {
+export const isAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (req.user?.accountType !== "Admin") {
       return res.status(401).json({
@@ -123,7 +124,7 @@ export const isAdmin = async (req: any, res: Response, next: NextFunction) => {
       });
     }
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       success: false,
       message: "User role cannot be verified, please try again",
