@@ -1,33 +1,28 @@
-import { Resend } from "resend"
-import dotenv from "dotenv"
+import env from "@/configs/env";
+import { resend } from "@/configs/resend";
+import { logger } from "./logger";
 
-dotenv.config()
-
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-const mailSender = async (email: string, title: string, body: string) => {
+export async function sendEmail(email: string, title: string, body: string) {
   try {
     const { data, error } = await resend.emails.send({
-      from: `"Zenith Academy" <academy@aayushbharti.in>`,
+      from: `"Nextdemy" <${env.EMAIL_FROM}>`,
       to: [email],
       subject: title,
       html: body,
-    })
+    });
 
     if (error) {
-      console.error("Error sending email:", error.message)
-      return error
+      logger.error(error, "Error sending email:");
+      return error;
     }
 
-    console.log("Email sent:", data?.id)
-    return data
+    logger.info({ id: data?.id }, "Email sent:");
+    return data;
   } catch (error) {
-    console.error("Unexpected error:", (error as Error).message)
-    return error
+    logger.error(error, "Unexpected error:");
+    return error;
   }
 }
-
-export default mailSender
 
 // import dotenv from "dotenv"
 // import nodemailer from "nodemailer"
@@ -48,7 +43,7 @@ export default mailSender
 
 //     // Send email
 //     const info = await transporter.sendMail({
-//       from: `"ZenithAcademy" <${process.env.MAIL_USER}>`,
+//       from: `"Nextdemy" <${process.env.MAIL_USER}>`,
 //       to: email,
 //       subject: title,
 //       html: body,
