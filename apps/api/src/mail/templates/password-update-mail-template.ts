@@ -55,7 +55,7 @@ export const passwordUpdated = (email: string, name: string) => `<!DOCTYPE html>
     <body>
         <div class="container">
             <a href="https://academy.aayushbharti.in"><img class="logo"
-                    src="" alt="Zenith Logo"></a>
+                    src="" alt="Nextdemy Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">
                 <p>Hey ${name},</p>
@@ -65,7 +65,7 @@ export const passwordUpdated = (email: string, name: string) => `<!DOCTYPE html>
             </div>
             <div class="support">If you have any questions or need further assistance, please feel free to reach out to us
                 at
-                <a href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!
+                <a href="mailto:academy@aayushbharti.in">info@Nextdemy.com</a>. We are here to help!
             </div>
         </div>
     </body>
