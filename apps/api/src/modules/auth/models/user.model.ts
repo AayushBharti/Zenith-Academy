@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Define the user schema using the Mongoose Schema constructor
 const userSchema = new mongoose.Schema(
@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
+      index: true,
     },
     // Define the password field with type String and required
     password: {
@@ -69,7 +71,7 @@ const userSchema = new mongoose.Schema(
   },
   // Add timestamps for when the document is created and last modified
   { timestamps: true }
-)
+);
 
 // Export the Mongoose model for the user schema, using the name "User"
-export default mongoose.model("User", userSchema)
+export default mongoose.model("User", userSchema);
