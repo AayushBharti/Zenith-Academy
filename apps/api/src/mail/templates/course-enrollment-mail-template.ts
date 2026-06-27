@@ -72,7 +72,7 @@ export const courseEnrollmentEmail = (
     <body>
         <div class="container">
             <a href="academy.aayushbharti.in"><img class="logo" src=""
-                    alt="Zenith Logo"></a>
+                    alt="Nextdemy Logo"></a>
             <div class="message">Course Registration Confirmation</div>
             <div class="body">
                 <p>Dear ${name},</p>
@@ -85,7 +85,7 @@ export const courseEnrollmentEmail = (
                 <a class="cta" href="https://academy.aayushbharti.in/dashboard">Go to Dashboard</a>
             </div>
             <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:academy@aayushbharti.in">info@Zenith.com</a>. We are here to help!</div>
+                    href="mailto:academy@aayushbharti.in">info@Nextdemy.com</a>. We are here to help!</div>
         </div>
     </body>
     </html>`;
