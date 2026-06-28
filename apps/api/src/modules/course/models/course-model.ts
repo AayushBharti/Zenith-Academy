@@ -1,18 +1,21 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Define the Courses schema
 const coursesSchema = new mongoose.Schema(
   {
     courseName: {
       type: String,
+      required: true,
     },
     courseDescription: {
       type: String,
+      required: true,
     },
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
+      index: true,
     },
     whatYouWillLearn: {
       type: String,
@@ -31,6 +34,8 @@ const coursesSchema = new mongoose.Schema(
     ],
     price: {
       type: Number,
+      required: true,
+      min: [0, "Price cannot be negative"],
     },
     thumbnail: {
       type: String,
@@ -57,10 +62,11 @@ const coursesSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Draft", "Published"],
+      index: true,
     },
   },
   { timestamps: true }
-)
+);
 
 // Export the Courses model
-export default mongoose.model("Course", coursesSchema)
+export default mongoose.model("Course", coursesSchema);
