@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Define the Section schema
 const sectionSchema = new mongoose.Schema({
@@ -12,7 +12,7 @@ const sectionSchema = new mongoose.Schema({
       ref: "SubSection",
     },
   ],
-})
+});
 
 // Export the Section model
-export default mongoose.model("Section", sectionSchema)
+export default mongoose.model("Section", sectionSchema);
