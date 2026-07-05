@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Define the RatingAndReview schema
 const ratingAndReviewSchema = new mongoose.Schema({
@@ -21,7 +21,7 @@ const ratingAndReviewSchema = new mongoose.Schema({
     ref: "Course",
     index: true,
   },
-})
+});
 
 // Export the RatingAndReview model
-export default mongoose.model("RatingAndReview", ratingAndReviewSchema)
+export default mongoose.model("RatingAndReview", ratingAndReviewSchema);
