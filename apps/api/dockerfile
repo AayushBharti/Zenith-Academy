@@ -1,0 +1,42 @@
+# Base stage
+FROM oven/bun:1 AS base
+WORKDIR /app
+
+# Turbo Stage - Prune the shared workspace
+FROM base AS turbo
+COPY . .
+RUN bun add -g turbo
+RUN turbo prune api --docker
+
+# Install dependencies (Prod only for runner)
+FROM base AS prod-deps
+COPY --from=turbo /app/out/json/ .
+COPY --from=turbo /app/out/bun.lock ./
+RUN bun install --frozen-lockfile --production
+
+# Build Stage
+FROM base AS builder
+COPY --from=turbo /app/out/json/ .
+COPY --from=turbo /app/out/bun.lock ./
+RUN bun install --frozen-lockfile
+COPY --from=turbo /app/out/full/ .
+RUN bun run build --filter=api
+
+# Runner Stage
+FROM base AS runner
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 expressjs
+USER expressjs
+
+COPY --from=prod-deps --chown=expressjs:nodejs /app/node_modules ./node_modules
+COPY --from=prod-deps --chown=expressjs:nodejs /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder --chown=expressjs:nodejs /app/apps/api/dist ./apps/api/dist
+COPY --from=builder --chown=expressjs:nodejs /app/apps/api/package.json ./apps/api/package.json
+
+WORKDIR /app/apps/api
+
+EXPOSE 5000
+
+CMD ["bun", "dist/server.js"]
