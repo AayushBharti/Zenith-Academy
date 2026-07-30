@@ -1,11 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@workspace/ui/components/button";
 import {
   Form,
   FormControl,
@@ -13,13 +9,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { sendOtp } from "@/services/auth-service";
-
-import { ACCOUNT_TYPE } from "../../data/constants";
-import { useAuthStore } from "../../store/use-auth-store";
+} from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
+import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { ACCOUNT_TYPE } from "@/data/constants";
+import { useSendOtp } from "@/features/auth/hooks/use-auth-mutations";
+import { useAuthStore } from "@/features/auth/use-auth-store";
 
 const formSchema = z
   .object({
@@ -38,8 +36,8 @@ const formSchema = z
 export default function SignupForm() {
   const router = useRouter();
   const { setSignupData } = useAuthStore();
+  const sendOtpMutation = useSendOtp();
 
-  // 1. Define form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,24 +50,19 @@ export default function SignupForm() {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
-    // Setting signup data to state
-    // To be used after otp verification
     setSignupData(values);
-    // Send OTP to user for verification
-    console.log("SEND OTP TO USER FOR VERIFICATION");
-    sendOtp(values.email, router.push);
-
-    toast.success("Account created successfully!");
-    form.reset();
+    sendOtpMutation.mutate(values.email, {
+      onSuccess: () => {
+        router.push("/verify-email");
+        form.reset();
+      },
+    });
   }
 
   return (
     <Form {...form}>
-      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <Tabs
           defaultValue={ACCOUNT_TYPE.STUDENT}
           onValueChange={(value) =>
@@ -97,7 +90,7 @@ export default function SignupForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter first name" {...field} />
+                  <Input placeholder="John" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,62 +103,67 @@ export default function SignupForm() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter last name" {...field} />
+                  <Input placeholder="Doe" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Enter email address" {...field} />
+                <Input placeholder="m@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Create Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter Password"
-                  type="password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Confirm Password"
-                  type="password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button className="w-full" type="submit">
-          Create Account
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="6+ characters" type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Re-enter password"
+                    type="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button
+          className="w-full"
+          disabled={sendOtpMutation.isPending}
+          type="submit"
+        >
+          {sendOtpMutation.isPending ? "Sending OTP..." : "Create Account"}
         </Button>
       </form>
     </Form>
