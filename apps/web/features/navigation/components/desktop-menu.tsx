@@ -1,9 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import * as React from "react";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,10 +8,30 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+} from "@workspace/ui/components/navigation-menu";
+import { cn } from "@workspace/ui/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import * as React from "react";
 
-export default function DesktopMenu({ navData }: { navData: any[] }) {
+interface NavSubItem {
+  title: string;
+  href: string;
+  description: string;
+  icon?: React.ElementType;
+}
+
+interface NavItem {
+  id: string;
+  label: string;
+  type: "menu" | "link";
+  href?: string;
+  description?: string;
+  featuredImage?: string;
+  items?: NavSubItem[];
+}
+
+export default function DesktopMenu({ navData }: { navData: NavItem[] }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -54,7 +70,7 @@ export default function DesktopMenu({ navData }: { navData: any[] }) {
                     )}
 
                     {/* Menu Items */}
-                    {item.items.map((subItem: any) => (
+                    {item?.items?.map((subItem: NavSubItem) => (
                       <ListItem
                         href={subItem.href}
                         icon={subItem.icon}
@@ -77,7 +93,7 @@ export default function DesktopMenu({ navData }: { navData: any[] }) {
                 asChild
                 className={navigationMenuTriggerStyle()}
               >
-                <Link href={item.href}>{item.label}</Link>
+                <Link href={item.href ?? "/"}>{item.label}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           );
