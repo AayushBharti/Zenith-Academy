@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@workspace/ui/components/button";
+import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import {
   ArrowLeft,
   ChevronRight,
@@ -9,18 +11,39 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useProfileStore } from "@/features/profile/use-profile-store";
+import { ModeToggle } from "@/features/shared/components/mode-toggle";
 
-import { ModeToggle } from "@/components/common/mode-toggle";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface MobileMenuProps {
-  token: string | null;
-  navData: any[]; // In a real app, define a proper recursive type
+interface NavSubItem {
+  title: string;
+  href: string;
+  description: string;
+  icon?: React.ElementType;
 }
 
-export default function MobileMenu({ navData, token }: MobileMenuProps) {
+interface NavItem {
+  id: string;
+  label: string;
+  type: "menu" | "link";
+  href?: string;
+  description?: string;
+  featuredImage?: string;
+  items?: NavSubItem[];
+}
+
+interface MobileMenuProps {
+  navData: NavItem[];
+}
+
+export default function MobileMenu({ navData }: MobileMenuProps) {
+  const { user } = useProfileStore();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
   // 'main' means top level. Any other string is the ID of the active submenu.
   const [activeMenu, setActiveMenu] = useState<string>("main");
 
@@ -92,7 +115,7 @@ export default function MobileMenu({ navData, token }: MobileMenuProps) {
                     ) : (
                       <Link
                         className="flex w-full items-center rounded-md p-3 font-medium text-base hover:bg-muted"
-                        href={item.href}
+                        href={item.href ?? "/"}
                       >
                         {item.label}
                       </Link>
@@ -111,7 +134,7 @@ export default function MobileMenu({ navData, token }: MobileMenuProps) {
                 key="submenu"
                 variants={variants}
               >
-                {subMenuData?.items?.map((subItem: any) => (
+                {subMenuData?.items?.map((subItem: NavSubItem) => (
                   <Link
                     className="group flex items-start gap-3 rounded-md p-3 hover:bg-muted"
                     href={subItem.href}
@@ -138,20 +161,20 @@ export default function MobileMenu({ navData, token }: MobileMenuProps) {
 
       {/* Footer */}
       <div className="border-t p-4">
-        {!token ? (
+        {hydrated && !user && (
           <div className="mb-4 grid grid-cols-2 gap-3">
-            <Button asChild variant="outline">
+            <Button animation="swap" asChild variant="outline">
               <Link href="/login">
                 <LogIn className="mr-2 h-4 w-4" /> Log in
               </Link>
             </Button>
-            <Button asChild>
+            <Button animation="slide-in" asChild>
               <Link href="/signup">
                 <UserPlus className="mr-2 h-4 w-4" /> Sign up
               </Link>
             </Button>
           </div>
-        ) : null}
+        )}
         <div className="flex items-center justify-between">
           <span className="font-medium text-muted-foreground text-sm">
             Theme
