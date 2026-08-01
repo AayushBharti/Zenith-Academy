@@ -1,5 +1,5 @@
-import { NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
+import { NavigationMenuLink } from "@workspace/ui/components/navigation-menu";
+import { cn } from "@workspace/ui/lib/utils";
 
 export const ListItem = ({
   className,
