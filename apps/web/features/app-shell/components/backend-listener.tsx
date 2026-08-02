@@ -4,8 +4,8 @@ import { AlertTriangle, Server, Wifi } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
-import { apiConnector } from "@/utils/api-connector";
-import { categories } from "@/utils/apis";
+import { apiConnector } from "@/lib/api-connector";
+import { categories } from "@/lib/apis";
 
 export default function BackendListener() {
   const hasChecked = useRef(false);
@@ -55,7 +55,7 @@ export default function BackendListener() {
             { id: toastId, duration: 4000, icon: null }
           );
         }
-      } catch (error) {
+      } catch (_error) {
         clearTimeout(timer);
 
         // FIX: Show error toast even if it failed instantly (Backend Offline)
