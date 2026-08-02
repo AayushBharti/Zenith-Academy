@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@workspace/ui/components/button";
 import Image from "next/image";
 import Link from "next/link";
 import { type MouseEvent, useRef } from "react";
 import heroStats from "@/public/assets/hero-stat.webp";
-import { Button } from "../ui/button";
 import HighlightText from "./highlighted-text";
 import LaserFlow from "./lazer-flow";
 
@@ -63,27 +63,30 @@ export default function Hero() {
       />
 
       {/* --- Content Layer --- */}
-      <div className="container relative z-30 mx-auto h-full w-full px-5">
+      <div className="container relative z-30 h-full w-full">
         {/* Text Section: */}
-        <div className="flex max-w-2xl flex-col items-start pt-20 md:pt-32">
+        <div className="flex max-w-2xl flex-col items-start pt-26 md:pt-32">
           <h1 className="text-balance bg-linear-to-br from-30% from-black to-black/40 bg-clip-text font-bold text-4xl text-transparent leading-tight md:text-6xl dark:from-white dark:to-white/40">
-            Unlock Your Potential with In-Demand{" "}
-            <HighlightText text={"Coding Skills"} />
+            Where Engineers Build Real Skills <HighlightText text="Together" />
           </h1>
 
           <p className="mt-6 text-balance text-base text-muted-foreground md:text-xl">
-            Learn to code at your own pace, anywhere, with access to hands-on
-            projects, quizzes, and personalized feedback.
+            Join peer-driven cohorts, learn from industry practitioners, and
+            build production-grade projects with a global community of
+            developers.
           </p>
 
           <div className="mt-8 flex flex-row gap-4">
-            <Button asChild size="lg" variant={"default"}>
-              <Link href="/signup">See in action</Link>
+            <Button animation="swap" asChild size="lg" variant="default">
+              <Link href="/signup">Start Learning Free</Link>
+            </Button>
+            <Button animation="slide-in" asChild size="lg" variant="outline">
+              <Link href="/catalog">Explore Courses</Link>
             </Button>
           </div>
         </div>
 
-        <div className="absolute top-[60.1%] left-0 aspect-video w-full px-5 md:w-[90%]">
+        <div className="absolute top-[60.1%] left-0 aspect-video w-full px-4 md:w-[90%]">
           <div className="mask-[linear-gradient(to_bottom,black_80%,transparent_100%)] relative h-full w-full overflow-hidden rounded-t-[20px] border-4 border-[#FFF] border-b-0 shadow-2xl [webkit-mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]">
             <video
               autoPlay
