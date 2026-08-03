@@ -1,12 +1,11 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { Button } from "@workspace/ui/components/button";
+import { cn } from "@workspace/ui/lib/utils";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { Highlight, themes } from "prism-react-renderer";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import HighlightText from "./highlighted-text";
 
 type CTAButton = {
@@ -63,11 +62,11 @@ export function CodeBlocks({
     return () => clearTimeout(timeout);
   }, [codeblock]);
 
-  // Calculate current line count based on displayed code to sync line numbers
-  const lineCount = displayedCode.split("\n").length;
+  // Calculate total line count from the full code block to show all line numbers at once
+  const lineCount = codeblock.split("\n").length;
 
   return (
-    <section className="container px-5 py-24">
+    <section className="container py-24">
       <div
         className={cn(
           "flex flex-col items-center gap-12 lg:gap-20",
@@ -91,23 +90,17 @@ export function CodeBlocks({
 
           <div className="mt-4 flex flex-wrap gap-4">
             <Button
+              animation="swap"
               asChild
-              className={cn(
-                "font-semibold shadow-lg transition-all hover:scale-105 active:scale-95",
-                ctabtn1.active && "shadow-primary/25"
-              )}
-              size="lg"
               variant={ctabtn1.active ? "default" : "outline"}
             >
-              <Link href={ctabtn1.linkto}>
-                {ctabtn1.btnText}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+              <Link href={ctabtn1.linkto}>{ctabtn1.btnText}</Link>
             </Button>
 
             <Button
+              animation="slide-in"
               asChild
-              className="font-semibold transition-all hover:scale-105 active:scale-95"
+              className="font-semibold"
               size="lg"
               variant={ctabtn2.active ? "default" : "secondary"}
             >
@@ -147,10 +140,10 @@ export function CodeBlocks({
             </div>
 
             {/* Code Content */}
-            <div className="relative flex h-[300px] overflow-auto p-4 font-mono text-sm leading-6">
+            <div className="relative flex h-[350px] overflow-hidden p-4 font-mono text-sm leading-6">
               {/* Line Numbers */}
-              <div className="flex select-none flex-col border-white/5 border-r pr-4 text-right text-neutral-600 transition-all duration-300">
-                {Array.from({ length: Math.max(12, lineCount) }).map((_, i) => (
+              <div className="flex select-none flex-col pr-4 text-right text-neutral-600 transition-all duration-300">
+                {Array.from({ length: Math.max(1, lineCount) }).map((_, i) => (
                   <span className="leading-6" key={i}>
                     {i + 1}
                   </span>
@@ -158,25 +151,27 @@ export function CodeBlocks({
               </div>
 
               {/* Dynamic Code Block */}
-              <div className="flex-1 pl-4">
+              <div className="flex-1">
                 <Highlight
                   code={displayedCode}
                   language="tsx"
                   theme={themes.nightOwl}
                 >
                   {({ tokens, getLineProps, getTokenProps }) => (
-                    <div className="whitespace-pre-wrap break-words">
+                    <div className="select-text overflow-hidden whitespace-pre">
                       {tokens.map((line, i) => (
                         <div key={i} {...getLineProps({ line })}>
-                          {line.map((token, key) => (
-                            <span
-                              key={key}
-                              {...getTokenProps({ token, key })}
-                            />
-                          ))}
+                          {line.map((token, idx) => {
+                            const { key: _k, ...tokenProps } = getTokenProps({
+                              token,
+                              key: idx,
+                            });
+                            return <span key={idx} {...tokenProps} />;
+                          })}
                         </div>
                       ))}
-                      {/* Blinking Cursor */}
+
+                      {/* Cursor */}
                       <span className="inline-block h-4 w-1.5 animate-caret-blink bg-blue-400 align-middle" />
                     </div>
                   )}
@@ -216,23 +211,22 @@ app.listen(3000, () => {
 console.log('Server running on port 3000');
 });`}
       ctabtn1={{
-        btnText: "Try it yourself",
+        btnText: "Start Building",
         linkto: "/signup",
         active: true,
       }}
       ctabtn2={{
-        btnText: "Learn more",
-        linkto: "/login",
+        btnText: "See Curriculum",
+        linkto: "/catalog",
         active: false,
       }}
       heading={
         <>
-          Unlock Your <HighlightText text="coding potential" /> with our
-          expertly crafted courses
+          Write <HighlightText text="Real Code" /> From Day One
         </>
       }
       position="flex-row"
-      subheading="Learn from top industry professionals with years of coding experience, committed to helping you master the skills you need."
+      subheading="No toy examples. Build production patterns used by engineering teams — then get feedback from peers who've shipped the same code."
     />
 
     <CodeBlocks
@@ -256,22 +250,22 @@ try {
 }
 }`}
       ctabtn1={{
-        btnText: "Continue Lesson",
+        btnText: "Start Building",
         linkto: "/signup",
         active: true,
       }}
       ctabtn2={{
-        btnText: "Learn more",
-        linkto: "/login",
+        btnText: "See Curriculum",
+        linkto: "/catalog",
         active: false,
       }}
       heading={
         <>
-          Start <HighlightText text="coding in seconds" />
+          Ship Faster With <HighlightText text="Peer Reviews" />
         </>
       }
       position="flex-row-reverse"
-      subheading="Jump right in and start coding from your very first lesson with our immersive hands-on environment."
+      subheading="Submit your projects, review your cohort's work, and learn patterns you'd never discover alone. Real growth happens in collaboration."
     />
   </div>
 );
