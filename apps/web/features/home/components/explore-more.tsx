@@ -1,18 +1,22 @@
 "use client";
 
+import { Badge } from "@workspace/ui/components/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
+import { cn } from "@workspace/ui/lib/utils";
 import { BarChart, BookOpen, Layers } from "lucide-react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { useState } from "react";
-
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HomePageExplore } from "@/data/homepage-explore";
-import { cn } from "@/lib/utils";
+import { SectionHeader } from "../../shared/components/section-header";
 import HighlightText from "./highlighted-text";
 
 const tabsName = ["Free Courses", "Trending Now", "Career Growth"];
 
-// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -44,16 +48,15 @@ export default function ExploreMore() {
   return (
     <section className="w-full bg-background py-20">
       <div className="container mx-auto flex flex-col items-center px-4">
-        {/* Header Section */}
-        <div className="mb-10 max-w-2xl space-y-4 text-center">
-          <h2 className="font-bold text-3xl text-foreground tracking-tight md:text-4xl">
-            Unlock Your <HighlightText text="Potential" />
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Curated learning paths designed to help you master new skills and
-            advance your career.
-          </p>
-        </div>
+        <SectionHeader
+          badge="Explore Paths"
+          description="Whether you're writing your first line of code or architecting distributed systems — there's a cohort for you."
+          title={
+            <>
+              Curated Paths for <HighlightText text="Every Stage" />
+            </>
+          }
+        />
 
         {/* Professional Segmented Tabs */}
         <div className="mb-12 inline-flex items-center justify-center rounded-full bg-muted p-1.5">
@@ -64,7 +67,7 @@ export default function ExploreMore() {
                 className={cn(
                   "relative rounded-full px-6 py-2 font-medium text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   isActive
-                    ? "text-foreground" // Active text color (Dark in light mode)
+                    ? "text-black" // Active text color (Dark in light mode)
                     : "text-muted-foreground hover:text-foreground" // Inactive text color
                 )}
                 key={tab}
@@ -72,7 +75,7 @@ export default function ExploreMore() {
               >
                 {isActive && (
                   <motion.div
-                    className="absolute inset-0 rounded-full bg-background shadow-sm"
+                    className="absolute inset-0 rounded-full bg-white shadow-sm"
                     layoutId="activeTab"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
