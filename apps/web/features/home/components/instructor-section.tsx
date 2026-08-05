@@ -1,6 +1,7 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Button } from "@workspace/ui/components/button";
+import { CheckCircle2 } from "lucide-react";
 import * as motion from "motion/react-client";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import HighlightText from "./highlighted-text";
 
 export default function InstructorSection() {
@@ -9,7 +10,7 @@ export default function InstructorSection() {
       {/* Background Decoration */}
       <div className="-z-10 -translate-y-1/2 absolute top-1/2 left-0 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
 
-      <div className="container mx-auto px-5 md:px-10">
+      <div className="container mx-auto md:px-10">
         <div className="flex flex-col-reverse items-center gap-16 lg:flex-row lg:gap-24">
           {/* --- Image Section --- */}
           <motion.div
@@ -24,7 +25,7 @@ export default function InstructorSection() {
 
             <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-neutral-200/50 dark:shadow-black/50">
               <img // Or <Image /> if you have Next.js image config set up
-                alt="ZenithAcademy Instructor"
+                alt="Nextdemy Instructor"
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                 src="/assets/instructor-pic.png"
                 style={{ maxHeight: "600px" }}
@@ -60,14 +61,13 @@ export default function InstructorSection() {
           >
             <div className="space-y-4">
               <h2 className="font-bold text-4xl text-neutral-900 leading-[1.1] tracking-tight sm:text-5xl dark:text-neutral-100">
-                Become an <br />
-                <HighlightText text="Instructor" />
+                Teach What You've <br />
+                <HighlightText text="Built" />
               </h2>
               <p className="text-lg text-neutral-600 leading-relaxed dark:text-neutral-400">
-                Join a global community of educators and teach millions of
-                students from around the world. ZenithAcademy gives you the
-                tools to create courses, share your knowledge, and grow your
-                teaching career.
+                Share your production experience with thousands of engineers
+                worldwide. Nextdemy gives you the platform, the audience, and
+                the tools — you bring the expertise.
               </p>
             </div>
 
@@ -75,29 +75,30 @@ export default function InstructorSection() {
             <div className="grid grid-cols-1 gap-3 font-medium text-neutral-700 text-sm sm:grid-cols-2 dark:text-neutral-300">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Teach your way</span>
+                <span>Create courses your way</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Inspire learners</span>
+                <span>Reach a global audience</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Earn money</span>
+                <span>Earn from your expertise</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Join our community</span>
+                <span>Join 250+ instructors</span>
               </div>
             </div>
 
             <div className="pt-2">
               <Button
-                className="h-12 px-8 text-base shadow-lg shadow-primary/25 transition-all hover:scale-105 active:scale-95"
+                animation="swap"
+                asChild
+                className="h-12 px-8 text-base"
                 size="lg"
               >
-                Start Teaching Today
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <Link href="/signup">Start Teaching Today</Link>
               </Button>
             </div>
           </motion.div>
