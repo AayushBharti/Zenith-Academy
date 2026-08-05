@@ -1,8 +1,9 @@
 "use client";
 
+import { cn } from "@workspace/ui/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils"; // Ensure this path matches your project structure
+import { SectionHeader } from "../../shared/components/section-header";
 import HighlightText from "./highlighted-text";
 
 const data = [
@@ -57,25 +58,15 @@ export function Features() {
 
   return (
     <section className="container relative my-24">
-      <div className="mx-auto mb-16 max-w-3xl text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-100/50 px-3 py-1 text-neutral-600 text-sm dark:border-neutral-800 dark:bg-neutral-900/50 dark:text-neutral-400">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500" />
-          </span>
-          <span className="font-semibold text-xs uppercase tracking-wider">
-            Features Overview
-          </span>
-        </div>
-
-        <h2 className="mb-4 font-bold text-4xl text-neutral-900 leading-tight tracking-tight md:text-5xl dark:text-neutral-100">
-          Maximize Your <HighlightText text="Learning Experience" />
-        </h2>
-        <p className="text-lg text-neutral-600 dark:text-neutral-400">
-          We provide the tools and resources you need to master new skills
-          effectively.
-        </p>
-      </div>
+      <SectionHeader
+        badge="Features Overview"
+        description="We provide the tools and resources you need to master new skills effectively."
+        title={
+          <>
+            Maximize Your <HighlightText text="Learning Experience" />
+          </>
+        }
+      />
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
         {/* Left Column: Text Accordion */}
@@ -100,7 +91,7 @@ export function Features() {
                     className={cn(
                       "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg font-bold text-sm transition-colors",
                       featureOpen === index
-                        ? "bg-primary text-primary-foreground" // Assuming you have standard shadcn variables
+                        ? "bg-primary text-primary-foreground"
                         : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800"
                     )}
                   >
@@ -131,7 +122,6 @@ export function Features() {
                       {item.content}
                     </p>
 
-                    {/* Mobile Image (Visible only on small screens) */}
                     <div className="relative mt-6 block h-48 w-full overflow-hidden rounded-lg md:hidden">
                       <img
                         alt={item.title}
@@ -143,7 +133,6 @@ export function Features() {
                 </div>
               </div>
 
-              {/* Progress Bar */}
               {featureOpen === index && (
                 <div className="absolute bottom-0 left-0 h-1 w-full bg-neutral-100 dark:bg-neutral-800">
                   <motion.div
@@ -173,7 +162,6 @@ export function Features() {
             />
           </AnimatePresence>
 
-          {/* Overlay Gradient for better text contrast if needed */}
           <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
         </div>
       </div>
