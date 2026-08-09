@@ -1,21 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown, Loader2, Send } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
-
-import { Button } from "@/components/ui/button";
+import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@workspace/ui/components/card";
 import {
   Command,
   CommandEmpty,
@@ -23,7 +16,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@workspace/ui/components/command";
 import {
   Form,
   FormControl,
@@ -31,19 +24,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
+} from "@workspace/ui/components/popover";
+import { Textarea } from "@workspace/ui/components/textarea";
+import { cn } from "@workspace/ui/lib/utils";
+import { Check, ChevronsUpDown, Loader2, Send } from "lucide-react";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 // Make sure your JSON file is standard array of objects: { code: "+91", country: "India" }
 import countryCode from "@/data/countrycode.json" with { type: "json" };
-import { cn } from "@/lib/utils";
-import { apiConnector } from "@/utils/api-connector";
-import { contactusEndpoint } from "@/utils/apis";
+import { apiConnector } from "@/lib/api-connector";
+import { contactusEndpoint } from "@/lib/apis";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -95,7 +94,6 @@ export default function ContactForm() {
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error("Failed to send message", {
         description: "Please try again later.",
       });
@@ -107,7 +105,7 @@ export default function ContactForm() {
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto w-full max-w-2xl p-4"
+      className="w-full"
       initial={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
     >
