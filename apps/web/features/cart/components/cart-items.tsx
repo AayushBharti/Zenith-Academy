@@ -1,12 +1,12 @@
 "use client";
 
+import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
 import { Star, Trash2, User2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useCartStore } from "@/store/use-cart-store";
+import { useCartStore } from "@/features/cart/use-cart-store";
 
 export default function CartItems() {
   const { cart, removeFromCart } = useCartStore();
@@ -14,7 +14,7 @@ export default function CartItems() {
   return (
     <div className="flex flex-col gap-6">
       <AnimatePresence mode="popLayout">
-        {cart.map((course: any) => (
+        {cart.map((course) => (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="group flex flex-col gap-5 rounded-xl border border-border bg-card p-4 shadow-xs transition-all duration-300 hover:border-primary/20 sm:flex-row"
@@ -30,7 +30,7 @@ export default function CartItems() {
                 alt={course.courseName}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 fill
-                src={course.thumbnail}
+                src={course.thumbnail ?? ""}
               />
             </div>
 
@@ -54,7 +54,9 @@ export default function CartItems() {
                   className="bg-secondary/50 font-normal text-muted-foreground text-xs"
                   variant="secondary"
                 >
-                  {course.category?.name}
+                  {typeof course.category === "object"
+                    ? course.category?.name
+                    : course.category}
                 </Badge>
 
                 {/* Instructor */}
