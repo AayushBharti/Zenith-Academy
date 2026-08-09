@@ -1,30 +1,29 @@
 "use client";
 
-import { ArrowRight, ShieldCheck } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { buyCourse } from "@/services/payment-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useCartStore } from "@/store/use-cart-store";
-import { useProfileStore } from "@/store/use-profile-store";
+} from "@workspace/ui/components/card";
+import { ShieldCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/features/auth/use-auth-store";
+import { useCartStore } from "@/features/cart/use-cart-store";
+import { useBuyCourse } from "@/features/payment/hooks/use-payment-mutations";
 
 export default function CartSummary() {
   const { total, cart } = useCartStore();
-  const { token } = useAuthStore();
-  const { user } = useProfileStore();
+  const { accessToken } = useAuthStore();
   const router = useRouter();
+  const buyMutation = useBuyCourse();
 
   const handleBuyCourse = () => {
-    const courses = cart.map((course: any) => course._id);
-    if (token) {
-      buyCourse(token, courses, user, router.push);
+    if (accessToken) {
+      const courseIds = cart.map((course) => course._id);
+      buyMutation.mutate(courseIds);
     } else {
       router.push("/login");
     }
@@ -85,11 +84,13 @@ export default function CartSummary() {
 
       <CardFooter className="flex flex-col gap-4 p-6 pt-0">
         <Button
+          animation="swap"
           className="h-11 w-full font-semibold text-base shadow-md"
+          disabled={buyMutation.isPending}
           onClick={handleBuyCourse}
           size="lg"
         >
-          Checkout Now <ArrowRight className="ml-2 h-4 w-4" />
+          {buyMutation.isPending ? "Processing..." : "Checkout Now"}
         </Button>
 
         <div className="flex w-full items-center justify-center gap-2 rounded-md bg-muted/30 p-2 text-muted-foreground text-xs">
