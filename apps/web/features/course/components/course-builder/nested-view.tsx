@@ -1,17 +1,29 @@
 "use client";
 
+import type {
+  SectionResponse,
+  SubSectionResponse,
+} from "@workspace/shared-types";
 import type React from "react";
 import { useState } from "react";
 import {
-  deleteSection,
-  deleteSubSection,
-} from "@/services/course-details-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useCourseStore } from "@/store/use-course-store";
+  useDeleteSection,
+  useDeleteSubSection,
+} from "@/features/course/hooks/use-course-mutations";
+import { useCourseStore } from "@/features/course/use-course-store";
 
 import ConfirmationModal from "./confirmation-modal";
 import { SectionView } from "./section-view";
 import SubSectionModal from "./subsection-modal";
+
+interface ConfirmationModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
 
 interface NestedViewProps {
   handleChangeEditSectionName: (sectionId: string, sectionName: string) => void;
@@ -20,48 +32,55 @@ interface NestedViewProps {
 const NestedView: React.FC<NestedViewProps> = ({
   handleChangeEditSectionName,
 }) => {
-  const { token } = useAuthStore();
   const { course, setCourse } = useCourseStore();
+  const deleteSectionMutation = useDeleteSection();
+  const deleteSubSectionMutation = useDeleteSubSection();
 
   // --- Modal State Management ---
   const [modalData, setModalData] = useState<{
     type: "add" | "edit" | "view" | null;
-    data: any;
+    data: string | SubSectionResponse | null;
   }>({ type: null, data: null });
 
-  const [confirmationModal, setConfirmationModal] = useState<any>(null);
+  const [confirmationModal, setConfirmationModal] =
+    useState<ConfirmationModalData | null>(null);
 
   // --- Logic Handlers ---
 
-  const handleDeleteSection = async (sectionId: string) => {
-    const result = await deleteSection(
+  const handleDeleteSection = (sectionId: string) => {
+    if (!course) return;
+    deleteSectionMutation.mutate(
       { sectionId, courseId: course._id },
-      token as string
+      {
+        onSuccess: (result) => {
+          setCourse(result);
+          setConfirmationModal(null);
+        },
+      }
     );
-    if (result) {
-      setCourse(result);
-      setConfirmationModal(null);
-    }
   };
 
-  const handleDeleteSubSection = async (
-    subSectionId: string,
-    sectionId: string
-  ) => {
-    const result = await deleteSubSection(
-      { subSectionId, courseId: course._id, sectionId },
-      token as string
+  const handleDeleteSubSection = (subSectionId: string, sectionId: string) => {
+    if (!course) return;
+    deleteSubSectionMutation.mutate(
+      {
+        subSectionId,
+        courseId: course._id,
+        sectionId,
+      },
+      {
+        onSuccess: (result) => {
+          setCourse(result);
+          setConfirmationModal(null);
+        },
+      }
     );
-    if (result) {
-      setCourse(result);
-      setConfirmationModal(null);
-    }
   };
 
   return (
     <div className="space-y-6">
       {/* --- Render List of Sections --- */}
-      {course?.courseContent?.map((section: any) => (
+      {course?.courseContent?.map((section: SectionResponse) => (
         <SectionView
           key={section._id}
           onAddSubSection={() =>
