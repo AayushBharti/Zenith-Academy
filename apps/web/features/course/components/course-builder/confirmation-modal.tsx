@@ -1,6 +1,4 @@
-import React from "react"
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -8,18 +6,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@workspace/ui/components/dialog";
+import type React from "react";
 
 type ConfirmationModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  text1: string
-  text2: string
-  btn1Text: string
-  btn2Text: string
-  btn1Handler: () => void
-  btn2Handler: () => void
-}
+  isOpen: boolean;
+  onClose: () => void;
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+};
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
@@ -31,22 +30,22 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   btn1Handler,
   btn2Handler,
 }) => (
-  <Dialog open={isOpen} onOpenChange={onClose}>
+  <Dialog onOpenChange={onClose} open={isOpen}>
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{text1}</DialogTitle>
         <DialogDescription>{text2}</DialogDescription>
       </DialogHeader>
       <DialogFooter>
-        <Button variant="destructive" onClick={btn1Handler}>
+        <Button onClick={btn1Handler} variant="destructive">
           {btn1Text}
         </Button>
-        <Button variant="outline" onClick={btn2Handler}>
+        <Button onClick={btn2Handler} variant="outline">
           {btn2Text}
         </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
-)
+);
 
-export default ConfirmationModal
+export default ConfirmationModal;
