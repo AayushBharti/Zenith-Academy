@@ -1,11 +1,6 @@
 "use client";
 
-import { FileText, Loader2, Video } from "lucide-react";
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@workspace/ui/components/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -21,17 +16,21 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+} from "@workspace/ui/components/drawer";
+import { Input } from "@workspace/ui/components/input";
+import { Label } from "@workspace/ui/components/label";
+import { Textarea } from "@workspace/ui/components/textarea";
+import { cn } from "@workspace/ui/lib/utils";
+import { FileText, Loader2, Video } from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import {
-  createSubSection,
-  updateSubSection,
-} from "@/services/course-details-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useCourseStore } from "@/store/use-course-store";
+  useCreateSubSection,
+  useUpdateSubSection,
+} from "@/features/course/hooks/use-course-mutations";
+import { useCourseStore } from "@/features/course/use-course-store";
 
 import Upload from "./video-upload";
 
@@ -70,9 +69,11 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
   edit = false,
   view = false,
 }) => {
-  const { token } = useAuthStore();
   const { course, setCourse } = useCourseStore();
-  const [loading, setLoading] = useState(false);
+  const createSubSectionMutation = useCreateSubSection();
+  const updateSubSectionMutation = useUpdateSubSection();
+  const loading =
+    createSubSectionMutation.isPending || updateSubSectionMutation.isPending;
   const isDesktop = useIsDesktop();
 
   const {
@@ -110,7 +111,8 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
     );
   };
 
-  const handleEditSubsection = async (data: any) => {
+  const handleEditSubsection = (data: Record<string, string>) => {
+    if (!course) return;
     const currentValues = getValues();
     const sectionData = modalData as SubSection;
 
@@ -118,59 +120,50 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
     formData.append("SubsectionId", sectionData._id);
 
     if (currentValues.lecture !== sectionData.title) {
-      formData.append("title", data.lecture);
+      formData.append("title", data.lecture ?? "");
     }
     if (currentValues.lectureDesc !== sectionData.description) {
-      formData.append("description", data.lectureDesc);
+      formData.append("description", data.lectureDesc ?? "");
     }
     if (currentValues.lectureVideo !== sectionData.videoUrl) {
-      formData.append("videoFile", data.lectureVideo);
+      formData.append("videoFile", data.lectureVideo ?? "");
     }
     formData.append("courseId", course._id);
 
-    const result = await updateSubSection(formData, token as string);
-    if (result) {
-      setCourse(result);
-      handleClose();
-      toast.success("Lecture Updated", {
-        description: "Lecture updated successfully.",
-      });
-    }
+    updateSubSectionMutation.mutate(formData, {
+      onSuccess: (result) => {
+        setCourse(result);
+        handleClose();
+      },
+    });
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = (data: Record<string, string>) => {
     if (view) return;
 
-    setLoading(true);
-    try {
-      if (edit) {
-        if (!isFormUpdated()) {
-          toast.error("No changes made", {
-            description: "No changes were made to the lecture.",
-          });
-        } else {
-          await handleEditSubsection(data);
-        }
+    if (edit) {
+      if (!isFormUpdated()) {
+        toast.error("No changes made", {
+          description: "No changes were made to the lecture.",
+        });
       } else {
-        const formData = new FormData();
-        formData.append("sectionId", modalData as string);
-        formData.append("title", data.lecture);
-        formData.append("description", data.lectureDesc);
-        formData.append("videoFile", data.lectureVideo);
-        formData.append("courseId", course._id);
+        handleEditSubsection(data);
+      }
+    } else {
+      if (!course) return;
+      const formData = new FormData();
+      formData.append("sectionId", modalData as string);
+      formData.append("title", data.lecture ?? "");
+      formData.append("description", data.lectureDesc ?? "");
+      formData.append("videoFile", data.lectureVideo ?? "");
+      formData.append("courseId", course._id);
 
-        const result = await createSubSection(formData, token as string);
-        if (result) {
+      createSubSectionMutation.mutate(formData, {
+        onSuccess: (result) => {
           setCourse(result);
           handleClose();
-          toast.success("Lecture added successfully");
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("Failed to save lecture");
-    } finally {
-      setLoading(false);
+        },
+      });
     }
   };
 
@@ -260,8 +253,10 @@ const SubsectionModal: React.FC<SubsectionModalProps> = ({
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
             </>
+          ) : edit ? (
+            "Save Changes"
           ) : (
-            <>{edit ? "Save Changes" : "Create Lecture"}</>
+            "Create Lecture"
           )}
         </Button>
       )}
