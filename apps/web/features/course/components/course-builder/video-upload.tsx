@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@workspace/ui/components/button";
+import { Label } from "@workspace/ui/components/label";
+import { cn } from "@workspace/ui/lib/utils";
 import {
   CloudUpload,
   FileVideo,
@@ -11,17 +14,18 @@ import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import type {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
 
 interface UploadProps {
   name: string;
   label: string;
-  register: any;
-  setValue: any;
-  errors: any;
+  register: UseFormRegister<Record<string, string | File>>;
+  setValue: UseFormSetValue<Record<string, string | File>>;
+  errors: FieldErrors<Record<string, string | File>>;
   video?: boolean;
   viewData?: string | null;
   editData?: string | null;
@@ -75,7 +79,7 @@ export default function Upload({
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     setPreviewSource(null);
-    setValue(name, null);
+    setValue(name, "");
   };
 
   return (
