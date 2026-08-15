@@ -1,10 +1,10 @@
 "use client";
 
+import { cn } from "@workspace/ui/lib/utils";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface ChipInputProps {
   value: string[];
@@ -56,11 +56,10 @@ const ChipInput: React.FC<ChipInputProps> = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-wrap gap-2 rounded-md border border-input bg-input/30 px-3 py-2 text-sm ring-offset-background",
-        isFocused &&
-          "border-transparent outline-hidden ring-2 ring-ring ring-offset-2",
+        "flex w-full flex-wrap items-center gap-2 rounded-lg border border-input bg-input/30 px-3 py-2 text-sm ring-offset-background transition-all",
+        isFocused && "border-transparent ring-2 ring-ring ring-offset-2",
         disabled && "cursor-not-allowed opacity-50",
-        "h-auto min-h-9",
+        "h-auto min-h-10",
         className
       )}
       onClick={() => inputRef.current?.focus()}
@@ -69,33 +68,29 @@ const ChipInput: React.FC<ChipInputProps> = ({
         {value.map((tag, index) => (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="flex h-6 items-center gap-1 rounded-md bg-secondary px-2 font-medium text-secondary-foreground text-xs"
-            exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+            className="group flex items-center gap-1 rounded-full border bg-secondary/60 py-0.5 pr-1 pl-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary"
+            exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.15 } }}
             initial={{ opacity: 0, scale: 0.8 }}
             key={tag}
             layout
           >
             <span>{tag}</span>
             <button
-              className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-destructive hover:text-destructive-foreground"
+              className="grid size-4 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-destructive hover:text-destructive-foreground"
               onClick={(e) => {
                 e.stopPropagation();
                 removeTag(index);
               }}
               type="button"
             >
-              <X className="h-3 w-3" />
+              <X className="size-3" />
             </button>
           </motion.div>
         ))}
       </AnimatePresence>
 
       <input
-        className={cn(
-          "min-w-[120px] flex-1 bg-transparent outline-hidden placeholder:text-muted-foreground",
-          // Ensure the text aligns with the chips
-          "h-6 py-0"
-        )}
+        className="min-w-24 flex-1 bg-transparent py-0.5 outline-hidden placeholder:text-muted-foreground"
         disabled={disabled}
         onBlur={() => setIsFocused(false)}
         onChange={handleInputChange}
