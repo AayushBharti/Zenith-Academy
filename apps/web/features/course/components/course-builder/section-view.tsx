@@ -1,5 +1,17 @@
 "use client";
 
+import type {
+  SectionResponse,
+  SubSectionResponse,
+} from "@workspace/shared-types";
+import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
 import {
   ChevronRight,
   Folder,
@@ -11,25 +23,17 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import type React from "react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { SubSectionView } from "./sub-section-view";
 
 interface SectionViewProps {
-  section: any;
+  section: SectionResponse;
   onEdit: () => void;
   onDelete: () => void;
   onAddSubSection: () => void;
-  onEditSubSection: (subSection: any) => void;
+  onEditSubSection: (subSection: SubSectionResponse) => void;
   onDeleteSubSection: (subSectionId: string) => void;
-  onViewSubSection: (subSection: any) => void;
+  onViewSubSection: (subSection: SubSectionResponse) => void;
 }
 
 export const SectionView: React.FC<SectionViewProps> = ({
@@ -116,7 +120,7 @@ export const SectionView: React.FC<SectionViewProps> = ({
               {/* List of Subsections */}
               <div className="ml-3 space-y-2 border-border/50 border-l-2 pl-4">
                 {section.subSection && section.subSection.length > 0 ? (
-                  section.subSection.map((subSection: any) => (
+                  section.subSection.map((subSection: SubSectionResponse) => (
                     <SubSectionView
                       key={subSection._id}
                       onDelete={() => onDeleteSubSection(subSection._id)}
