@@ -1,12 +1,12 @@
 "use client";
 
+import type { SubSectionResponse } from "@workspace/shared-types";
+import { Button } from "@workspace/ui/components/button";
 import { Eye, Pencil, Trash2, Video } from "lucide-react";
 import type React from "react";
 
-import { Button } from "@/components/ui/button";
-
 interface SubSectionViewProps {
-  subSection: any;
+  subSection: SubSectionResponse;
   onView: () => void;
   onEdit: () => void;
   onDelete: () => void;
