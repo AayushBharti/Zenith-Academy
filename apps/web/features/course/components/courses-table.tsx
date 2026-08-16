@@ -1,5 +1,19 @@
 "use client";
 
+import type { CourseResponse as CourseDetails } from "@workspace/shared-types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@workspace/ui/components/alert-dialog";
+import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
+import { Card, CardContent, CardFooter } from "@workspace/ui/components/card";
 import { format } from "date-fns";
 import {
   AlertTriangle,
@@ -16,54 +30,32 @@ import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { COURSE_STATUS } from "@/data/constants";
-import {
-  deleteCourse,
-  fetchInstructorCourses,
-} from "@/services/course-details-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import type { CourseDetails } from "@/types/course";
+import { useDeleteCourse } from "@/features/course/hooks/use-course-mutations";
 
 interface CoursesGridProps {
   courses: CourseDetails[];
-  setCourses: any;
+  setCourses: (courses: CourseDetails[] | null) => void;
 }
 
 export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
   const router = useRouter();
-  const { token } = useAuthStore();
-  const [loading, setLoading] = useState(false);
+  const deleteMutation = useDeleteCourse();
   const [courseToDelete, setCourseToDelete] = useState<CourseDetails | null>(
     null
   );
 
   // --- Handlers ---
-  const handleCourseDelete = async () => {
+  const handleCourseDelete = () => {
     if (!courseToDelete) return;
-    setLoading(true);
-    try {
-      await deleteCourse({ courseId: courseToDelete._id }, token as string);
-      const updatedCourses = await fetchInstructorCourses(token as string);
-      if (updatedCourses) setCourses(updatedCourses);
-    } catch (error) {
-      console.error("Error deleting course:", error);
-    } finally {
-      setLoading(false);
-      setCourseToDelete(null);
-    }
+    deleteMutation.mutate(
+      { courseId: courseToDelete._id },
+      {
+        onSettled: () => {
+          setCourseToDelete(null);
+        },
+      }
+    );
   };
 
   const formatDate = (dateString: string) => {
@@ -100,6 +92,7 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
           the world today.
         </p>
         <Button
+          animation="swap"
           className="font-semibold"
           onClick={() => router.push("/dashboard/create-course")}
           size="lg"
@@ -121,7 +114,7 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
         <AnimatePresence>
           {courses.map((course) => (
             <motion.div key={course._id} layout variants={item}>
-              <Card className="group flex h-full flex-col overflow-hidden border-border/50 transition-all duration-300 hover:border-primary/50 hover:shadow-md">
+              <Card className="group flex h-full flex-col overflow-hidden border-border/50 py-0 transition-all duration-300 hover:border-primary/50 hover:shadow-md">
                 {/* --- Thumbnail Section --- */}
                 <div className="relative aspect-video w-full overflow-hidden bg-muted">
                   {course.thumbnail ? (
@@ -129,7 +122,7 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
                       alt={course.courseName}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       fill
-                      src={course.thumbnail}
+                      src={course.thumbnail ?? ""}
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -178,7 +171,7 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
                 </div>
 
                 {/* --- Content Section --- */}
-                <CardContent className="flex flex-1 flex-col p-5">
+                <CardContent className="flex flex-1 flex-col">
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <h3 className="line-clamp-1 font-bold text-xl transition-colors duration-200 group-hover:text-primary">
                       {course.courseName}
@@ -192,14 +185,15 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
                   <div className="flex items-center gap-4 text-muted-foreground text-xs">
                     <div className="flex items-center gap-1 rounded-md bg-secondary/50 px-2 py-1">
                       <Calendar className="h-3 w-3" />
-                      <span>Created: {formatDate(course.createdAt)}</span>
+                      <span>Created: {formatDate(course.createdAt ?? "")}</span>
                     </div>
                   </div>
                 </CardContent>
 
                 {/* --- Footer Actions --- */}
-                <CardFooter className="gap-3 p-4 pt-0">
+                <CardFooter className="gap-3">
                   <Button
+                    animation="slide-in"
                     className="flex-1 hover:bg-secondary"
                     onClick={() =>
                       router.push(`/dashboard/edit-course/${course._id}`)
@@ -210,8 +204,9 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
                     Edit
                   </Button>
                   <Button
-                    className="flex-0 px-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     onClick={() => setCourseToDelete(course)}
+                    size="icon"
                     variant="ghost"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -246,16 +241,18 @@ export default function CoursesGrid({ courses, setCourses }: CoursesGridProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleteMutation.isPending}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              disabled={loading}
+              disabled={deleteMutation.isPending}
               onClick={(e) => {
-                e.preventDefault(); // Prevent auto-close to handle loading state
+                e.preventDefault();
                 handleCourseDelete();
               }}
             >
-              {loading ? "Deleting..." : "Delete Permanently"}
+              {deleteMutation.isPending ? "Deleting..." : "Delete Permanently"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
