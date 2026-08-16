@@ -1,12 +1,11 @@
 "use client";
 
-import { Loader2, Star } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar";
+import { Button } from "@workspace/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -14,18 +13,29 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { createRating } from "@/services/course-details-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useProfileStore } from "@/store/use-profile-store";
+} from "@workspace/ui/components/dialog";
+import { Label } from "@workspace/ui/components/label";
+import { Textarea } from "@workspace/ui/components/textarea";
+import { cn } from "@workspace/ui/lib/utils";
+import { Loader2, Star } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useCreateRating } from "@/features/course/hooks/use-course-mutations";
+import { useProfileStore } from "@/features/profile/use-profile-store";
 
 interface FormData {
   userRating: number;
   userExperience: string;
 }
+
+const ratingLabels: Record<number, string> = {
+  5: "Excellent!",
+  4: "Good",
+  3: "Average",
+  2: "Below Average",
+  1: "Poor",
+};
 
 export function ReviewModal({
   setReviewModal,
@@ -33,11 +43,10 @@ export function ReviewModal({
   setReviewModal: (isOpen: boolean) => void;
 }) {
   const { courseId } = useParams();
-  const { token } = useAuthStore();
   const { user } = useProfileStore();
+  const createRatingMutation = useCreateRating();
 
-  const [loading, setLoading] = useState(false);
-  const [hover, setHover] = useState(0); // For hover effect on stars
+  const [hover, setHover] = useState(0);
 
   const {
     register,
@@ -63,25 +72,19 @@ export function ReviewModal({
     });
   }, [register]);
 
-  const onSubmit = async (data: FormData) => {
-    setLoading(true);
-    try {
-      await createRating(
-        {
-          courseId: courseId as string,
-          review: data.userExperience,
-          rating: data.userRating,
+  const onSubmit = (data: FormData) => {
+    createRatingMutation.mutate(
+      {
+        courseId: courseId as string,
+        review: data.userExperience,
+        rating: data.userRating,
+      },
+      {
+        onSuccess: () => {
+          setReviewModal(false);
         },
-        token as string
-      );
-      toast.success("Review added successfully");
-      setReviewModal(false);
-    } catch (error) {
-      console.error("Error submitting review:", error);
-      toast.error("Failed to add review");
-    } finally {
-      setLoading(false);
-    }
+      }
+    );
   };
 
   const handleStarClick = (starValue: number) => {
@@ -127,15 +130,7 @@ export function ReviewModal({
               )}
             >
               {rating > 0
-                ? rating === 5
-                  ? "Excellent!"
-                  : rating === 4
-                    ? "Good"
-                    : rating === 3
-                      ? "Average"
-                      : rating === 2
-                        ? "Below Average"
-                        : "Poor"
+                ? (ratingLabels[rating] ?? "Select a Rating")
                 : "Select a Rating"}
             </Label>
 
@@ -193,15 +188,15 @@ export function ReviewModal({
 
           <DialogFooter className="gap-2 sm:justify-between">
             <Button
-              disabled={loading}
+              disabled={createRatingMutation.isPending}
               onClick={() => setReviewModal(false)}
               type="button"
               variant="ghost"
             >
               Cancel
             </Button>
-            <Button className="min-w-[120px]" disabled={loading} type="submit">
-              {loading ? (
+            <Button className="min-w-[120px]" disabled={createRatingMutation.isPending} type="submit">
+              {createRatingMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Submitting
