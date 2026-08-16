@@ -1,4 +1,11 @@
 import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui/components/card";
+import { cn } from "@workspace/ui/lib/utils";
+import {
   Bell,
   BookOpen,
   DollarSign,
@@ -7,11 +14,7 @@ import {
   Lightbulb,
   StickyNote,
   Video,
-} from "lucide-react"
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-import { cn } from "@/lib/utils"
+} from "lucide-react";
 
 const CourseTips = ({ className }: { className?: string }) => {
   const courseUploadTips = [
@@ -43,10 +46,10 @@ const CourseTips = ({ className }: { className?: string }) => {
       icon: <Bell className="h-5 w-5" />,
       text: "Make Announcements to notify any important notes to all enrolled students at once.",
     },
-  ]
+  ];
 
   return (
-    <Card className={cn("xl:self-start xl:w-[400px]", className)}>
+    <Card className={cn("xl:w-[400px] xl:self-start", className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lightbulb className="size-5 text-lg text-yellow-500" />
@@ -57,8 +60,8 @@ const CourseTips = ({ className }: { className?: string }) => {
         <ul className="space-y-4">
           {courseUploadTips.map((tip, index) => (
             <li
+              className="flex items-start gap-3 text-muted-foreground"
               key={index}
-              className="flex items-start text-muted-foreground gap-3"
             >
               <span className="mt-0.5">{tip.icon}</span>
               <span className="text-sm">{tip.text}</span>
@@ -67,7 +70,7 @@ const CourseTips = ({ className }: { className?: string }) => {
         </ul>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default CourseTips
+export default CourseTips;
