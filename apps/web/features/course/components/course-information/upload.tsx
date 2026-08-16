@@ -1,11 +1,11 @@
 "use client";
 
+import { cn } from "@workspace/ui/lib/utils";
 import { CloudUpload, Image as ImageIcon, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface UploadProps {
   onChange: (file: File | null) => void;
@@ -45,7 +45,7 @@ const Upload: React.FC<UploadProps> = ({ onChange, value }) => {
 
   const handleFile = (file: File) => {
     // Basic validation for image types
-    if (file && file.type.startsWith("image/")) {
+    if (file?.type.startsWith("image/")) {
       onChange(file);
     }
   };
