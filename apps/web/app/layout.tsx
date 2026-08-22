@@ -1,13 +1,15 @@
 import "./globals.css";
 
+import { Toaster } from "@workspace/ui/components/sonner";
+import { ThemeProvider } from "@workspace/ui/components/theme-provider";
+import { cn } from "@workspace/ui/lib/utils";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import Navbar from "@/components/common/navbar/navbar";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { cn } from "@/lib/utils";
-import BackendListener from "../components/common/backend-listner";
+import BackendListener from "@/features/app-shell/components/backend-listener";
+import { FooterWrapper } from "@/features/layout/components/footer-wrapper";
+import Navbar from "@/features/navigation/components/navbar";
+import { QueryProvider } from "@/lib/query-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,14 +24,11 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Zentih Minds",
-    template: "%s | Zentih Minds",
+    default: "Nextdemy",
+    template: "%s | Nextdemy",
   },
   description:
-    "Zentih Minds is a platform for learning and exploring the world of AI and technology.",
-  icons: {
-    icon: "/favicon.ico",
-  },
+    "Nextdemy is a platform for learning and exploring the world of AI and technology.",
 };
 
 export const viewport: Viewport = {
@@ -53,11 +52,13 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider>
-          <BackendListener />
-          <Toaster position="top-center" />
-          <Navbar />
-          {children}
-          {/* <Footer /> */}
+          <QueryProvider>
+            <BackendListener />
+            <Toaster position="top-center" />
+            <Navbar />
+            {children}
+            <FooterWrapper />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
