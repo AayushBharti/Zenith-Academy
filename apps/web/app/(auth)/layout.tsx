@@ -1,7 +1,7 @@
-import React from "react"
+import type React from "react";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  return <main className="auth">{children}</main>
-}
+const Layout = ({ children }: { children: React.ReactNode }) => (
+  <main className="min-h-screen">{children}</main>
+);
 
-export default Layout
+export default Layout;
