@@ -1,25 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { updatePassword } from "@/services/auth-service"
-import { useAuthStore } from "@/store/use-auth-store"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@workspace/ui/components/alert";
+import { Button } from "@workspace/ui/components/button";
 import {
   Form,
   FormControl,
@@ -28,8 +15,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
+import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import AuthLayout from "@/features/auth/components/auth-layout";
+import { useResetPassword } from "@/features/auth/hooks/use-auth-mutations";
 
 const updatePasswordSchema = z
   .object({
@@ -39,141 +34,125 @@ const updatePasswordSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
 
 export default function UpdatePassword() {
-  const [resetComplete, setResetComplete] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { loading, setLoading } = useAuthStore()
+  const [resetComplete, setResetComplete] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const params = useParams();
+  const token = params?.id as string;
+  const resetPasswordMutation = useResetPassword();
 
   const form = useForm<z.infer<typeof updatePasswordSchema>>({
     resolver: zodResolver(updatePasswordSchema),
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
-    },
-  })
+    defaultValues: { password: "", confirmPassword: "" },
+  });
 
-  const router = useRouter()
-  const token =
-    typeof window !== "undefined"
-      ? window.location.pathname.split("/").at(-1)
-      : ""
-
-  async function onSubmit(data: z.infer<typeof updatePasswordSchema>) {
-    setError(null)
-    setLoading(true)
-    try {
-      updatePassword(
-        data.password,
-        data.confirmPassword,
-        token as string,
-        setResetComplete,
-        router.push
-      )
-      setResetComplete(true)
-    } catch (error) {
-      setError(
-        "An error occurred while updating your password. Please try again."
-      )
-    } finally {
-      setLoading(false)
-    }
+  function onSubmit(data: z.infer<typeof updatePasswordSchema>) {
+    setError(null);
+    resetPasswordMutation.mutate(
+      { password: data.password, confirmPassword: data.confirmPassword, token },
+      {
+        onSuccess: () => setResetComplete(true),
+        onError: () =>
+          setError(
+            "An error occurred while updating your password. Please try again."
+          ),
+      }
+    );
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            {!resetComplete ? "Choose new password" : "Reset complete!"}
-          </CardTitle>
-          <CardDescription>
-            {!resetComplete
-              ? "Almost done. Enter your new password and you're all set."
-              : "All done! We have sent an email to confirm the password change."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-            </div>
-          ) : !resetComplete ? (
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>New Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Enter new password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Password must be at least 6 characters long.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Confirm new password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    <AuthLayout>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h1 className="font-bold text-2xl tracking-tight">
+            {resetComplete ? "Reset complete" : "Choose new password"}
+          </h1>
+          <p className="text-muted-foreground text-sm">
+            {resetComplete
+              ? "Your password has been successfully updated."
+              : "Almost done. Enter your new password and you're all set."}
+          </p>
+        </div>
 
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
+        {resetPasswordMutation.isPending ? (
+          <div className="flex justify-center py-8">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-muted-foreground border-t-primary" />
+          </div>
+        ) : resetComplete ? (
+          <Alert>
+            <CheckCircle2 className="h-4 w-4" />
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>
+              Your password has been updated. You can now log in.
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <Form {...form}>
+            <form
+              className="space-y-4"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter new password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Must be at least 6 characters.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
                 )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Confirm new password"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <Button type="submit" className="w-full">
-                  Reset Password
-                </Button>
-              </form>
-            </Form>
-          ) : (
-            <Alert>
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertTitle>Success</AlertTitle>
-              <AlertDescription>
-                Your password has been successfully updated.
-              </AlertDescription>
-            </Alert>
-          )}
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <Button variant="outline" className="w-full" asChild>
-            <Link href="/login">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Login
-            </Link>
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
-  )
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <Button className="w-full" type="submit">
+                Reset Password
+              </Button>
+            </form>
+          </Form>
+        )}
+
+        <Button asChild className="w-full" variant="outline">
+          <Link href="/login">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Login
+          </Link>
+        </Button>
+      </div>
+    </AuthLayout>
+  );
 }
