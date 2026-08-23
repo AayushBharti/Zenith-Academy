@@ -1,29 +1,20 @@
-import CTASection from "@/components/about/cta";
-import FAQ from "@/components/about/faq";
-// import HeroAbout from "@/components/about/hero-about"
-import LearningGrid from "@/components/about/learning-grid";
-// import Mission from "@/components/about/mission"
-import Statistics from "@/components/about/statistics";
-import VideoSection from "@/components/about/vIdeo-section";
-import ReviewsCarousel from "@/components/common/review-carousel";
+import { AboutHero } from "@/features/about/components/about-hero";
+import CTASection from "@/features/about/components/cta";
+import FAQ from "@/features/about/components/faq";
+import LearningGrid from "@/features/about/components/learning-grid";
+import { WhatWeBelieve } from "@/features/about/components/what-we-believe";
+import { StatsBar } from "@/features/home/components/stats-bar";
+import ReviewsCarousel from "@/features/shared/components/review-carousel";
 
-export default function PremiumDarkModeEdTechAboutPage() {
+export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background pt-16 text-foreground">
-      {/* <HeroAbout /> */}
-
-      {/* <Mission /> */}
-
+    <div className="min-h-screen pt-16">
+      <AboutHero />
+      <StatsBar />
+      <WhatWeBelieve />
       <LearningGrid />
-
-      <Statistics />
-
-      <VideoSection />
-
       <FAQ />
-
       <CTASection />
-
       <ReviewsCarousel />
     </div>
   );
