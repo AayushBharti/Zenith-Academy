@@ -1,18 +1,14 @@
-import Template from "@/components/auth/auth-template"
-import OpenRoute from "@/components/auth/open-route"
+import Template from "@/features/auth/components/auth-template";
+import OpenRoute from "@/features/auth/components/open-route";
 
-const Login: React.FC = () => {
+export default function Login() {
   return (
     <OpenRoute>
       <Template
-        title="Welcome Back"
-        description1="Build skills for today, tomorrow, and beyond."
-        description2="Education to future-proof your career."
-        image="/assets/login.webp"
+        description="Enter your email below to login to your account"
         formType="login"
+        title="Login to your account"
       />
     </OpenRoute>
-  )
+  );
 }
-
-export default Login
