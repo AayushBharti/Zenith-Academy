@@ -1,3 +1,5 @@
+import { Button } from "@workspace/ui/components/button";
+import { Separator } from "@workspace/ui/components/separator";
 import {
   Clock,
   Mail,
@@ -6,22 +8,20 @@ import {
   Phone,
 } from "lucide-react";
 import type { Metadata } from "next";
-import ContactForm from "@/components/contact-us/contact-form";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import ContactForm from "@/features/contact/components/contact-form";
 
 export const metadata: Metadata = {
-  title: "Contact Us | ZenithAcademy",
+  title: "Contact Us | Nextdemy",
   description:
     "Get in touch with our team for support, inquiries, or feedback.",
 };
 
 export default function ContactPage() {
   return (
-    <div className="mt-16 min-h-screen bg-background">
+    <div className="min-h-screen pt-16">
       {/* Page Header */}
       <section className="bg-muted/30 py-16 md:py-24">
-        <div className="container mx-auto px-5 text-center">
+        <div className="container text-center">
           <h1 className="font-bold text-4xl text-foreground tracking-tight md:text-5xl">
             Contact Our Team
           </h1>
@@ -32,7 +32,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <div className="container mx-auto px-5 py-12">
+      <div className="container py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Left Column: Contact Information */}
           <div className="flex flex-col gap-10 lg:col-span-5">
