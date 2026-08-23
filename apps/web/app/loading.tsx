@@ -1,23 +1,23 @@
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
       <div className="flex items-center">
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
+          className="mr-2 h-4 w-4 animate-spin"
           fill="none"
+          height="24"
           stroke="currentColor"
-          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="mr-2 h-4 w-4 animate-spin"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
         </svg>
-        <span className="size-full gird place-items-center">Loading...</span>
+        <span className="gird size-full place-items-center">Loading...</span>
       </div>
     </div>
-  )
+  );
 }
