@@ -1,19 +1,23 @@
 "use client";
 
-import ReviewsCarousel from "@/components/common/review-carousel";
-import { CodeBlocksSection } from "@/components/home/code-blocks";
-import ExploreMore from "@/components/home/explore-more";
-import { Features } from "@/components/home/features";
-import Hero from "@/components/home/hero";
-import InstructorSection from "@/components/home/instructor-section";
+import { CodeBlocksSection } from "@/features/home/components/code-blocks";
+import { CommunitySpotlight } from "@/features/home/components/community-spotlight";
+import ExploreMore from "@/features/home/components/explore-more";
+import Hero from "@/features/home/components/hero";
+import { HowItWorks } from "@/features/home/components/how-it-works";
+import InstructorSection from "@/features/home/components/instructor-section";
+import { StatsBar } from "@/features/home/components/stats-bar";
+import ReviewsCarousel from "@/features/shared/components/review-carousel";
 
 export default function Home() {
   return (
-    <main className="relative mx-auto overflow-x-hidden dark:bg-black-100">
+    <main className="relative min-h-screen overflow-x-hidden">
       <Hero />
-      <Features />
+      <StatsBar />
+      <HowItWorks />
       <CodeBlocksSection />
       <ExploreMore />
+      <CommunitySpotlight />
       <InstructorSection />
       <ReviewsCarousel />
     </main>
