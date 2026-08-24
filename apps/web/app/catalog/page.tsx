@@ -1,5 +1,15 @@
 "use client";
 
+import type {
+  CategoryResponse as Category,
+  CourseResponse as CourseDetails,
+} from "@workspace/shared-types";
+import { Badge } from "@workspace/ui/components/badge";
+import { Button } from "@workspace/ui/components/button";
+import { Card, CardContent } from "@workspace/ui/components/card";
+import { Input } from "@workspace/ui/components/input";
+import { Separator } from "@workspace/ui/components/separator";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 import {
   ArrowRight,
   Code2,
@@ -14,21 +24,13 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
-import { CourseCard } from "@/components/common/course-card";
-// Components
-import { CourseSlider } from "@/components/common/course-slider";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-
 // Types & Utils
 import { COURSE_STATUS } from "@/data/constants";
-import type { Category, CourseDetails } from "@/types/course";
-import { apiConnector } from "@/utils/api-connector";
-import { categories as categoryApis, courseEndpoints } from "@/utils/apis";
+import { CourseCard } from "@/features/course/components/course-card";
+// Components
+import { CourseSlider } from "@/features/course/components/course-slider";
+import { apiConnector } from "@/lib/api-connector";
+import { categories as categoryApis, courseEndpoints } from "@/lib/apis";
 
 // --- Helper for Category Icons ---
 const getCategoryStyle = (name: string) => {
@@ -90,7 +92,6 @@ export default function CatalogPage() {
           setNewCourses([...publishedCourses].reverse().slice(0, 5));
         }
       } catch (error) {
-        console.error("Failed to fetch catalog data:", error);
       } finally {
         setLoading(false);
       }
@@ -128,7 +129,6 @@ export default function CatalogPage() {
           setSearchResults(publishedResults);
         }
       } catch (error) {
-        console.error("Search failed:", error);
       } finally {
         setIsSearching(false);
       }
@@ -145,9 +145,9 @@ export default function CatalogPage() {
   if (loading) return <CatalogPageSkeleton />;
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-20 text-foreground">
+    <div className="min-h-screen pt-16">
       {/* ================= HEADER SECTION (Vercel Style) ================= */}
-      <div className="sticky top-16 z-30 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container py-4 md:py-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             {/* Title Area */}
@@ -249,11 +249,11 @@ export default function CatalogPage() {
                   return (
                     <Link
                       className="group outline-none"
-                      href={`/catalog/${cat.slug}`}
+                      href={`/catalog/${cat.slug ?? cat._id}`}
                       key={cat._id}
                     >
-                      <Card className="h-full border border-border/50 bg-background/50 shadow-sm transition-all duration-200 hover:border-primary/20 hover:bg-muted/50 hover:shadow-md">
-                        <CardContent className="flex items-center gap-4 p-4">
+                      <Card className="h-full shadow-sm transition-all duration-200 hover:border-primary/20 hover:bg-muted/50 hover:shadow-md">
+                        <CardContent className="flex items-center gap-4">
                           <div
                             className={`rounded-md p-2.5 ${style.bg} ${style.color}`}
                           >
@@ -313,7 +313,7 @@ export default function CatalogPage() {
 // --- Skeleton Component ---
 function CatalogPageSkeleton() {
   return (
-    <div className="min-h-screen bg-background pt-24 pb-20">
+    <div className="min-h-screen pt-16">
       <div className="container space-y-12">
         {/* Header Skeleton */}
         <div className="flex flex-col justify-between gap-4 border-b pb-6 md:flex-row">
