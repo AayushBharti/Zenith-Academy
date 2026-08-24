@@ -1,21 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { useAuthStore } from "@/store/use-auth-store"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { ArrowLeft } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@workspace/ui/components/button";
 import {
   Form,
   FormControl,
@@ -24,174 +10,158 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@workspace/ui/components/form";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp"
-
-import { signUp } from "../../../services/auth-service"
+} from "@workspace/ui/components/input-otp";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import AuthLayout from "@/features/auth/components/auth-layout";
+import { useSignUp } from "@/features/auth/hooks/use-auth-mutations";
+import { useAuthStore } from "@/features/auth/use-auth-store";
 
 const otpSchema = z.object({
-  otp: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-})
+  otp: z.string().min(6, "Your one-time password must be 6 characters."),
+});
 
 export default function VerifyEmail() {
-  const router = useRouter()
-  const { signupData } = useAuthStore()
-  const [countdown, setCountdown] = useState(30)
-  const [error, setError] = useState<string | null>(null)
-
-  console.log(error)
-  // TODO: Add error toast
+  const router = useRouter();
+  const { signupData } = useAuthStore();
+  const [countdown, setCountdown] = useState(30);
+  const [error, setError] = useState<string | null>(null);
+  const signUpMutation = useSignUp();
 
   useEffect(() => {
     if (!signupData) {
-      router.push("/signup")
+      router.push("/signup");
     }
-  }, [signupData, router])
+  }, [signupData, router]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown((prevCountdown) =>
-        prevCountdown > 0 ? prevCountdown - 1 : 0
-      )
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
+      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const form = useForm<z.infer<typeof otpSchema>>({
     resolver: zodResolver(otpSchema),
-    defaultValues: {
-      otp: "",
-    },
-  })
+    defaultValues: { otp: "" },
+  });
 
-  async function onSubmit(data: z.infer<typeof otpSchema>) {
-    setError(null)
-    if (signupData) {
-      const {
-        email,
-        accountType,
-        confirmPassword,
-        password,
-        lastName,
-        firstName,
-      } = signupData
-
-      try {
-        await signUp(
-          accountType,
-          firstName,
-          lastName,
-          email,
-          password,
-          confirmPassword,
-          data.otp,
-          router.push
-        )
-      } catch (error) {
-        setError("Invalid OTP. Please try again.")
-      }
-    } else {
-      setError("Signup data is not available")
+  function onSubmit(data: z.infer<typeof otpSchema>) {
+    setError(null);
+    if (!signupData) {
+      setError("Signup data is not available");
+      return;
     }
+
+    const { email, accountType, firstName, lastName, password, confirmPassword } =
+      signupData;
+    signUpMutation.mutate(
+      { accountType, firstName, lastName, email, password, confirmPassword: confirmPassword ?? password, otp: data.otp },
+      {
+        onSuccess: () => router.push("/login"),
+        onError: () => setError("Invalid OTP. Please try again."),
+      }
+    );
   }
 
   const handleResendOTP = () => {
-    // TODO: Implement resend OTP logic here
-    setCountdown(30)
-  }
+    setCountdown(30);
+  };
 
-  if (!signupData) {
-    return null
-  }
+  if (!signupData) return null;
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            Verify Your Email
-          </CardTitle>
-          <CardDescription>
-            We&apos;ve sent a 6-digit code to {signupData.email}. Enter it below
-            to verify your email address.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="otp"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>One-Time Password</FormLabel>
-                    <FormControl>
-                      <InputOTP maxLength={6} {...field}>
-                        <InputOTPGroup>
-                          <InputOTPSlot index={0} />
-                          <InputOTPSlot index={1} />
-                          <InputOTPSlot index={2} />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot index={3} />
-                          <InputOTPSlot index={4} />
-                          <InputOTPSlot index={5} />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </FormControl>
-                    <FormDescription>
-                      Please enter the one-time password sent to your email.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <AuthLayout>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <h1 className="font-bold text-2xl tracking-tight">
+            Verify your email
+          </h1>
+          <p className="text-muted-foreground text-sm">
+            We&apos;ve sent a 6-digit code to{" "}
+            <span className="font-medium text-foreground">
+              {signupData.email}
+            </span>
+          </p>
+        </div>
 
-              <div className="flex justify-between items-center">
-                <Button type="submit" className="w-full">
-                  Verify Email
-                </Button>
-              </div>
-            </form>
-          </Form>
-
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500">
-              Didn&apos;t receive the code?
-              {countdown > 0 ? (
-                <span className="ml-1">Resend in {countdown}s</span>
-              ) : (
-                <Button
-                  variant="link"
-                  className="p-0 h-auto font-normal"
-                  onClick={handleResendOTP}
-                >
-                  Resend OTP
-                </Button>
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="otp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>One-Time Password</FormLabel>
+                  <FormControl>
+                    <InputOTP maxLength={6} {...field}>
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormControl>
+                  <FormDescription>
+                    Enter the code sent to your email.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
               )}
-            </p>
-          </div>
+            />
 
-          <div className="mt-6">
+            {error && (
+              <p className="text-destructive text-sm">{error}</p>
+            )}
+
             <Button
-              variant="outline"
               className="w-full"
-              onClick={() => router.push("/signup")}
+              disabled={signUpMutation.isPending}
+              type="submit"
             >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Sign Up
+              {signUpMutation.isPending ? "Verifying..." : "Verify Email"}
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
+          </form>
+        </Form>
+
+        <p className="text-center text-muted-foreground text-sm">
+          Didn&apos;t receive the code?{" "}
+          {countdown > 0 ? (
+            <span>Resend in {countdown}s</span>
+          ) : (
+            <button
+              className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
+              onClick={handleResendOTP}
+              type="button"
+            >
+              Resend OTP
+            </button>
+          )}
+        </p>
+
+        <Button
+          className="w-full"
+          onClick={() => router.push("/signup")}
+          variant="outline"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Sign Up
+        </Button>
+      </div>
+    </AuthLayout>
+  );
 }
