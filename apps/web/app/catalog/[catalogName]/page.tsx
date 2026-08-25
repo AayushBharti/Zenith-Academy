@@ -1,14 +1,10 @@
 "use client";
 
-import { AlertCircle, Home, SearchX } from "lucide-react";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
-// Components
-import { CourseSlider } from "@/components/common/course-slider";
-import ReviewsCarousel from "@/components/common/review-carousel";
-import { Badge } from "@/components/ui/badge";
+import type {
+  CategoryResponse as Category,
+  CourseResponse as CourseDetails,
+} from "@workspace/shared-types";
+import { Badge } from "@workspace/ui/components/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,156 +12,166 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-// Services & Utils
-import { getCatalogaPageData } from "@/services/catalog-service";
-import type { Category, CourseDetails } from "@/types/course";
-import { apiConnector } from "@/utils/api-connector";
-import { categories } from "@/utils/apis";
+} from "@workspace/ui/components/breadcrumb";
+import { Button } from "@workspace/ui/components/button";
+import { Separator } from "@workspace/ui/components/separator";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@workspace/ui/components/tabs";
+import { AlertCircle, Home, SearchX } from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useCatalogPageData } from "@/features/catalog/hooks/use-catalog-queries";
+// Components
+import { CourseSlider } from "@/features/course/components/course-slider";
+import { useCourseCategories } from "@/features/course/hooks/use-course-queries";
+import ReviewsCarousel from "@/features/shared/components/review-carousel";
 
 export default function CatalogPageContent() {
   // 1. Get the slug from the URL
   const { catalogName } = useParams();
   const catalogSlug = catalogName as string;
 
-  const [category, setCategory] = useState<Category | null>(null);
-  const [catalogPageData, setCatalogPageData] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<string>("popular");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // 2. Fetch all categories
-        const result = await apiConnector("GET", categories.CATEGORIES_API);
-        console.log("result", result.data.data);
+  // 2. Fetch all categories
+  const {
+    data: allCategories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useCourseCategories();
 
-        // 3. Find the category by matching the SLUG
-        const foundCategory = result.data.data.find(
-          (item: any) => item.slug === catalogSlug
-        );
-
-        if (!foundCategory) {
-          setError("Category not found");
-          setIsLoading(false);
-          return;
-        }
-        setCategory(foundCategory);
-
-        // 4. Fetch page details using the Category ID
-        const pageData = await getCatalogaPageData(foundCategory._id);
-        setCatalogPageData(pageData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to load catalog data.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (catalogSlug) {
-      fetchData();
-    }
-  }, [catalogSlug]);
-
-  if (isLoading) return <CatalogSkeleton />;
-
-  if (error || !category)
-    return <ErrorState message={error || "Category not found"} />;
-
-  const hasNoCourses = !(
-    catalogPageData?.selectedCourses?.length ||
-    catalogPageData?.differentCourses?.length ||
-    catalogPageData?.mostSellingCourses?.length
+  // 3. Derive the matching category from the slug
+  const category = useMemo(
+    () => allCategories?.find((c: Category) => c.slug === catalogSlug) ?? null,
+    [allCategories, catalogSlug]
   );
 
+  // 4. Fetch catalog page data once we have a category ID
+  const {
+    data: catalogPageData,
+    isLoading: catalogLoading,
+    error: catalogError,
+  } = useCatalogPageData(category?._id ?? "");
+
+  // Handle page state: loading, error, or ready
+  if (categoriesLoading) {
+    return <CatalogSkeleton />;
+  }
+
+  if (categoriesError || !category) {
+    return (
+      <ErrorState message={categoriesError?.message || "Category not found"} />
+    );
+  }
+
+  // Special handling for catalog data fetching
+  const isNoCoursesFoundError =
+    catalogError?.message?.toLowerCase().includes("no courses found") ?? false;
+
+  if (catalogLoading && !isNoCoursesFoundError) {
+    return <CatalogSkeleton />;
+  }
+
+  if (catalogError && !isNoCoursesFoundError) {
+    return <ErrorState message={catalogError.message} />;
+  }
+
+  // Determine if we should show the "No Courses" component
+  const hasNoCourses =
+    isNoCoursesFoundError ||
+    !(
+      catalogPageData?.selectedCourses?.length ||
+      catalogPageData?.differentCourses?.length ||
+      catalogPageData?.mostSellingCourses?.length
+    );
+
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen pt-16">
       {/* Header */}
       <CatalogHeader category={category} />
 
-      <main className="container mx-auto space-y-20 px-4 py-12 md:px-6 lg:px-8">
-        {hasNoCourses ? (
+      {hasNoCourses ? (
+        <div className="container py-12">
           <NoCourses categoryName={category.name} />
-        ) : (
-          <div className="fade-in-50 animate-in space-y-20 duration-500">
-            {/* 1. Hero / Selected Courses */}
-            <section className="space-y-8">
-              <div className="flex flex-col gap-3">
-                <h2 className="font-bold text-3xl text-foreground tracking-tight sm:text-4xl">
-                  Courses to get you started
-                </h2>
-                <p className="max-w-2xl text-lg text-muted-foreground">
-                  Hand-picked courses to jumpstart your learning path in{" "}
-                  <span className="font-medium text-primary">
-                    {category.name}
-                  </span>
-                  .
-                </p>
-              </div>
+        </div>
+      ) : (
+        <div className="fade-in-50 animate-in space-y-20 py-12 duration-500">
+          {/* 1. Hero / Selected Courses */}
+          <section className="container space-y-8">
+            <div className="flex flex-col gap-3">
+              <h2 className="font-bold text-3xl text-foreground tracking-tight sm:text-4xl">
+                Courses to get you started
+              </h2>
+              <p className="max-w-2xl text-lg text-muted-foreground">
+                Hand-picked courses to jumpstart your learning path in{" "}
+                <span className="font-medium text-primary">
+                  {category.name}
+                </span>
+                .
+              </p>
+            </div>
 
-              <Tabs
-                className="w-full"
-                onValueChange={setActiveTab}
-                value={activeTab}
+            <Tabs
+              className="w-full"
+              onValueChange={setActiveTab}
+              value={activeTab}
+            >
+              <TabsList className="mb-8 grid w-full grid-cols-2 sm:w-[400px]">
+                <TabsTrigger value="popular">Most Popular</TabsTrigger>
+                <TabsTrigger value="new">New Arrivals</TabsTrigger>
+              </TabsList>
+              <TabsContent
+                className="space-y-4 focus-visible:outline-none"
+                value="popular"
               >
-                <TabsList className="mb-8 grid w-full grid-cols-2 sm:w-[400px]">
-                  <TabsTrigger value="popular">Most Popular</TabsTrigger>
-                  <TabsTrigger value="new">New Arrivals</TabsTrigger>
-                </TabsList>
-                <TabsContent
-                  className="space-y-4 focus-visible:outline-none"
-                  value="popular"
-                >
-                  <CourseSlider
-                    courses={catalogPageData?.selectedCourses || []}
-                  />
-                </TabsContent>
-                <TabsContent
-                  className="space-y-4 focus-visible:outline-none"
-                  value="new"
-                >
-                  <CourseSlider
-                    courses={catalogPageData?.differentCourses || []}
-                  />
-                </TabsContent>
-              </Tabs>
-            </section>
+                <CourseSlider
+                  courses={catalogPageData?.selectedCourses || []}
+                />
+              </TabsContent>
+              <TabsContent
+                className="space-y-4 focus-visible:outline-none"
+                value="new"
+              >
+                <CourseSlider
+                  courses={catalogPageData?.differentCourses || []}
+                />
+              </TabsContent>
+            </Tabs>
+          </section>
 
-            <Separator className="bg-border/50" />
+          <Separator className="container bg-border/50" />
 
-            {/* 2. Top Selling */}
+          {/* 2. Top Selling */}
+          <div className="container">
             <CourseSection
               badge="Top Selling"
               courses={catalogPageData?.mostSellingCourses || []}
               title="Frequently Bought Together"
             />
+          </div>
 
-            <Separator className="bg-border/50" />
+          <Separator className="container bg-border/50" />
 
-            {/* 3. Similar Courses */}
+          {/* 3. Similar Courses */}
+          <div className="container">
             <CourseSection
               courses={catalogPageData?.differentCourses || []}
               title={`More in ${category.name}`}
             />
-
-            <Separator className="bg-border/50" />
-
-            {/* 4. Social Proof (Reviews) */}
-            <div className="pt-8">
-              <ReviewsCarousel />
-            </div>
           </div>
-        )}
-      </main>
+
+          <Separator className="container bg-border/50" />
+
+          {/* 4. Social Proof (Reviews) */}
+          <ReviewsCarousel />
+        </div>
+      )}
     </div>
   );
 }
@@ -174,8 +180,8 @@ export default function CatalogPageContent() {
 
 function CatalogHeader({ category }: { category: Category }) {
   return (
-    <div className="w-full border-b bg-muted/30 pt-24 pb-12">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+    <div className="w-full border-b bg-muted/30 py-12">
+      <div className="container">
         <div className="flex flex-col gap-6">
           {/* Breadcrumb */}
           <Breadcrumb>
@@ -268,10 +274,10 @@ function NoCourses({ categoryName }: { categoryName: string }) {
         Check back later.
       </p>
       <div className="flex gap-4">
-        <Button onClick={() => router.push("/")} size="lg" variant="outline">
+        <Button animation="swap" onClick={() => router.push("/")} size="lg" variant="outline">
           Go Home
         </Button>
-        <Button onClick={() => router.push("/catalog")} size="lg">
+        <Button animation="slide-in" onClick={() => router.push("/catalog")} size="lg">
           Explore Catalog
         </Button>
       </div>
@@ -299,10 +305,10 @@ function ErrorState({ message }: { message: string }) {
 
 function CatalogSkeleton() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pt-16">
       {/* Header Skeleton */}
-      <div className="w-full border-b bg-muted/30 pt-20 pb-12">
-        <div className="container mx-auto space-y-6 px-4">
+      <div className="w-full border-b bg-muted/30 py-12">
+        <div className="container space-y-6">
           <Skeleton className="h-5 w-48" />
           <Skeleton className="h-16 w-3/4 max-w-xl" />
           <Skeleton className="h-6 w-full max-w-2xl" />
@@ -310,7 +316,7 @@ function CatalogSkeleton() {
       </div>
 
       {/* Content Skeleton */}
-      <div className="container mx-auto space-y-20 px-4 py-12">
+      <div className="container space-y-20 py-12">
         {[1, 2].map((section) => (
           <div className="space-y-8" key={section}>
             <div className="space-y-3">
