@@ -1,6 +1,16 @@
 "use client";
 
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar";
+import { Button } from "@workspace/ui/components/button";
+import { Card, CardContent } from "@workspace/ui/components/card";
+import { RatingStars } from "@workspace/ui/components/rating-stars";
+import { Separator } from "@workspace/ui/components/separator";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import {
   AlertCircle,
   Award,
   Check,
@@ -16,65 +26,49 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { RatingStars } from "@/components/ui/rating-stars";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ACCOUNT_TYPE } from "@/data/constants";
-import { fetchCourseDetails } from "@/services/course-details-service";
-import { buyCourse } from "@/services/payment-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useCartStore } from "@/store/use-cart-store";
-import { useProfileStore } from "@/store/use-profile-store";
-import type { CourseDetails as CourseDetailsType } from "@/types/course";
-import getAvgRating from "@/utils/avg-rating";
+import { useAuthStore } from "@/features/auth/use-auth-store";
+import { useCartStore } from "@/features/cart/use-cart-store";
+import { useCourseDetails } from "@/features/course/hooks/use-course-queries";
+import { useBuyCourse } from "@/features/payment/hooks/use-payment-mutations";
+import { useProfileStore } from "@/features/profile/use-profile-store";
+import getAvgRating from "@/lib/utils";
 
 export default function CourseDetails() {
-  const { token } = useAuthStore();
+  const { accessToken } = useAuthStore();
   const { user } = useProfileStore();
   const { addToCart } = useCartStore();
   const router = useRouter();
   const { courseId } = useParams();
 
-  const [course, setCourse] = useState<CourseDetailsType | null>(null);
-  const [avgReviewCount, setAvgReviewCount] = useState(0);
-  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: course, isLoading } = useCourseDetails(
+    (courseId as string) ?? ""
+  );
 
-  // --- Data Fetching ---
-  useEffect(() => {
-    const getCourseDetails = async () => {
-      if (!courseId) return;
-      setIsLoading(true);
-      try {
-        const response = await fetchCourseDetails(courseId as string);
-        setCourse(response);
+  const avgReviewCount = useMemo(
+    () =>
+      course?.ratingAndReviews?.length
+        ? getAvgRating(course.ratingAndReviews)
+        : 0,
+    [course?.ratingAndReviews]
+  );
 
-        if (response?.ratingAndReviews?.length) {
-          setAvgReviewCount(getAvgRating(response.ratingAndReviews));
-        }
+  const alreadyEnrolled = useMemo(
+    () =>
+      course && user
+        ? (course.studentsEnrolled?.includes(user._id) ?? false)
+        : false,
+    [course, user]
+  );
 
-        if (response && user) {
-          setAlreadyEnrolled(response.studentsEnrolled?.includes(user._id));
-        }
-      } catch (error) {
-        console.error("Error fetching course details:", error);
-        toast.error("Failed to load course details");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getCourseDetails();
-  }, [courseId, user]);
+  const buyCourseMutation = useBuyCourse();
 
   // --- Handlers ---
   const handlePayment = () => {
-    if (token && courseId) {
-      buyCourse(token, [courseId as string], user, router.push);
+    if (accessToken && courseId) {
+      buyCourseMutation.mutate([courseId as string]);
     } else {
       toast.error("Please login to purchase course");
       router.push("/login");
@@ -82,7 +76,7 @@ export default function CourseDetails() {
   };
 
   const handleAddToCart = () => {
-    if (token && course) {
+    if (accessToken && course) {
       addToCart(course);
       toast.success("Added to cart");
     } else {
@@ -92,30 +86,29 @@ export default function CourseDetails() {
   };
 
   // --- Formatting ---
-  const totalLectures = useMemo(
-    () =>
-      course?.courseContent?.reduce(
-        (acc, sec) => acc + sec.subSection.length,
-        0
-      ) || 0,
-    [course]
-  );
+  const totalLectures =
+    course?.courseContent?.reduce(
+      (acc, sec) => acc + sec.subSection.length,
+      0
+    ) || 0;
 
   if (isLoading) return <CourseDetailsSkeleton />;
   if (!course) return <ErrorState />;
 
   return (
-    <div className="mt-16 min-h-screen bg-background pb-20">
+    <div className="min-h-screen pt-16">
       {/* ================= HERO SECTION ================= */}
-      <div className="relative bg-slate-900 px-4 pt-10 pb-12 text-white md:px-8">
-        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="relative bg-slate-950 py-12 text-white">
+        <div className="container relative z-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
             {/* Breadcrumb-ish */}
             <div className="mb-4 flex items-center gap-2 text-slate-300 text-sm">
               <span>Home</span> <span className="text-slate-500">/</span>
               <span>Course</span> <span className="text-slate-500">/</span>
               <span className="font-medium text-primary">
-                {course.category?.name}
+                {typeof course.category === "object"
+                  ? course.category?.name
+                  : course.category}
               </span>
             </div>
 
@@ -134,11 +127,12 @@ export default function CourseDetails() {
                 </span>
                 <RatingStars maxRating={5} rating={avgReviewCount} />
                 <span className="cursor-pointer text-slate-400 underline">
-                  ({course.ratingAndReviews.length} ratings)
+                  ({course.ratingAndReviews?.length ?? 0} ratings)
                 </span>
               </div>
               <div className="text-slate-300">
-                {course.studentsEnrolled.length.toLocaleString()} students
+                {(course.studentsEnrolled?.length ?? 0).toLocaleString()}{" "}
+                students
               </div>
             </div>
 
@@ -147,13 +141,16 @@ export default function CourseDetails() {
               <div className="flex items-center gap-2">
                 <span className="text-slate-400">Created by</span>
                 <span className="text-white underline decoration-2 decoration-primary underline-offset-4">
-                  {course.instructor.firstName} {course.instructor.lastName}
+                  {course.instructor?.firstName} {course.instructor?.lastName}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Info className="h-4 w-4" />
                 <span>
-                  Last updated {new Date(course.updatedAt).toLocaleDateString()}
+                  Last updated{" "}
+                  {course.updatedAt
+                    ? new Date(course.updatedAt).toLocaleDateString()
+                    : "N/A"}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -166,14 +163,14 @@ export default function CourseDetails() {
       </div>
 
       {/* ================= MAIN CONTENT ================= */}
-      <div className="mx-auto mt-8 grid max-w-7xl grid-cols-1 gap-10 px-4 md:px-8 lg:grid-cols-3">
+      <div className="container grid grid-cols-1 gap-10 py-8 lg:grid-cols-3">
         {/* --- LEFT COLUMN --- */}
         <div className="space-y-10 lg:col-span-2">
           {/* What You Will Learn */}
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="mb-6 font-bold text-2xl">What you&apos;ll learn</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {course.whatYouWillLearn.split("\n").map((item, i) => (
+              {(course.whatYouWillLearn ?? "").split("\n").map((item, i) => (
                 <div className="flex items-start gap-3" key={i}>
                   <Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <span className="text-muted-foreground text-sm leading-relaxed">
@@ -189,14 +186,14 @@ export default function CourseDetails() {
             <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
               <h2 className="font-bold text-2xl">Course Content</h2>
               <div className="flex gap-2 text-muted-foreground text-sm">
-                <span>{course.courseContent.length} sections</span> •
+                <span>{course.courseContent?.length ?? 0} sections</span> •
                 <span>{totalLectures} lectures</span>
               </div>
             </div>
 
             {/* Custom Accordion Replacement */}
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border">
-              {course.courseContent.map((section) => (
+              {(course.courseContent ?? []).map((section) => (
                 <CurriculumSection key={section._id} section={section} />
               ))}
             </div>
@@ -207,17 +204,17 @@ export default function CourseDetails() {
             <h2 className="font-bold text-2xl">Instructor</h2>
             <div className="flex items-start gap-4">
               <Avatar className="h-16 w-16 border-2 border-primary/10">
-                <AvatarImage src={course.instructor.image} />
+                <AvatarImage src={course.instructor?.image} />
                 <AvatarFallback>
-                  {course.instructor.firstName[0]}
+                  {course.instructor?.firstName?.[0]}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
                 <div className="font-bold text-lg text-primary">
-                  {course.instructor.firstName} {course.instructor.lastName}
+                  {course.instructor?.firstName} {course.instructor?.lastName}
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  {course.instructor.additionalDetails?.about ||
+                  {course.instructor?.additionalDetails?.about ||
                     "Experienced Instructor specializing in modern web technologies."}
                 </p>
 
@@ -228,7 +225,7 @@ export default function CourseDetails() {
                   </div>
                   <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
                     <MonitorPlay className="h-4 w-4" />{" "}
-                    {course.studentsEnrolled.length} Students
+                    {course.studentsEnrolled?.length ?? 0} Students
                   </div>
                 </div>
               </div>
@@ -240,13 +237,13 @@ export default function CourseDetails() {
         <div className="relative lg:col-span-1">
           <div className="space-y-6 lg:sticky lg:top-24">
             {/* Floating Buy Card (Moved up via negative margin on desktop to overlap Hero) */}
-            <Card className="lg:-mt-[200px] relative z-20 overflow-hidden border-0 shadow-xl">
+            <Card className="lg:-mt-110 relative z-20 overflow-hidden border-0 py-0 shadow-xl">
               <div className="group relative aspect-video w-full cursor-pointer overflow-hidden bg-slate-900">
                 <Image
                   alt={course.courseName}
                   className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
                   fill
-                  src={course.thumbnail}
+                  src={course.thumbnail ?? ""}
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
                   <div className="scale-90 rounded-full bg-white/90 p-4 shadow-lg transition-transform group-hover:scale-100">
@@ -266,6 +263,7 @@ export default function CourseDetails() {
                   <div className="space-y-3">
                     {alreadyEnrolled ? (
                       <Button
+                        animation="swap"
                         className="h-11 w-full font-semibold text-base"
                         onClick={() =>
                           router.push("/dashboard/enrolled-courses")
@@ -276,12 +274,14 @@ export default function CourseDetails() {
                     ) : (
                       <>
                         <Button
+                          animation="swap"
                           className="h-11 w-full font-semibold text-base"
                           onClick={handlePayment}
                         >
                           Buy Now
                         </Button>
                         <Button
+                          animation="slide-in"
                           className="h-11 w-full border-primary/20 font-semibold text-base hover:bg-primary/5 hover:text-primary"
                           onClick={handleAddToCart}
                           variant="outline"
@@ -335,7 +335,17 @@ export default function CourseDetails() {
 }
 
 // --- SUB-COMPONENT: Curriculum Section (No Accordion) ---
-function CurriculumSection({ section }: { section: any }) {
+interface CurriculumSectionData {
+  _id: string;
+  sectionName: string;
+  subSection: {
+    _id: string;
+    title: string;
+    description?: string;
+  }[];
+}
+
+function CurriculumSection({ section }: { section: CurriculumSectionData }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -371,7 +381,7 @@ function CurriculumSection({ section }: { section: any }) {
             transition={{ duration: 0.2 }}
           >
             <div className="pb-2">
-              {section.subSection.map((sub: any) => (
+              {section.subSection.map((sub) => (
                 <div
                   className="flex items-start gap-3 px-4 py-3 pl-11 transition-colors hover:bg-secondary/10"
                   key={sub._id}
@@ -419,11 +429,11 @@ function ErrorState() {
 
 function CourseDetailsSkeleton() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen pt-16">
       {/* Hero Skeleton */}
       <div className="h-[300px] w-full animate-pulse bg-slate-900" />
 
-      <div className="-mt-20 mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 md:px-8 lg:grid-cols-3">
+      <div className="container grid grid-cols-1 gap-10 py-8 lg:grid-cols-3">
         <div className="space-y-8 pt-20 lg:col-span-2">
           <Skeleton className="h-10 w-3/4" />
           <Skeleton className="h-4 w-full" />
