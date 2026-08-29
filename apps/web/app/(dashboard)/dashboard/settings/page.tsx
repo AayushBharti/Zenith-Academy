@@ -1,15 +1,17 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Camera, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@workspace/ui/components/alert";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar";
+import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
@@ -17,7 +19,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@workspace/ui/components/card";
 import {
   Form,
   FormControl,
@@ -26,24 +28,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@workspace/ui/components/form";
+import { Input } from "@workspace/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from "@workspace/ui/components/select";
+import { Textarea } from "@workspace/ui/components/textarea";
+import { AlertCircle, Camera, Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { DashboardPageHeader } from "@/features/dashboard/components/dashboard-page-header";
 import {
-  deleteAccount,
-  updateAdditionalDetails,
-  updatePassword,
-  updatePfp,
-} from "@/services/profile-service";
-import { useAuthStore } from "@/store/use-auth-store";
-import { useProfileStore } from "@/store/use-profile-store";
+  useChangePassword,
+  useDeleteAccount,
+  useUpdatePfp,
+  useUpdateProfile,
+} from "@/features/profile/hooks/use-profile-mutations";
+import { useProfileStore } from "@/features/profile/use-profile-store";
 
 const profileSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -74,12 +80,21 @@ const passwordSchema = z
   });
 
 export default function Settings() {
-  const router = useRouter();
-  const { token } = useAuthStore();
   const { user } = useProfileStore();
 
-  const [isUpdating, setIsUpdating] = useState(false);
+  const updatePfpMutation = useUpdatePfp();
+  const updateProfileMutation = useUpdateProfile();
+  const changePasswordMutation = useChangePassword();
+  const deleteAccountMutation = useDeleteAccount();
+
+  const isUpdating =
+    updatePfpMutation.isPending ||
+    updateProfileMutation.isPending ||
+    changePasswordMutation.isPending ||
+    deleteAccountMutation.isPending;
+
   const [profilePicture, setProfilePicture] = useState(user?.image);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -103,80 +118,52 @@ export default function Settings() {
     },
   });
 
-  const handleProfilePictureChange = async (
+  const handleProfilePictureChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsUpdating(true);
-      try {
-        console.log(file);
-        setProfilePicture(URL.createObjectURL(file));
-        await updatePfp(token as string, file);
-      } catch (error) {
-        console.error("Error updating profile picture:", error);
-      } finally {
-        setIsUpdating(false);
-      }
+      setProfilePicture(URL.createObjectURL(file));
+      updatePfpMutation.mutate(file);
     }
   };
 
-  async function onProfileSubmit(values: z.infer<typeof profileSchema>) {
-    setIsUpdating(true);
-    try {
-      const updatedData = {
-        ...values,
-        gender: values.gender === "prefer-not-to-say" ? "" : values.gender,
-      };
-      await updateAdditionalDetails(token as string, updatedData);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    } finally {
-      setIsUpdating(false);
-    }
+  function onProfileSubmit(values: z.infer<typeof profileSchema>) {
+    const updatedData = {
+      ...values,
+      gender: values.gender === "prefer-not-to-say" ? "" : values.gender,
+    };
+    updateProfileMutation.mutate(updatedData);
   }
 
-  async function onPasswordSubmit(values: z.infer<typeof passwordSchema>) {
-    setIsUpdating(true);
-    try {
-      const { currentPassword, confirmPassword } = values;
-      if (currentPassword === confirmPassword) {
-        await updatePassword(token as string, values);
-      } else {
-        toast.error("Password does not match");
-      }
-      passwordForm.reset();
-    } catch (error) {
-      console.error("Error updating password:", error);
-    } finally {
-      setIsUpdating(false);
-    }
+  function onPasswordSubmit(values: z.infer<typeof passwordSchema>) {
+    changePasswordMutation.mutate(values, {
+      onSuccess: () => {
+        passwordForm.reset();
+      },
+    });
   }
 
-  const onDeleteAccount = async () => {
+  const onDeleteAccount = () => {
     if (
       window.confirm(
         "Are you sure you want to delete your account? This action cannot be undone."
       )
     ) {
-      setIsUpdating(true);
-      try {
-        await deleteAccount(token as string, router.push);
-      } catch (error) {
-        console.error("Error deleting account:", error);
-      } finally {
-        setIsUpdating(false);
-      }
+      deleteAccountMutation.mutate();
     }
   };
 
   if (!user) return null;
 
   return (
-    <div className="space-y-8">
-      <h1 className="font-bold text-3xl">Account Settings</h1>
+    <div className="container space-y-8 p-4 md:p-8">
+      <DashboardPageHeader
+        description="Manage your account settings, profile, and preferences."
+        title="Account Settings"
+      />
 
-      <Card>
+      <Card className="border-border/60 shadow-sm">
         <CardHeader>
           <CardTitle>Profile Picture</CardTitle>
           <CardDescription>Update your profile picture here.</CardDescription>
@@ -193,24 +180,29 @@ export default function Settings() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <label className="cursor-pointer" htmlFor="picture">
-              <div className="flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
-                <Camera className="h-4 w-4" />
-                Change Picture
-              </div>
-            </label>
-            <Input
+            <Button
+              disabled={isUpdating}
+              onClick={() => fileInputRef.current?.click()}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              <Camera className="mr-2 h-4 w-4" />
+              Change Picture
+            </Button>
+            <input
+              accept="image/*"
               className="hidden"
               disabled={isUpdating}
-              id="picture"
               onChange={handleProfilePictureChange}
+              ref={fileInputRef}
               type="file"
             />
           </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-border/60 shadow-sm">
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
           <CardDescription>
@@ -352,7 +344,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-border/60 shadow-sm">
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
           <CardDescription>Update your password here.</CardDescription>
@@ -425,7 +417,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-border/60 shadow-sm">
         <CardHeader>
           <CardTitle>Delete Account</CardTitle>
           <CardDescription>
