@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizeCss: true,
+    // viewTransition: true,
+    browserDebugInfoInTerminal: true,
   },
   images: {
     minimumCacheTTL: 3_153_600,
