@@ -1,7 +1,7 @@
 <div align="center">
   <br />
-  <a href="https://zenith-acad.vercel.app" target="_blank">
-    <img src="public/readme/hero.png" alt="Zenith Academy Banner">
+  <a href="https://academy.aayushbharti.in" target="_blank">
+    <img src="public/readme/hero.png" alt="Nextdemy Banner">
   </a>
   <br />
   <div>
@@ -11,301 +11,317 @@
     <img alt="Static Badge" src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white">
     <img alt="Static Badge" src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
   </div>
-  <h1>Zenith Academy</h1>
+  <h1>Nextdemy</h1>
   <h3>Online Education Platform for You</h3>
-  <p><a href="https://zenith-acad.vercel.app" target="_blank"><b>Check Live</b></a></p>
+  <p><a href="https://academy.aayushbharti.in" target="_blank"><b>Check Live</b></a></p>
 </div>
 
-## 📋 Table of Contents
+## Table of Contents
 
-1. 🤖 [Introduction](#introduction)
-2. ⚙️ [Tech Stack](#tech-stack)
-3. 🔋 [Features](#features)
-4. ⚡ [API Design](#api-design)
-5. 🤝 [How to Contribute](#how-to-contribute)
-<!-- 4. 🏗️ [System Architecture](#system-architecture) -->
+1. [Introduction](#introduction)
+2. [Tech Stack](#tech-stack)
+3. [Monorepo Structure](#monorepo-structure)
+4. [Features](#features)
+5. [Architecture](#architecture)
+6. [API Reference](#api-reference)
+7. [Getting Started](#getting-started)
+8. [Contributing](#contributing)
 
 ---
 
-## 🤖 Introduction
+## Introduction
 
-Zenith Academy is a fully functional ed-tech platform enabling users to create, consume, and rate educational content. Built with the MERN stack, it provides:
+Nextdemy is a fully functional ed-tech platform enabling users to create, consume, and rate educational content. Built as a **Turborepo monorepo** with a Next.js frontend and Express.js API, it provides:
 
 - A seamless and interactive learning experience for students.
 - A platform for instructors to showcase expertise and connect globally.
 
-Explore the platform: [Zenith Academy Live](https://zenith-acad.vercel.app)
+Explore the platform: [Nextdemy Live](https://academy.aayushbharti.in)
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
-| Category    | Technology | Description |
-|-------------|------------|-------------|
-| **Frontend** | <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" /> <br> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React" /> <br> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /> <br> <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" /> <br> <img src="https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=zustand&logoColor=white" alt="Zustand" /> <br> <img src="https://img.shields.io/badge/Framer_Motion-EF0087?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" /> | Built with Next.js for SSR and performance, React 19 for UI, TypeScript for type safety, Tailwind CSS for responsive styling, Zustand for lightweight state management, and Framer Motion for animations. |
-| **Backend** | <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" /> <br> <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" /> <br> <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" /> <br> <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" alt="Mongoose" /> <br> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" /> <br> <img src="https://img.shields.io/badge/Bcrypt-563D7C?style=for-the-badge&logo=bcrypt&logoColor=white" alt="Bcrypt" /> <br> <img src="https://img.shields.io/badge/Razorpay-02042B?style=for-the-badge&logo=razorpay&logoColor=white" alt="Razorpay" /> <br> <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary" /> | Node.js with Express.js for server-side logic and RESTful APIs, MongoDB with Mongoose for database management, JWT and Bcrypt for authentication and security, Razorpay for payments integration, and Cloudinary for media storage. |
-| **Tools & Deployment** | <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" /> <br> <img src="https://img.shields.io/badge/Turborepo-000000?style=for-the-badge&logo=turbo&logoColor=white" alt="Turborepo" /> <br> <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /> | Deployed on Vercel for global delivery, using Turborepo for monorepo management and build optimization, with GitHub for version control. |
-
----
-
-## 🔋 Features
-
-Zenith Academy offers a comprehensive set of features for students and instructors to deliver an engaging online education experience.
-
-### 🎓 For Students
-
-- **Homepage** – Overview of the platform with featured courses and quick navigation.
-- **Course List** – Browse all available courses with detailed descriptions, ratings, and instructor information.
-- **Wishlist** – Add courses to your wishlist for future enrolment.
-- **Cart & Checkout** – Secure cart management and payment processing with Razorpay integration.
-- **Course Content** – Access enrolled course content, including videos, notes, and interactive materials.
-- **Progress Tracking** – Monitor lesson completion, quiz scores, and overall course progress.
-- **User Profile** – View and edit personal account details and enrolment history.
-
-
-### 👨‍🏫 For Instructors
-
-- **Instructor Dashboard** – Overview of created courses with ratings, enrolment statistics, and income tracking.
-- **Course Management** – Create, update, and delete courses with multimedia content uploads via Cloudinary.
-- **Insights** – View detailed analytics on course views, clicks, enrolments, and earnings.
-- **Profile Management** – Edit personal and professional instructor details to maintain credibility.
-
-
-### 🔧 Platform Features
-
-- **Secure Authentication** – JWT-based login and registration with Bcrypt password hashing and role-based access.
-- **Payment Integration** – Razorpay gateway for seamless and secure course purchases.
-- **Responsive Design** – Mobile-first, accessible UI built with Tailwind CSS and Framer Motion animations for smooth interactions.
-- **Dynamic Search & Filtering** – Efficient course search and category-based filtering for enhanced user experience.
-- **RESTful APIs** – Structured APIs built with Express.js and Node.js for scalable backend operations.
-- **Cloud-based Media Management** – Cloudinary integration for storing and serving course images and videos efficiently.
-- **Monorepo Architecture** – Managed with Turborepo for optimized build performance and maintainability.
-
-
-Zenith Academy is designed for scalability, security, and an intuitive learning experience to empower students and instructors worldwide.
+| Category | Technology | Description |
+|---|---|---|
+| **Frontend** | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Zustand v5, TanStack React Query v5, Motion (Framer Motion), shadcn/ui | SSR with App Router, feature-based architecture, server state via React Query, client state via Zustand, dark/light mode with next-themes |
+| **Backend** | Express.js, Mongoose, Zod, Bun runtime, JWT (access + refresh tokens), Bcrypt, Razorpay, Cloudinary, Resend | Domain-driven modular API (`routes > controllers > services > models`), Zod validation, Pino logging, rate limiting |
+| **Shared** | Zod schemas + TypeScript types (`@workspace/shared-types`), shadcn/ui component library (`@workspace/ui`) | Shared types and 30+ UI components across apps |
+| **Tools** | Turborepo, Bun 1.2.5, Biome (linting/formatting), Docker | Monorepo orchestration, fast installs/builds, consistent code style |
 
 ---
 
-<!-- 
-### 🏗️ **System Architecture**
+## Monorepo Structure
 
-Zenith Academy follows a **modular, scalable client-server architecture** consisting of:
+```
+nextdemy/
+├── apps/
+│   ├── api/                    # Express.js API (Bun runtime)
+│   │   └── src/
+│   │       ├── configs/        # Zod-validated env, DB, Cloudinary, Razorpay, Resend
+│   │       ├── modules/        # Domain modules (auth, course, payment, profile, contact, upload, health)
+│   │       │   └── <module>/   # routes > controllers > services > models
+│   │       ├── shared/         # Middlewares, utils (ApiResponse, ApiError, asyncHandler, logger)
+│   │       └── types/          # Custom type declarations
+│   └── web/                    # Next.js 16 App (React 19)
+│       ├── app/                # App Router pages
+│       │   ├── (auth)/         # Login, signup, forgot-password, verify-email
+│       │   ├── (dashboard)/    # Profile, analytics, courses, cart, settings
+│       │   ├── about/
+│       │   ├── catalog/
+│       │   ├── contact/
+│       │   └── courses/
+│       ├── features/           # Feature-based modules
+│       │   ├── auth/           # components, hooks, store
+│       │   ├── course/         # components, hooks, store
+│       │   ├── cart/           # components, store
+│       │   ├── dashboard/      # components (analytics charts, sidebar, header)
+│       │   ├── payment/        # hooks
+│       │   ├── profile/        # hooks, store
+│       │   ├── navigation/     # navbar, mobile menu
+│       │   ├── home/           # homepage sections
+│       │   ├── about/          # about page sections
+│       │   └── shared/         # shared components
+│       └── lib/                # API connector, React Query config, utils
+├── packages/
+│   ├── shared-types/           # Zod schemas + inferred TS types (auth, course, payment, user, contact, upload)
+│   ├── ui/                     # shadcn/ui component library (30+ components)
+│   └── typescript-config/      # Shared TS configs
+├── turbo.json
+└── package.json
+```
 
-- ✅ **Frontend** – Next.js, React, Tailwind CSS, Zustand, Framer Motion
-- ✅ **Backend** – Node.js, Express.js REST API
-- ✅ **Database** – MongoDB with Mongoose ODM
-- ✅ **Integrations** – Razorpay for payments, Cloudinary for media storage
-![Architecture Diagram](apps/web/public/readme/architecture.png)
+---
 
---- -->
+## Features
 
-### 🔷 **Architecture Diagram**
+### For Students
+
+- **Course Catalog** — Browse courses with descriptions, ratings, and instructor details
+- **Cart & Checkout** — Razorpay-powered payment processing
+- **Course Player** — Video player with section/subsection navigation and progress tracking
+- **Enrolled Courses** — Track enrolled courses and completion progress
+- **Payment History** — View past transactions
+- **Profile** — Manage personal information and account settings
+
+### For Instructors
+
+- **Analytics Dashboard** — Revenue charts (donut, bar, radial), student enrollment stats, top performers table
+- **Course Management** — Create, edit, and delete courses with sections and video subsections
+- **Media Uploads** — Cloudinary integration for thumbnails and video content
+- **Earnings Tracking** — View total earnings and per-course revenue breakdown
+
+### Platform
+
+- **Authentication** — JWT access/refresh token flow with OTP email verification
+- **Responsive Design** — Mobile-first UI with Tailwind CSS 4 and dark/light mode
+- **Sticky Dashboard Header** — Breadcrumb navigation with frosted glass effect
+- **Split-screen Auth Pages** — Random HD Unsplash abstract images on each visit
+- **RESTful API v2** — Modular Express.js routes with Zod validation and structured error handling
+
+---
+
+## Architecture
 
 ```mermaid
 graph TD
-    subgraph User Side
-        User[User Browser]
+    subgraph Client
+        Browser[User Browser]
     end
 
-    subgraph Frontend
-        FE[Next.js App]
+    subgraph "Frontend (Next.js 16)"
+        FE[App Router + React 19]
+        RQ[React Query]
+        ZS[Zustand Stores]
     end
 
-    subgraph Backend
-        BE[Node.js + Express.js Server]
+    subgraph "Backend (Express.js + Bun)"
+        API["/api/v2/*"]
+        MW[Middlewares: Rate Limit, Auth, Helmet, CORS]
+        MOD[Modules: Auth, Course, Payment, Profile, Contact, Upload, Health]
     end
 
     subgraph Database
-        DB[MongoDB with Mongoose ODM]
+        DB[(MongoDB + Mongoose)]
     end
 
     subgraph External Services
-        Razorpay[Razorpay Payments]
-        Cloudinary[Cloudinary Media Storage]
+        RP[Razorpay Payments]
+        CL[Cloudinary Media]
+        RS[Resend Email]
     end
 
-    User --> FE
-    FE --> BE
-    BE --> DB
-    BE --> Cloudinary
-    FE --> Razorpay
+    Browser --> FE
+    FE --> RQ
+    FE --> ZS
+    RQ --> API
+    API --> MW --> MOD
+    MOD --> DB
+    MOD --> CL
+    MOD --> RS
+    Browser --> RP
 ```
 
 ---
 
-## ⚡ API Design
+## API Reference
 
-Zenith Academy follows a **RESTful API architecture** using **Node.js and Express.js**, structured under `/api/v1/` with modular route grouping for scalability and clarity.
+All routes are prefixed with `/api/v2/`.
 
-### 🔷 **Base Routes**
+### Auth (`/api/v2/auth`)
 
-- `/api/v1/auth` – Authentication-related routes  
-- `/api/v1/profile` – User profile management  
-- `/api/v1/payment` – Payment processing routes  
-- `/api/v1/course` – Course and category management routes  
-- `/api/v1/contact` – Contact form submissions
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/login` | | Authenticate user, return access + refresh tokens |
+| POST | `/signup` | | Register new user (student/instructor) |
+| POST | `/logout` | Yes | Invalidate refresh token |
+| POST | `/refresh-token` | | Refresh access token via httpOnly cookie |
+| POST | `/sendotp` | | Send OTP to email for verification |
+| POST | `/changepassword` | Yes | Change password |
+| POST | `/reset-password-token` | | Generate password reset token |
+| POST | `/reset-password` | | Reset password with token |
 
-### 🔐 **Authentication Routes**
+### Profile (`/api/v2/profile`)
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| GET | `/getUserDetails` | Yes | Get current user details |
+| PUT | `/updateProfile` | Yes | Update profile information |
+| POST | `/updateDisplayPicture` | Yes | Upload profile picture (multipart) |
+| DELETE | `/deleteProfile` | Yes | Delete account |
+| GET | `/getEnrolledCourses` | Yes | List enrolled courses |
+| GET | `/getInstructorDashboardDetails` | Instructor | Analytics dashboard data |
+
+### Course (`/api/v2/course`)
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/createCourse` | Instructor | Create course (multipart: thumbnail) |
+| POST | `/editCourse` | Instructor | Edit course details |
+| DELETE | `/deleteCourse` | Yes | Delete course |
+| GET | `/getAllCourses` | | List all courses |
+| POST | `/getCourseDetails` | | Get course details |
+| POST | `/getFullCourseDetails` | Yes | Get full course content |
+| GET | `/getInstructorCourses` | Instructor | List instructor's courses |
+| POST | `/searchCourse` | | Search courses by keyword |
+| POST | `/addSection` | Instructor | Add section to course |
+| POST | `/updateSection` | Instructor | Update section |
+| POST | `/deleteSection` | Instructor | Delete section |
+| POST | `/addSubSection` | Instructor | Add subsection (multipart: video) |
+| POST | `/updateSubSection` | Instructor | Update subsection |
+| POST | `/deleteSubSection` | Instructor | Delete subsection |
+| POST | `/updateCourseProgress` | Student | Mark lecture as complete |
+| POST | `/createCategory` | Admin | Create category |
+| GET | `/showAllCategories` | | List all categories |
+| POST | `/getCategoryPageDetails` | | Get category page details |
+| POST | `/addCourseToCategory` | Instructor | Assign course to category |
+| POST | `/createRating` | Student | Submit rating and review |
+| GET | `/getAverageRating` | | Get average rating |
+| GET | `/getReviews` | | List all reviews |
+
+### Payment (`/api/v2/payment`)
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/capturePayment` | Student | Initiate Razorpay payment |
+| POST | `/verifyPayment` | Yes | Verify payment signature |
+| POST | `/sendPaymentSuccessEmail` | Yes | Send payment confirmation email |
+| GET | `/history` | Yes | Get payment history |
+| GET | `/instructor-earnings` | Instructor | Get instructor earnings |
+
+### Contact (`/api/v2/contact`)
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/contactUs` | | Submit contact form |
+
+### Upload (`/api/v2/upload`)
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/file` | | Upload single file |
+| POST | `/files` | | Upload multiple files (max 10) |
+| DELETE | `/` | | Delete file |
+
+### Health (`/api/v2/health`)
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/login` | Authenticate user and return JWT token. |
-| POST | `/signup` | Register a new user (student/instructor). |
-| POST | `/sendotp` | Send OTP to user’s email for verification or reset. |
-| POST | `/changepassword` | Change user password (requires auth). |
-| POST | `/reset-password-token` | Generate password reset token. |
-| POST | `/reset-password` | Reset password using valid token. |
-
-### 👤 **Profile Routes**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| DELETE | `/deleteProfile` | Delete user account (requires auth). |
-| PUT | `/updateProfile` | Update user profile details (requires auth). |
-| GET | `/getUserDetails` | Fetch logged-in user’s details. |
-| GET | `/getEnrolledCourses` | Get all courses enrolled by user. |
-| PUT | `/updateDisplayPicture` | Update user’s display picture. |
-| GET | `/getInstructorDashboardDetails` | Instructor-only dashboard analytics. |
-
-### 💳 **Payment Routes**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/capturePayment` | Capture initiated payment (student only). |
-| POST | `/verifyPayment` | Verify payment signature. |
-| POST | `/sendPaymentSuccessEmail` | Send payment success email to user. |
-
-### 📚 **Course & Category Routes**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/createCourse` | Create new course (instructor only). |
-| POST | `/addSection` | Add section to course (instructor only). |
-| POST | `/updateSection` | Update section details (instructor only). |
-| POST | `/deleteSection` | Delete section (instructor only). |
-| POST | `/addSubSection` | Add subsection to section (instructor only). |
-| POST | `/updateSubSection` | Update subsection details (instructor only). |
-| POST | `/deleteSubSection` | Delete subsection (instructor only). |
-| GET | `/getAllCourses` | Retrieve all courses. |
-| POST | `/getCourseDetails` | Get specific course details. |
-| POST | `/getFullCourseDetails` | Get full course content (auth required). |
-| POST | `/editCourse` | Edit course details (instructor only). |
-| DELETE | `/deleteCourse` | Delete course (instructor only). |
-| GET | `/getInstructorCourses` | Get all courses created by instructor. |
-| POST | `/searchCourse` | Search courses by keyword. |
-| POST | `/updateCourseProgress` | Mark lecture as completed (student only). |
-
-### 🗂️ **Category Routes (Admin only)**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/createCategory` | Create a new course category. |
-| GET | `/showAllCategories` | Fetch all categories. |
-| POST | `/getCategoryPageDetails` | Get category-specific course details. |
-| POST | `/addCourseToCategory` | Assign course to category (instructor only). |
-
-### 🌟 **Ratings & Reviews Routes**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/createRating` | Submit course rating and review (student only). |
-| GET | `/getAverageRating` | Get average rating for a course. |
-| GET | `/getReviews` | Get all reviews for a course. |
-
-### ✉️ **Contact Routes**
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/contactUs` | Submit contact form (name, email, message). |
+|---|---|---|
+| GET | `/` | Server health check |
 
 ---
 
-This robust API design ensures **scalable, secure, and maintainable backend services** powering Zenith Academy’s online education ecosystem.
+## Getting Started
 
+### Prerequisites
 
-
-## 🤝 How to Contribute
-
-We welcome contributions from the community to improve Zenith Academy. Follow these steps to get started:
-
-### ⚡ Prerequisites
-
-Ensure you have the following installed:
-
+- [Bun](https://bun.sh/) v1.2.5+
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en)
-- [pnpm](https://pnpm.io/)
+- MongoDB instance
+- Cloudinary, Razorpay, and Resend accounts (for full functionality)
 
-### 📝 Steps to Contribute
-
-##### 1. **Fork the repository**
-
-- Click the `Fork` button at the top right of this page to create your own copy. 
-
-
-##### 2. **Clone your forked repository**
+### Setup
 
 ```bash
-git clone https://github.com/your-username/Zenith-Academy.git
-cd Zenith-Academy
-````
+# Clone the repository
+git clone https://github.com/aayushbharti/nextdemy.git
+cd nextdemy
 
-##### 3. **Install dependencies using pnpm**
+# Install dependencies
+bun install
 
-```bash
-pnpm install
+# Set up environment variables
+cp apps/api/.env.example apps/api/.env
+# Edit apps/api/.env with your credentials
+
+# Run all apps in development mode
+bun run dev
+
+# Or run individually
+bun run dev:api    # API on configured port
+bun run dev:web    # Web on port 3000
 ```
 
-##### 4. **Create a new branch for your feature or bug fix**
+### Available Scripts
 
 ```bash
-git checkout -b feature/YourFeatureName
+bun run dev          # Dev mode (all apps)
+bun run build        # Build all apps
+bun run lint         # Biome linter
+bun run format       # Ultracite formatter
+bun run fix          # Biome auto-fix
 ```
-
-##### 5. **Make your changes**
-
-- Ensure your code follows the project’s coding standards and includes relevant tests if applicable.
-
-##### 6. **Commit your changes**
-
-```bash
-git add .
-git commit -m "Add YourFeatureName"
-```
-
-##### 7. **Push to your branch**
-
-```bash
-git push origin feature/YourFeatureName
-```
-
-##### 8. **Create a Pull Request**
-
-Go to your forked repository on GitHub and click `Compare & pull request`. Add a clear description of your changes.
-  
-### 💡 Contribution Guidelines
-
-- ✅ Keep PRs focused and atomic
-- ✅ Write clear commit messages
-- ✅ Follow existing code style and structure
-- ✅ Test thoroughly before submitting
 
 ---
 
-### 📜 Code of Conduct
+## Contributing
 
-This project follows a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you agree to uphold these standards.
+We welcome contributions from the community.
 
-Thank you for contributing to **Zenith Academy**! 🙌
+1. **Fork** the repository
+2. **Clone** your fork: `git clone https://github.com/your-username/nextdemy.git`
+3. **Install** dependencies: `bun install`
+4. **Create** a branch: `git checkout -b feature/your-feature`
+5. **Make** your changes
+6. **Commit**: `git commit -m "Add your feature"`
+7. **Push**: `git push origin feature/your-feature`
+8. **Open** a Pull Request
+
+### Guidelines
+
+- Keep PRs focused and atomic
+- Write clear commit messages
+- Follow existing code style (Biome handles formatting)
+- Test thoroughly before submitting
 
 ---
 
-## ❤️ Contributors
+## Contributors
 
-<a href="https://github.com/aayushbharti/Zenith-Academy/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=aayushbharti/Zenith-Academy" />
+<a href="https://github.com/aayushbharti/nextdemy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=aayushbharti/nextdemy" />
 </a>
 
 ---
 
-<p align="center">Built with ❤️ by <a href="https://github.com/AayushBharti">Aayush Bharti</a></p>
+<p align="center">Built with care by <a href="https://github.com/AayushBharti">Aayush Bharti</a></p>
