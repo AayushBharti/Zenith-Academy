@@ -1,0 +1,40 @@
+FROM oven/bun:1 AS base
+WORKDIR /app
+
+# Turbo Stage
+FROM base AS turbo
+COPY . .
+RUN bun add -g turbo
+RUN turbo prune web --docker
+
+# Install dependencies
+FROM base AS deps
+COPY --from=turbo /app/out/json/ .
+COPY --from=turbo /app/out/bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Build Stage
+FROM base AS builder
+COPY --from=turbo /app/out/json/ .
+COPY --from=turbo /app/out/bun.lock ./
+RUN bun install --frozen-lockfile
+COPY --from=turbo /app/out/full/ .
+RUN bun run build --filter=web
+
+# Runner Stage — Node for Next.js standalone
+FROM node:23-slim AS runner
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
+
+COPY --from=builder /app/apps/web/public ./apps/web/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "apps/web/server.js"]
